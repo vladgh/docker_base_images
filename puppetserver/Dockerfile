@@ -1,6 +1,7 @@
 FROM ubuntu:14.04
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
+EXPOSE 8140
 WORKDIR /tmp
 
 RUN apt-get update -y && \
@@ -14,4 +15,3 @@ RUN apt-get update -y && \
   apt-get install -y puppetserver && \
   rm -rf /var/lib/apt/lists/*
 
-EXPOSE 8140

@@ -1,8 +1,9 @@
 FROM ruby:2.2
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
-COPY Gemfile /tmp/agent/Gemfile
+EXPOSE 8523
 WORKDIR /tmp/agent
+
+COPY Gemfile /tmp/agent/Gemfile
 RUN bundle install
 
-EXPOSE 8523
