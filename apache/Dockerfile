@@ -7,7 +7,8 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/* && \
   docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr && \
   docker-php-ext-install gd && \
-  docker-php-ext-install mysqli
+  docker-php-ext-install mysqli && \
+  docker-php-ext-install soap
 
 # Modify apache config
 RUN a2enmod rewrite && \
