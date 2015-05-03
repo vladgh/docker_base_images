@@ -15,5 +15,5 @@ RUN apt-get update -qy && \
   apt-get install -qy puppetserver && \
   rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ['/opt/puppetlabs/bin/puppetserver']
-CMD ['foreground']
+ENTRYPOINT ["/opt/puppetlabs/bin/puppetserver"]
+CMD ["foreground"]
