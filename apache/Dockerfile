@@ -7,7 +7,7 @@ RUN apt-get update && \
   wget libtool apache2-dev && \
   docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr && \
   docker-php-ext-install gd && \
-  docker-php-ext-install mysqli soap mcrypt && \
+  docker-php-ext-install mysqli soap && \
   wget -O /tmp/mod_cloudflare.c https://www.cloudflare.com/static/misc/mod_cloudflare/mod_cloudflare.c && \
   apxs2 -a -i -c /tmp/mod_cloudflare.c && \
   apt-get --purge -y remove apache2-dev wget && \
