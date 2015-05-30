@@ -11,7 +11,8 @@ RUN apt-get update && \
   wget -O /tmp/mod_cloudflare.c https://www.cloudflare.com/static/misc/mod_cloudflare/mod_cloudflare.c && \
   apxs2 -a -i -c /tmp/mod_cloudflare.c && \
   apt-get --purge -y remove apache2-dev wget && \
-  apt-get -y autoremove && apt-get -y clean && rm -rf /var/lib/apt/lists/*
+  apt-get -y autoremove && apt-get -y clean && \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Modify apache config
 RUN a2enmod rewrite && \
