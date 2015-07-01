@@ -9,8 +9,8 @@ RUN apt-get update -y && \
     apt-get update -y && apt-get install -y puppetserver && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV HOME="/opt/puppetlabs/server/data/puppetserver" \
-    JAVA_ARGS="-Xms512m -Xmx512m -XX:MaxPermSize=256m"
+ENV HOME='/opt/puppetlabs/server/data/puppetserver' \
+    JAVA_ARGS="-Xms256m -Xmx512m"
 RUN sed -i "s/JAVA_ARGS=.*/JAVA_ARGS=\"${JAVA_ARGS}\"/g" \
     /etc/default/puppetserver
 
