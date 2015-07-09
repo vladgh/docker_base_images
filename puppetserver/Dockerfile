@@ -2,7 +2,7 @@ FROM ubuntu:14.04
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 ENV JAVA_ARGS="-Xms256m -Xmx512m" \
-    PATH /opt/puppetlabs/bin/:$PATH
+    PATH=/opt/puppetlabs/bin/:$PATH
 
 RUN DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && apt-get install -y wget && \
