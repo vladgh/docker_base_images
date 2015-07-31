@@ -5,8 +5,8 @@ MAINTAINER Vlad Ghinea vlad@ghn.me
 RUN apt-get update && \
   apt-get install -y libpng12-dev libjpeg-dev libxml2-dev libmcrypt-dev \
     libcurl4-gnutls-dev zlib1g-dev libicu-dev g++ wget libtool apache2-dev && \
-  docker-php-ext-install curl gd iconv intl json mbstring mcrypt mysqli \
-    soap simplexml xml xmlwriter zip && \
+  docker-php-ext-install gd intl mbstring mcrypt mysqli \
+    soap zip && \
   wget -O /tmp/mod_cloudflare.c https://www.cloudflare.com/static/misc/mod_cloudflare/mod_cloudflare.c && \
   apxs2 -a -i -c /tmp/mod_cloudflare.c && \
   apt-get --purge -y remove apache2-dev wget && \
