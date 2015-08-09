@@ -9,7 +9,10 @@ RUN apt-get update && \
   docker-php-ext-install gd intl mbstring mcrypt mysqli soap zip tidy \
     opcache && \
   wget -O /tmp/mod_cloudflare.c https://www.cloudflare.com/static/misc/mod_cloudflare/mod_cloudflare.c && \
+  wget -O /tmp/mod_pagespeed_64.deb https://dl-ssl.google.com/dl/linux/direct/mod-pagespeed-stable_current_amd64.deb && \
   apxs2 -a -i -c /tmp/mod_cloudflare.c && \
+  touch /etc/default/mod-pagespeed && \
+  dpkg -i /tmp/mod_pagespeed_64.deb && apt-get -f install && \
   apt-get --purge -y remove apache2-dev wget && \
   apt-get -y autoremove && apt-get -y clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
