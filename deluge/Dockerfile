@@ -10,6 +10,6 @@ ADD run.sh /run.sh
 
 VOLUME ["/data"]
 
-EXPOSE 53160 53160/udp 8112 58846
+EXPOSE 8112 53160 53160/udp 58846
 
 ENTRYPOINT ["/bin/bash", "/run.sh"]

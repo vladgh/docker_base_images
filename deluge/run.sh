@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
+# Remove old pid if it exists
 [ -f /data/deluged.pid ] && rm -f /data/deluged.pid
-deluged -c /data -L info -l /data/deluged.log
-deluge-web -c /data
+
+# Start Deluge Daemon
+/usr/bin/deluged --config /data --logfile /data/deluged.log --loglevel info
+
+# Start Deluge Web UI
+/usr/bin/deluge-web --config /data --logfile /data/deluge-web.log --loglevel info
