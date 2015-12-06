@@ -2,7 +2,7 @@ FROM ubuntu:14.04
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 ENV JAVA_ARGS="-Xms256m -Xmx512m" \
-    PATH=/opt/puppetlabs/bin/:$PATH
+    PATH=/opt/puppetlabs/server/bin:/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:$PATH
 
 RUN DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && apt-get install -y wget && \
@@ -15,5 +15,6 @@ RUN DEBIAN_FRONTEND=noninteractive && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 EXPOSE 8140
+VOLUME ["/etc/puppetlabs/code"]
 ENTRYPOINT ["puppetserver"]
 CMD ["foreground"]
