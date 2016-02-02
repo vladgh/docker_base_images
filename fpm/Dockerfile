@@ -8,6 +8,6 @@ RUN apt-get update && apt-get install -y \
       apt-get -y autoremove && apt-get -y clean && \
       rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN docker-php-ext-install gd intl mbstring mcrypt mysqli soap zip tidy opcache pdo pdo_mysql pdo_pgsql
+RUN docker-php-ext-install gd intl mbstring mcrypt mysqli soap zip tidy opcache pdo pdo_mysql
 
 CMD ["php-fpm"]
