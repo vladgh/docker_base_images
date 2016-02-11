@@ -3,9 +3,9 @@ MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Install the PHP extensions we need
 RUN apt-get update && \
-  apt-get install -y libpng12-dev libjpeg-dev libxml2-dev libmcrypt-dev \
-    libcurl4-gnutls-dev zlib1g-dev libicu-dev g++ wget libtool apache2-dev \
-    libncurses5-dev libtidy-dev && \
+  apt-get install -y --no-install-recommends libpng12-dev libjpeg-dev \
+    libxml2-dev libmcrypt-dev libcurl4-gnutls-dev zlib1g-dev libicu-dev g++ \
+    wget libtool apache2-dev libncurses5-dev libtidy-dev && \
   docker-php-ext-install gd intl mbstring mcrypt mysqli soap zip tidy \
     opcache && \
   wget -O /tmp/mod_cloudflare.c https://www.cloudflare.com/static/misc/mod_cloudflare/mod_cloudflare.c && \

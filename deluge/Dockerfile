@@ -1,7 +1,7 @@
 FROM ubuntu:trusty
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
-RUN apt-get update && apt-get install -qy software-properties-common && \
+RUN apt-get update && apt-get install -y --no-install-recommends software-properties-common && \
     add-apt-repository ppa:deluge-team/ppa && \
     apt-get update -q && apt-get install -qy deluged deluge-web && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

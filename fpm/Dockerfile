@@ -1,7 +1,7 @@
 FROM php:7-fpm
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
       libpng12-dev libjpeg-dev libxml2-dev libmcrypt-dev \
       libcurl4-gnutls-dev zlib1g-dev libicu-dev \
       libncurses5-dev libtidy-dev ssmtp && \

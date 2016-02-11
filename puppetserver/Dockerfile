@@ -6,7 +6,7 @@ ENV PATH=/opt/puppetlabs/server/bin:/opt/puppetlabs/puppet/bin:/opt/puppetlabs/b
 
 # Install Puppet release package
 RUN DEBIAN_FRONTEND=noninteractive && \
-    apt-get update -y && apt-get install -y wget && \
+    apt-get update -y && apt-get install -y --no-install-recommends wget && \
     release_deb="puppetlabs-release-pc1-trusty.deb" && \
     wget -O /tmp/${release_deb} https://apt.puppetlabs.com/${release_deb} && \
     dpkg -i /tmp/${release_deb} && \
@@ -14,7 +14,7 @@ RUN DEBIAN_FRONTEND=noninteractive && \
 
 # Install git and puppetserver
 RUN DEBIAN_FRONTEND=noninteractive && \
-    apt-get update -y && apt-get install -y git puppetserver && \
+    apt-get update -y && apt-get install -y --no-install-recommends git puppetserver && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install gems
