@@ -26,6 +26,8 @@ RUN gem install r10k --no-ri --no-rdoc && \
 RUN sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{JAVA_ARGS:-\1\}@' /etc/default/puppetserver
 
 EXPOSE 8140
-VOLUME ["/etc/puppetlabs/code"]
-ENTRYPOINT ["puppetserver"]
-CMD ["foreground"]
+VOLUME ["/etc/puppetlabs/code", "/etc/puppetlabs/puppet"]
+
+COPY /entrypoint.sh /
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["puppetserver", "foreground"]
