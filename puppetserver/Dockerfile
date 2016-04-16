@@ -19,9 +19,7 @@ RUN DEBIAN_FRONTEND=noninteractive && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install gems
-RUN gem install r10k --no-ri --no-rdoc && \
-    gem install hiera-eyaml --no-ri --no-rdoc \
-    gem install aws-sdk --no-ri --no-rdoc
+RUN gem install r10k hiera-eyaml aws-sdk --no-ri --no-rdoc
 
 # JAVA_ARGS tuning
 RUN sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{JAVA_ARGS:-\1\}@' /etc/default/puppetserver
