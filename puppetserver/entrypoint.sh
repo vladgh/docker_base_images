@@ -6,7 +6,11 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Fix volumes ownership
-chown -R puppet:puppet /etc/puppetlabs/puppet/ssl
+# VARs
+SSLDIR='/etc/puppetlabs/puppet/ssl'
+
+# Fix SSL directory ownership
+mkdir -p "$SSLDIR"
+chown -R puppet:puppet "$SSLDIR"
 
 exec "$@"
