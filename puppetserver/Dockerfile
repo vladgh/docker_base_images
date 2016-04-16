@@ -20,14 +20,16 @@ RUN DEBIAN_FRONTEND=noninteractive && \
 
 # Install gems
 RUN gem install r10k --no-ri --no-rdoc && \
-    gem install hiera-eyaml --no-ri --no-rdoc
+    gem install hiera-eyaml --no-ri --no-rdoc \
+    gem install aws-sdk --no-ri --no-rdoc
 
 # JAVA_ARGS tuning
 RUN sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{JAVA_ARGS:-\1\}@' /etc/default/puppetserver
 
+# Expose ports
 EXPOSE 8140
-VOLUME ["/etc/puppetlabs/code", "/etc/puppetlabs/puppet"]
 
+# Configure entrypoint
 COPY /entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["puppetserver", "foreground"]
