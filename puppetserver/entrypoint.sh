@@ -8,7 +8,7 @@ IFS=$'\n\t'
 
 # VARs
 SSLDIR='/etc/puppetlabs/puppet/ssl'
-CSR_SIGN="${SSLDIR}/ca/csr_sign"
+CSR_SIGN='/etc/puppetlabs/csr/sign'
 
 # Fix SSL directory ownership
 mkdir -p "$SSLDIR"
