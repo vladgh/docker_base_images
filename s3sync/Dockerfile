@@ -8,6 +8,9 @@ RUN apk --update upgrade && \
     apk --purge -v del py-pip && \
     rm -rf /var/cache/apk/*
 
+# Volumes
+VOLUME ["/watch"]
+
 # Configure entrypoint
 COPY /entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]

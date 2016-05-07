@@ -5,7 +5,11 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # VARs
-S3PATH=${S3PATH:?}
+if [[ "${1:-}" =~ s3:// ]]; then
+  S3PATH=$1
+else
+  echo 'No S3 path specified' >&2; exit 1
+fi
 EVENTS=${EVENTS:-'CREATE,DELETE,MODIFY,MOVE,MOVED_FROM,MOVED_TO'}
 WATCHDIR=${WATCHDIR:-'/watch'}
 
