@@ -9,7 +9,7 @@ IFS=$'\n\t'
 # VARs
 SSLDIR='/etc/puppetlabs/puppet/ssl'
 CSR_SIGN='/etc/puppetlabs/csr/sign'
-R10K_DIR='/etc/puppetlabs/r10k'
+R10K_CFG='/etc/puppetlabs/r10k/r10k.yaml'
 
 # Fix SSL directory ownership
 mkdir -p "$SSLDIR"
@@ -21,7 +21,7 @@ if [[ -x "$CSR_SIGN" ]]; then
 fi
 
 # Deploy R10K environments (if a valid configuration file exists)
-if [[ -d "$R10K_DIR" ]] && [[ -s "${R10K_DIR}/r10k.yaml" ]]; then
+if [[ -s "$R10K_CFG" ]]; then
   r10k deploy environment --puppetfile --verbose
 fi
 
