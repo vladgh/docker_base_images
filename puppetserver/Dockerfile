@@ -27,6 +27,9 @@ RUN gem install aws-sdk --no-ri --no-rdoc
 # Expose ports
 EXPOSE 8140
 
+# Set-up logging
+COPY logback.xml request-logging.xml /etc/puppetlabs/puppetserver/
+
 # Configure entrypoint
 COPY /entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]

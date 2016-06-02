@@ -6,17 +6,15 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# VARs
-SSLDIR='/etc/puppetlabs/puppet/ssl'
-CSR_SIGN="${CSR_SIGN:-/etc/puppetlabs/csr/sign}"
-
 # Fix SSL directory ownership
+SSLDIR=$(puppet config print ssldir)
 mkdir -p "$SSLDIR"
 chown -R puppet:puppet "$SSLDIR"
 
 # Configure puppet to use a certificate autosign script (if it exists)
-if [[ -x "$CSR_SIGN" ]]; then
-  puppet config set autosign "$CSR_SIGN" --section master
+AUTOSIGN="${AUTOSIGN:-}"
+if [[ -n "$AUTOSIGN" ]]; then
+  puppet config set autosign "$AUTOSIGN" --section master
 fi
 
 exec "$@"
