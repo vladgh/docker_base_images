@@ -14,15 +14,12 @@ RUN DEBIAN_FRONTEND=noninteractive && \
     dpkg -i /tmp/${PUPPETLABS_RELEASE}.deb && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Install git and puppetserver
+# Install puppetserver
 RUN DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && apt-get install -y --no-install-recommends puppetserver && \
     sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{JAVA_ARGS:-\1\}@' \
     /etc/default/puppetserver && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Install extras (Gems, Python packages)
-RUN gem install aws-sdk --no-ri --no-rdoc
 
 # Expose ports
 EXPOSE 8140
