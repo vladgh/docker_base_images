@@ -7,8 +7,8 @@ ENV PATH=/opt/puppetlabs/server/bin:/opt/puppetlabs/puppet/bin:/opt/puppetlabs/b
 
 # Install Puppet release package
 RUN DEBIAN_FRONTEND=noninteractive && \
-    apt-get update -y && apt-get install -y --no-install-recommends \
-    wget python-pip python-setuptools python-wheel && \
+    apt-get update -y && \
+    apt-get install -y --no-install-recommends wget && \
     wget -O /tmp/${PUPPETLABS_RELEASE}.deb \
     https://apt.puppetlabs.com/${PUPPETLABS_RELEASE}.deb && \
     dpkg -i /tmp/${PUPPETLABS_RELEASE}.deb && \
@@ -16,15 +16,13 @@ RUN DEBIAN_FRONTEND=noninteractive && \
 
 # Install git and puppetserver
 RUN DEBIAN_FRONTEND=noninteractive && \
-    apt-get update -y && apt-get install -y --no-install-recommends \
-    git puppetserver && \
+    apt-get update -y && apt-get install -y --no-install-recommends puppetserver && \
     sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{JAVA_ARGS:-\1\}@' \
     /etc/default/puppetserver && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install extras (Gems, Python packages)
-RUN gem install r10k aws-sdk --no-ri --no-rdoc && \
-    pip install --upgrade pip setuptools awscli
+RUN gem install aws-sdk --no-ri --no-rdoc
 
 # Expose ports
 EXPOSE 8140
