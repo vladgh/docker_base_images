@@ -8,7 +8,7 @@ ENV PATH=/opt/puppetlabs/server/bin:/opt/puppetlabs/puppet/bin:/opt/puppetlabs/b
 # Install Puppet release package
 RUN DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && \
-    apt-get install -y --no-install-recommends wget && \
+    apt-get install -y wget && \
     wget -O /tmp/${PUPPETLABS_RELEASE}.deb \
     https://apt.puppetlabs.com/${PUPPETLABS_RELEASE}.deb && \
     dpkg -i /tmp/${PUPPETLABS_RELEASE}.deb && \
