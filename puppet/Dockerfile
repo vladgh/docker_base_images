@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM ubuntu:16.04
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Environment
