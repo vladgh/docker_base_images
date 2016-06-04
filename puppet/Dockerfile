@@ -11,12 +11,8 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends wget ca-certificates && \
     wget -O "/tmp/${PUPPETLABS_RELEASE}.deb" \
     "https://apt.puppetlabs.com/${PUPPETLABS_RELEASE}.deb" && \
-    dpkg -i "/tmp/${PUPPETLABS_RELEASE}.deb" && \
-    apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Install Puppet
-RUN export DEBIAN_FRONTEND=noninteractive && \
-    apt-get update -y && apt-get install -y --no-install-recommends puppet && \
+    dpkg -i "/tmp/${PUPPETLABS_RELEASE}.deb" && apt-get update -y && \
+    apt-get install -y --no-install-recommends puppet-agent && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENTRYPOINT ["puppet"]
