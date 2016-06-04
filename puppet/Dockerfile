@@ -17,9 +17,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 # Install Puppet
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && apt-get install -y --no-install-recommends puppet && \
-    sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{JAVA_ARGS:-\1\}@' \
-    /etc/default/puppetserver && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENTRYPOINT ["puppet"]
-CMD [""agent", "--verbose", "--onetime", "--no-daemonize", "--summarize""]
+CMD ["agent", "--verbose", "--onetime", "--no-daemonize", "--summarize"]
