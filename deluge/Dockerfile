@@ -8,8 +8,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends software-proper
 
 ADD run.sh /run.sh
 
-VOLUME ["/data"]
-
 EXPOSE 8112 53160 53160/udp 58846
 
 ENTRYPOINT ["/bin/bash", "/run.sh"]

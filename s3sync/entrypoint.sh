@@ -11,7 +11,7 @@ else
   echo 'No S3 path specified' >&2; exit 1
 fi
 EVENTS=${EVENTS:-'CREATE,DELETE,MODIFY,MOVE,MOVED_FROM,MOVED_TO'}
-WATCHDIR=${WATCHDIR:-'/watch'}
+WATCHDIR=${WATCHDIR:-/watch}
 
 # Ensure watched directory exists
 mkdir -p "$WATCHDIR"

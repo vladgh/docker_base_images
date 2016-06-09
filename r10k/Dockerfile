@@ -15,9 +15,6 @@ RUN apk --no-cache add --virtual build-dependencies py-pip && \
 # Install R10K
 RUN gem install r10k --version "$R10K_VERSION" --no-ri --no-rdoc
 
-# Configure volumes
-VOLUME ["/opt/puppetlabs/r10k/cache/", "/etc/puppetlabs/code/environments/"]
-
 # Default entrypoint and command
 ENTRYPOINT ["r10k"]
 CMD ["version"]
