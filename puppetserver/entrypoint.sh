@@ -17,4 +17,10 @@ if [[ -n "$AUTOSIGN" ]]; then
   puppet config set autosign "$AUTOSIGN" --section master
 fi
 
+# Configure puppet to use a comma-separated list of alternate DNS names (if they exist)
+DNS_ALT_NAMES="${DNS_ALT_NAMES-}"
+if [[ -n "$DNS_ALT_NAMES" ]]; then
+  puppet config set dns_alt_names "$DNS_ALT_NAMES" --section master
+fi
+
 exec "$@"
