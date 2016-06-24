@@ -5,12 +5,7 @@ MAINTAINER Vlad Ghinea vlad@ghn.me
 ENV R10K_VERSION='2.3.0'
 
 # Install packages
-RUN apk --no-cache add bash python git
-
-# Install AWS Command Line Interface
-RUN apk --no-cache add --virtual build-dependencies py-pip && \
-    pip install awscli && \
-    apk del build-dependencies
+RUN apk --no-cache add bash git
 
 # Install R10K
 RUN gem install r10k --version "$R10K_VERSION" --no-ri --no-rdoc
