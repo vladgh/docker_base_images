@@ -1,12 +1,8 @@
-FROM alpine:latest
+FROM vladgh/awscli:latest
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Install iNotify tools
-RUN apk --update upgrade && \
-    apk add --update bash inotify-tools python py-pip && \
-    pip install awscli && \
-    apk --purge -v del py-pip && \
-    rm -rf /var/cache/apk/*
+RUN apk --no-cache add inotify-tools
 
 # Configure entrypoint
 COPY /entrypoint.sh /
