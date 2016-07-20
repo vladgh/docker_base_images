@@ -10,24 +10,28 @@ WATCHDIR=${WATCHDIR:-/watch}
 INTERVAL=${INTERVAL:-600}
 EVENTS=${EVENTS:-'CREATE,DELETE,MODIFY,MOVE,MOVED_FROM,MOVED_TO'}
 
+log(){
+  echo "[$(date "+%Y-%m-%dT%H:%M:%S%z") - $(hostname)] ${*}"
+}
+
 sanity_checks() {
   mkdir -p "$WATCHDIR" # Ensure watched directory exists
 
   if [[ ! "${S3PATH:-}" =~ s3:// ]]; then
-    echo 'No S3 path specified' >&2; exit 1
+    log 'No S3 path specified' >&2; exit 1
   fi
   if [[ ! "${INTERVAL:-}" =~ ^[0-9]+$ ]]; then
-    echo 'The INTERVAL is not an integer' >&2; exit 1
+    log 'The INTERVAL is not an integer' >&2; exit 1
   fi
 }
 
 sync_down(){
-  echo 'Downloading files...'
+  log 'Downloading files...'
   aws s3 sync --delete "$S3PATH" "$WATCHDIR" || true
 }
 
 sync_up(){
-  echo 'Uploading files...'
+  log 'Uploading files...'
   aws s3 sync --delete "$WATCHDIR" "$S3PATH" || true
 }
 
@@ -43,7 +47,7 @@ sync_event(){
 }
 
 cleanup() {
-  echo 'Exit detected; trying to run final sync'
+  log 'Exit detected; trying to run final sync'
   sync_up; exit "${1:-0}"
 }
 
