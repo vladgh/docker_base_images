@@ -11,18 +11,16 @@
 #
 #################################################################
 
-FROM alpine:3.2
-MAINTAINER Jonathan Short <jonathan.short@sendgrid.com>
+FROM alpine:latest
+MAINTAINER Vlad Ghinea vlad@ghn.me
 
-RUN apk add --update rsyslog rsyslog-tls && rm -rf /var/cache/apk/*
-
-ADD run.sh /tmp/run.sh
-RUN chmod +x /tmp/run.sh
-ADD rsyslog.conf /etc/
-ADD loggly.crt /etc/rsyslog.d/keys/ca.d/
+RUN apk --no-cache add rsyslog rsyslog-tls
 
 EXPOSE 514
 EXPOSE 514/udp
 
-CMD ["/tmp/run.sh"]
+COPY rsyslog.conf /etc/
+COPY loggly.crt /etc/rsyslog.d/keys/ca.d/
 
+COPY entrypoint.sh /
+ENTRYPOINT ["/entrypoint.sh"]
