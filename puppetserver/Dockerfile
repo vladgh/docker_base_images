@@ -28,6 +28,6 @@ EXPOSE 8140
 COPY logback.xml request-logging.xml /etc/puppetlabs/puppetserver/
 
 # Configure entrypoint
-COPY /entrypoint.sh /
+COPY entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["puppetserver", "foreground"]

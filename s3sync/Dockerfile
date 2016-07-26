@@ -5,5 +5,5 @@ MAINTAINER Vlad Ghinea vlad@ghn.me
 RUN apk --no-cache add inotify-tools
 
 # Configure entrypoint
-COPY /entrypoint.sh /
+COPY entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
