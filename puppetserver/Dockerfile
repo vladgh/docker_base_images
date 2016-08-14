@@ -14,7 +14,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     wget -O "/tmp/${PUPPETLABS_RELEASE}.deb" \
     "https://apt.puppetlabs.com/${PUPPETLABS_RELEASE}.deb" && \
     dpkg -i "/tmp/${PUPPETLABS_RELEASE}.deb" && \
-    apt-get install -y --no-install-recommends \
+    apt-get update -y && apt-get install -y --no-install-recommends \
     puppetserver="$PUPPET_SERVER_VERSION"-1puppetlabs1 && \
     sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{JAVA_ARGS:-\1\}@' \
     /etc/default/puppetserver && \
