@@ -20,6 +20,7 @@ docker run --rm -it \
   -e GPG_RECIPIENT=ADBCDEFGH \
   -e BACKUP_PATHS=/backup1 /backup2 \
   -v ~/.aws:/root/.aws:ro \
+  -v /etc/localtime:/etc/localtime:ro
   -v ~/KeysPath:/keys:ro \
   -v ~/path/to/first/backup/dir:/backup1 \
   -v ~/path/to/second/backup/dir:/backup2 \
@@ -37,6 +38,7 @@ docker run -d \
   -e BACKUP_PATHS=/backup1 /backup2 \
   -e CRON_TIME= '0 0 * * *'\
   -v ~/.aws:/root/.aws:ro \
+  -v /etc/localtime:/etc/localtime:ro
   -v ~/KeysPath:/keys:ro \
   -v ~/path/to/first/backup/dir:/backup1 \
   -v ~/path/to/second/backup/dir:/backup2 \
