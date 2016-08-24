@@ -1,5 +1,36 @@
----
 language: ruby
+rvm: 2.2
 services: docker
-cache: bundler
-script: bundle exec rake spec
+cache:
+  directories:
+    - vendor/bundle
+branches:
+  except:
+    - /^v\d/
+env:
+  global:
+    - DOCKER_REPOSITORY=vladgh
+    - DOCKER_IMAGE_PREFIX=vpm
+  matrix:
+    - IMAGE=apache
+    - IMAGE=awscli
+    - IMAGE=backup
+    - IMAGE=deluge
+    - IMAGE=fpm
+    - IMAGE=loggly
+    - IMAGE=puppet
+    - IMAGE=puppetserver
+    - IMAGE=r10k
+    - IMAGE=s3sync
+before_install:
+  - sudo apt-get -qy update;
+    sudo apt-get -qy -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install docker-engine
+install: bundle install --path vendor/bundle
+script:
+  - bundle exec rake ${IMAGE}:build
+  - bundle exec rake ${IMAGE}:spec
+notifications:
+  webhooks:
+    urls: https://puppet.ghn.me/travis
+  slack:
+    secure: 'N00a4/N02UjLIQQ2ReO7pujt70BT7VBnUOE8xOzMIsj58S0NW07MsitNQaluJI6GpUu2fCs14/fbyDKGw6Coz/wr/B8PC/Z5xpFwRAqzPd/BgZotx7jVyVBRdHCott+SGHVdp5hsvNLY7aiMA49WQMJATG9kETPD0Mt8V01j4zg='

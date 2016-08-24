@@ -1,98 +1,60 @@
+require 'rainbow'
+
 def version
-  File.read('VERSION').strip
+  `git describe --always --tags`.strip
 end
 
-def current_git_sha
-  `git rev-parse HEAD`.strip
+def git_commit
+  `git rev-parse --short HEAD`.strip
 end
 
-def previous_git_sha
-  `git rev-parse HEAD~1`.strip
+def git_branch
+  return ENV['GIT_BRANCH'] if ENV['GIT_BRANCH']
+  return ENV['TRAVIS_BRANCH'] if ENV['TRAVIS_BRANCH']
+  `git symbolic-ref HEAD --short 2>/dev/null`.strip
 end
 
-# Color prompt
-class String
-  def black
-    "\033[30m#{self}\033[0m"
-  end
-
-  def red
-    "\033[31m#{self}\033[0m"
-  end
-
-  def green
-    "\033[32m#{self}\033[0m"
-  end
-
-  def yellow
-    "\033[33m#{self}\033[0m"
-  end
-
-  def blue
-    "\033[34m#{self}\033[0m"
-  end
-
-  def magenta
-    "\033[35m#{self}\033[0m"
-  end
-
-  def cyan
-    "\033[36m#{self}\033[0m"
-  end
-
-  def gray
-    "\033[37m#{self}\033[0m"
-  end
-
-  def bg_black
-    "\033[40m#{self}\0330m"
-  end
-
-  def bg_red
-    "\033[41m#{self}\033[0m"
-  end
-
-  def bg_green
-    "\033[42m#{self}\033[0m"
-  end
-
-  def bg_brown
-    "\033[43m#{self}\033[0m"
-  end
-
-  def bg_blue
-    "\033[44m#{self}\033[0m"
-  end
-
-  def bg_magenta
-    "\033[45m#{self}\033[0m"
-  end
-
-  def bg_cyan
-    "\033[46m#{self}\033[0m"
-  end
-
-  def bg_gray
-    "\033[47m#{self}\033[0m"
-  end
-
-  def bold
-    "\033[1m#{self}\033[22m"
-  end
-
-  def reverse_color
-    "\033[7m#{self}\033[27m"
-  end
+def git_url
+  `git config --get remote.origin.url`.strip
 end
 
 def info(message)
-  puts "==> #{message}".green
+  puts Rainbow("==> #{message}").green
 end
 
 def warn(message)
-  puts "==> #{message}".yellow
+  puts Rainbow("==> #{message}").yellow
 end
 
 def error(message)
-  puts "==> #{message}".red
+  puts Rainbow("==> #{message}").red
+end
+
+def command?(command)
+  system("command -v #{command} >/dev/null 2>&1")
+end
+
+def version_hash
+  @version_hash ||= begin
+    v = version
+    {}.tap do |h|
+      h[:major], h[:minor], h[:patch], h[:rev], h[:rev_hash] = v[1..-1].split(/[.-]/)
+    end
+  end
+end
+
+def increment_version(level)
+  v = version_hash.dup
+  v[level] = v[level].to_i + 1
+
+  to_zero = LEVELS[LEVELS.index(level) + 1..LEVELS.size]
+  to_zero.each { |z| v[z] = 0 }
+
+  v
+end
+
+def configure_changelog(config, release: nil)
+  config.bug_labels         = 'Type: Bug'
+  config.enhancement_labels = 'Type: Enhancement'
+  config.future_release     = "v#{release}" if release
 end
