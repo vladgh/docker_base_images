@@ -45,9 +45,13 @@ encrypt_archive(){
 
 # Create bucket, if it doesn't already exist
 ensure_s3_bucket(){
-  if ! aws s3 ls "$AWS_S3_BUCKET" >/dev/null 2>&1; then
+  if [[ -s /var/run/backup_bucket_name ]]; then
+    # Persist bucket name
+    export AWS_S3_BUCKET; AWS_S3_BUCKET="$(cat /var/run/backup_bucket_name)"
+  elif ! aws s3 ls "$AWS_S3_BUCKET" >/dev/null 2>&1; then
     log "Create '${AWS_S3_BUCKET}' bucket"
     aws s3 mb "s3://${AWS_S3_BUCKET}"
+    echo "$AWS_S3_BUCKET" > /var/run/backup_bucket_name
   fi
 }
 
@@ -60,6 +64,7 @@ upload_archive(){
 
 # Backup logic
 backup_archive(){
+  ensure_s3_bucket
   create_archive
   if [[ -n "$GPG_RECIPIENT" ]]; then
     encrypt_archive
