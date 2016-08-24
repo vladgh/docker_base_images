@@ -9,6 +9,7 @@ Dir['tasks/**/*.rake'].each { |task| load task }
 REPOSITORY   = ENV['DOCKER_REPOSITORY']   || 'vladgh'
 IMAGE_PREFIX = ENV['DOCKER_IMAGE_PREFIX'] || ''
 NO_CACHE     = ENV['DOCKER_NO_CACHE']     || false
+BUILD_ARGS   = ENV['DOCKER_BUILD_ARGS']   || false
 RELEASE_TYPE = ENV['RELEASE_TYPE']        || 'patch'
 BUILD_DATE   = Time.now.utc.strftime('%Y-%m-%dT%H:%M:%SZ')
 
@@ -76,10 +77,12 @@ IMAGES.each do |image|
     desc 'Build docker image'
     task build: :docker do
       cmd =  "cd #{docker_dir} && docker build"
-      cmd += " --build-arg VERSION=#{docker_tag}"
-      cmd += " --build-arg VCS_URL=#{git_url}"
-      cmd += " --build-arg VCS_REF=#{git_commit}"
-      cmd += " --build-arg BUILD_DATE=#{BUILD_DATE}"
+      if BUILD_ARGS
+        cmd += " --build-arg VERSION=#{docker_tag}"
+        cmd += " --build-arg VCS_URL=#{git_url}"
+        cmd += " --build-arg VCS_REF=#{git_commit}"
+        cmd += " --build-arg BUILD_DATE=#{BUILD_DATE}"
+      end
 
       if NO_CACHE
         info "Ignoring layer cache for #{docker_image}"

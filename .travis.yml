@@ -10,7 +10,6 @@ branches:
 env:
   global:
     - DOCKER_REPOSITORY=vladgh
-    - DOCKER_IMAGE_PREFIX=vpm
   matrix:
     - IMAGE=apache
     - IMAGE=awscli
