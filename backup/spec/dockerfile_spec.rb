@@ -9,6 +9,10 @@ describe 'Dockerfile' do
     expect(os[:family]).to eq('alpine')
   end
 
+  describe package('bash') do
+    it { is_expected.to be_installed }
+  end
+
   describe package('git') do
     it { is_expected.to be_installed }
   end
