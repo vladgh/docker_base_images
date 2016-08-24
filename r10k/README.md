@@ -1,4 +1,4 @@
-# R10K Docker Image
+# R10K Docker Image ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/master/r10k))
 
 https://github.com/puppetlabs/r10k
 

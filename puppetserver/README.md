@@ -1,6 +1,6 @@
-# PuppetServer Docker Image
+# PuppetServer Docker Image ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/master/puppetserver))
 
-### Available environment variables:
+## Available environment variables:
 
 #### `AUTOSIGN` [Boolean/String]:
 Puppet auto signing. For more information regarding policy based auto signing go to https://docs.puppet.com/puppet/latest/reference/ssl_autosign.html#policy-based-autosigning
@@ -22,7 +22,7 @@ For more information regarding memory tuning go to https://docs.puppet.com/puppe
 docker run -d -e JAVA_ARGS='-Xms512m -Xmx512m' vladgh/puppetserver
 ```
 
-### Complete run example:
+## Complete run example:
 ```
 docker run \
   --detach \

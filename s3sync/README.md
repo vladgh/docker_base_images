@@ -1,4 +1,4 @@
-# S3Sync Docker Image
+# S3Sync Docker Image ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/master/s3sync))
 
 Watches for changes in a directory and syncs them to S3.
 The container downloads first the S3 files (overwriting the local ones), and

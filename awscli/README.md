@@ -1,6 +1,6 @@
-# AWS Command Line Interface Docker Image
+# AWS Command Line Interface Docker Image ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/master/awscli))
 
-Docker container with the AWS Command Line Interface installed.
+Docker image with the AWS Command Line Interface installed.
 
 Optional variables :
 - `AWS_ACCESS_KEY_ID` (or functional IAM profile)

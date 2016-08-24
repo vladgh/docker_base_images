@@ -1,4 +1,4 @@
-# Loggly Docker Image
+# Loggly Docker Image ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/master/loggly))
 
 Docker container for loggly (via rsyslog). Check out Loggly's [Docker logging documentation](https://www.loggly.com/docs/docker-syslog/) to learn more.
 
