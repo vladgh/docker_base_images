@@ -21,6 +21,10 @@ describe 'Dockerfile' do
     it { is_expected.to be_installed }
   end
 
+  describe package('haveged') do
+    it { is_expected.to be_installed }
+  end
+
   describe package('xz') do
     it { is_expected.to be_installed }
   end
