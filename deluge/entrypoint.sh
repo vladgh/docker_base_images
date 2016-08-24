@@ -5,10 +5,16 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # Remove old pid if it exists
-[ -f /data/deluged.pid ] && rm -f /data/deluged.pid
+[ -f /cfg/deluged.pid ] && rm -f /cfg/deluged.pid
+
+# Ensure user is present
+useradd -u "$USER_ID" deluge || true
+
+# Ensure the right permissions
+chown -R deluge: /cfg
 
 # Start Deluge Daemon
-/usr/bin/deluged --config /config --loglevel info
+su - deluge -c '/usr/bin/deluged --config /cfg --loglevel info'
 
 # Start Deluge Web UI
-/usr/bin/deluge-web --config /config --loglevel info
+su - deluge -c '/usr/bin/deluge-web --config /cfg --loglevel info'
