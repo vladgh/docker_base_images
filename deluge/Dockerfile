@@ -13,5 +13,5 @@ EXPOSE 8112
 
 ENV USER_ID=1000
 
-COPY run.sh /run.sh
-ENTRYPOINT ["/run.sh"]
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
