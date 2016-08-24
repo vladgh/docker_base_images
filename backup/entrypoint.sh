@@ -59,11 +59,13 @@ ensure_s3_bucket(){
 upload_archive(){
   # Copy to AWS S3
   aws s3 cp "$BACKUP_FILE_ENCRYPTED" \
-    "s3://${AWS_S3_BUCKET}/${BACKUP_FILE_ENCRYPTED}"
+    "s3://${AWS_S3_BUCKET}/${BACKUP_PREFIX}/${BACKUP_FILE_ENCRYPTED}"
 }
 
 # Backup logic
 backup_archive(){
+  export BACKUP_PREFIX=${1:-hourly}
+
   ensure_s3_bucket
   create_archive
   if [[ -n "$GPG_RECIPIENT" ]]; then
@@ -130,15 +132,29 @@ main(){
       ensure_s3_bucket
       backup_archive
       ;;
-    cronjob)
+    cron)
       import_gpg_keys
       ensure_s3_bucket
-      echo "${CRON_TIME} /entrypoint.sh cronrun >> /backup.log 2>&1" > /etc/crontabs/root
+      cat > /etc/crontabs/root <<CRON
+${CRON_TIME} /entrypoint.sh hourly >> /backup.log 2>&1
+2 2 * * * /entrypoint.sh daily >> /backup.log 2>&1
+3 3 * * 6 /entrypoint.sh weekly >> /backup.log 2>&1
+5 5 1 * * /entrypoint.sh monthly >> /backup.log 2>&1
+CRON
       log "Run backups as a cronjob for ${CRON_TIME}"
       exec crond -l 2 -f
       ;;
-    cronrun)
-      backup_archive
+    hourly)
+      backup_archive 'hourly'
+      ;;
+    daily)
+      backup_archive 'daily'
+      ;;
+    weekly)
+      backup_archive 'weekly'
+      ;;
+    monthly)
+      backup_archive 'monthly'
       ;;
     restore)
       import_gpg_keys

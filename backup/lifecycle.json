@@ -1,0 +1,22 @@
+{
+  "Rules": [
+    {
+      "Status": "Enabled",
+      "Prefix": "hourly/",
+      "Expiration": { "Days": 1 },
+      "ID": "Hourly Rotation"
+    },
+    {
+      "Status": "Enabled",
+      "Prefix": "daily/",
+      "Expiration": { "Days": 7 },
+      "ID": "Daily Rotation"
+    },
+    {
+      "Status": "Enabled",
+      "Prefix": "weekly/",
+      "Expiration": { "Days": 30 },
+      "ID": "Weekly Rotation"
+    }
+  ]
+}
