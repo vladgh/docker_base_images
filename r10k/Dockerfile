@@ -2,7 +2,7 @@ FROM ruby:alpine
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Environment
-ENV R10K_VERSION='2.3.0'
+ENV R10K_VERSION='2.4.3'
 
 # Install packages
 RUN apk --no-cache add bash git
