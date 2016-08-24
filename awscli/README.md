@@ -1,4 +1,4 @@
-# AWS Command Line Interface
+# AWS Command Line Interface Docker Image
 
 Docker container with the AWS Command Line Interface installed.
 

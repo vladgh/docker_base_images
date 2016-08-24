@@ -1,4 +1,4 @@
-# Backup container
+# Backup Docker Image
 
 Environment variables :
 - `AWS_S3_BUCKET`: the name of the bucket (defaults to backups_vgh_{ID})
