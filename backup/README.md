@@ -44,7 +44,7 @@ docker run -d \
   -v ~/KeysPath:/keys:ro \
   -v ~/path/to/first/backup/dir:/backup1 \
   -v ~/path/to/second/backup/dir:/backup2 \
-  vladgh/backup cronjob
+  vladgh/backup cron
 ```
 
 ## Restore

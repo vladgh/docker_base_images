@@ -16,7 +16,7 @@ BACKUP_FILE="${NOW}.tar.xz"
 BACKUP_FILE_ENCRYPTED="${BACKUP_FILE}.gpg"
 RESTORE_FILE=
 RESTORE_FILE_DECRYPTED="decrypted.tar.xz"
-CRON_TIME="${CRON_TIME:-'8 */8 * * *'}"
+CRON_TIME="${CRON_TIME:-8 */8 * * *}"
 
 # Log message
 log(){
@@ -48,6 +48,7 @@ ensure_s3_bucket(){
   if [[ -s /var/run/backup_bucket_name ]]; then
     # Persist bucket name
     export AWS_S3_BUCKET; AWS_S3_BUCKET="$(cat /var/run/backup_bucket_name)"
+    log "Using '${AWS_S3_BUCKET}' bucket"
   elif ! aws s3 ls "$AWS_S3_BUCKET" >/dev/null 2>&1; then
     log "Create '${AWS_S3_BUCKET}' bucket"
     aws s3 mb "s3://${AWS_S3_BUCKET}"
@@ -100,7 +101,7 @@ decrypt_archive(){
 
 # Extract the latest archive
 extract_archive(){
-  log "Extrac '${RESTORE_FILE_DECRYPTED}' to '/restore'"
+  log "Extract '${RESTORE_FILE_DECRYPTED}' to '/restore'"
   mkdir -p /restore
   tar xJf "$RESTORE_FILE_DECRYPTED" --directory /restore
 }
