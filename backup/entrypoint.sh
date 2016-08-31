@@ -136,6 +136,10 @@ main(){
     cron)
       import_gpg_keys
       ensure_s3_bucket
+
+      log 'Initial backup'
+      backup_archive 'hourly'
+
       cat > /etc/crontabs/root <<CRON
 ${CRON_TIME} /entrypoint.sh hourly >> /backup.log 2>&1
 2 2 * * * /entrypoint.sh daily >> /backup.log 2>&1
