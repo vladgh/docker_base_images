@@ -30,7 +30,5 @@ script:
   - bundle exec rake ${IMAGE}:build
   - bundle exec rake ${IMAGE}:spec
 notifications:
-  webhooks:
-    urls: https://puppet.ghn.me/travis
   slack:
     secure: 'N00a4/N02UjLIQQ2ReO7pujt70BT7VBnUOE8xOzMIsj58S0NW07MsitNQaluJI6GpUu2fCs14/fbyDKGw6Coz/wr/B8PC/Z5xpFwRAqzPd/BgZotx7jVyVBRdHCott+SGHVdp5hsvNLY7aiMA49WQMJATG9kETPD0Mt8V01j4zg='
