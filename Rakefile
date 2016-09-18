@@ -6,6 +6,7 @@ require_relative 'lib/common'
 REPOSITORY   = ENV['DOCKER_REPOSITORY']   || 'vladgh'
 IMAGE_PREFIX = ENV['DOCKER_IMAGE_PREFIX'] || ''
 NO_CACHE     = ENV['DOCKER_NO_CACHE']     || false
+BUILD_ARGS   = ENV['DOCKER_BUILD_ARGS']   || false
 
 # Internals
 BUILD_DATE = Time.now.utc.strftime('%Y-%m-%dT%H:%M:%SZ')

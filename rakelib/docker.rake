@@ -34,10 +34,13 @@ IMAGES.each do |image|
     desc 'Build docker image'
     task build: :docker do
       cmd  = "cd #{docker_dir} && docker build"
-      cmd += " --build-arg VERSION=#{docker_tag}"
-      cmd += " --build-arg VCS_URL=#{git_url}"
-      cmd += " --build-arg VCS_REF=#{git_commit}"
-      cmd += " --build-arg BUILD_DATE=#{BUILD_DATE}"
+
+      if BUILD_ARGS
+        cmd += " --build-arg VERSION=#{docker_tag}"
+        cmd += " --build-arg VCS_URL=#{git_url}"
+        cmd += " --build-arg VCS_REF=#{git_commit}"
+        cmd += " --build-arg BUILD_DATE=#{BUILD_DATE}"
+      end
 
       if NO_CACHE
         info "Ignoring layer cache for #{docker_image}"
