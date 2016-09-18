@@ -16,7 +16,6 @@ env:
     - IMAGE=backup
     - IMAGE=deluge
     - IMAGE=fpm
-    - IMAGE=loggly
     - IMAGE=minidlna
     - IMAGE=puppet
     - IMAGE=puppetserver
