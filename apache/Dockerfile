@@ -1,4 +1,4 @@
-FROM php:7-apache
+FROM php:7.1-apache
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Install the PHP extensions we need

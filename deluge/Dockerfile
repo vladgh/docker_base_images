@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM ubuntu:16.04
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 RUN export DEBIAN_FRONTEND=noninteractive && \

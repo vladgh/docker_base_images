@@ -1,4 +1,4 @@
-FROM php:7-fpm
+FROM php:7.1-fpm
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 RUN apt-get update && apt-get install -y --no-install-recommends \

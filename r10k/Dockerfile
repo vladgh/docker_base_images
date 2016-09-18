@@ -1,4 +1,4 @@
-FROM ruby:alpine
+FROM ruby:2.3-alpine
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Environment

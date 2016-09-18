@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.4
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Install packages
