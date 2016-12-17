@@ -1,11 +1,15 @@
-# MiniDLNA
+# MiniDLNA ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/master/minidlna))
+[![](https://images.microbadger.com/badges/image/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/version/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna "Get your own version badge on microbadger.com")
+[![](https://images.microbadger.com/badges/commit/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna "Get your own commit badge on microbadger.com")
+[![](https://images.microbadger.com/badges/license/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna "Get your own license badge on microbadger.com")
 
-This is minidlna on top of minimal Alpine.
+This is MiniDLNA on top of minimal Alpine.
 It can be configured with environment variables.
 
 ## Usage
 
-Prefix any config directive of minidlna with `MINIDLNA_`
+Prefix any configuration directive of MiniDLNA with `MINIDLNA_`
 and run your container:
 
 ```
