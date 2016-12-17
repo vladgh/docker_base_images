@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+
+echo "------ HOOK START - BUILD -------"
+
+set -euo pipefail
+IFS=$'\n\t'
+
+printenv
+whoami
+pwd
+ls -lah
+
+VERSION=$(git describe --always --tags)
+VCS_URL=$(git config --get remote.origin.url)
+VCS_REF=$(git rev-parse --short HEAD)
+BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+docker build \
+  --build-arg VERSION="$VERSION" \
+  --build-arg VCS_URL="$VCS_URL" \
+  --build-arg VCS_REF="$VCS_REF" \
+  --build-arg BUILD_DATE="$BUILD_DATE" \
+  -t $IMAGE_NAME .
+
+echo "------ HOOK END - BUILD -------"
