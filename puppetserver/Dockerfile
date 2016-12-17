@@ -3,7 +3,7 @@ MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Environment
 ENV PATH=/opt/puppetlabs/server/bin:/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH \
-    PUPPETLABS_RELEASE='puppetlabs-release-pc1-xenial' \
+    PUPPETLABS_RELEASE="puppetlabs-release-pc1-xenial" \
     PUPPET_SERVER_VERSION="2.7.2" \
     JAVA_ARGS="-Xms512m -Xmx512m"
 
