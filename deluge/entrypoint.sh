@@ -10,6 +10,9 @@ IFS=$'\n\t'
 # Ensure user is present
 useradd -u "$USER_ID" deluge || true
 
+# Ensure config directory exists
+mkdir -p /cfg
+
 # Ensure the right permissions
 chown -R deluge: /cfg
 

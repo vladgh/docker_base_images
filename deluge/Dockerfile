@@ -1,6 +1,7 @@
 FROM ubuntu:16.04
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
+# Install packages
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
     apt-get install -y --no-install-recommends software-properties-common && \
@@ -9,10 +10,13 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -qy deluged deluge-web && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Expose ports
 EXPOSE 8112
 
+# User
 ENV USER_ID=1000
 
+# Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
