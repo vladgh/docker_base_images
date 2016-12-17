@@ -27,12 +27,12 @@ sanity_checks() {
 
 sync_down(){
   log 'Downloading files...'
-  aws s3 sync --delete "$S3PATH" "$WATCHDIR" || true
+  aws s3 sync --delete --exact-timestamps "$S3PATH" "$WATCHDIR" || true
 }
 
 sync_up(){
   log 'Uploading files...'
-  aws s3 sync --delete "$WATCHDIR" "$S3PATH" || true
+  aws s3 sync --delete --exact-timestamps "$WATCHDIR" "$S3PATH" || true
 }
 
 sync_event(){
