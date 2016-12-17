@@ -1,7 +1,5 @@
 # Vlad's Docker Base Images
 
-[![Build Status](https://travis-ci.org/vladgh/docker_base_images.svg?branch=master)](https://travis-ci.org/vladgh/docker_base_images)
-
 ## Description
 
 You can find published versions of these images on [Docker Hub](https://hub.docker.com/r/vladgh):
