@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+echo "------ HOOK START - POST_BUILD -------"
+
+set -euo pipefail
+IFS=$'\n\t'
+
+curl -X POST https://hooks.microbadger.com/images/vladgh/awscli/mbMppUV6he_zmIGik-MeJ22K8a0=
+
+echo "------ HOOK END - POST_BUILD -------"
