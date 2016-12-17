@@ -1,11 +1,8 @@
-FROM alpine:3.4
+FROM vladgh/awscli:stable
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Install packages
-RUN apk --no-cache add bash git gnupg haveged xz python && \
-    apk --no-cache add --virtual build-dependencies py-pip && \
-    pip install awscli && \
-    apk del build-dependencies
+RUN apk --no-cache add gnupg haveged xz
 
 # Entrypoint
 COPY entrypoint.sh /
