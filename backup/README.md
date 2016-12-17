@@ -1,6 +1,7 @@
 # Backup Docker Image ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/master/backup))
 [![](https://images.microbadger.com/badges/image/vladgh/backup.svg)](https://microbadger.com/images/vladgh/backup "Get your own image badge on microbadger.com")
 [![](https://images.microbadger.com/badges/version/vladgh/backup.svg)](https://microbadger.com/images/vladgh/backup "Get your own version badge on microbadger.com")
+[![](https://images.microbadger.com/badges/commit/vladgh/backup.svg)](https://microbadger.com/images/vladgh/backup "Get your own commit badge on microbadger.com")
 [![](https://images.microbadger.com/badges/license/vladgh/backup.svg)](https://microbadger.com/images/vladgh/backup "Get your own license badge on microbadger.com")
 
 ## Environment variables :
