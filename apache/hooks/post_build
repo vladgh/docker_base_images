@@ -2,6 +2,6 @@
 
 echo "------ HOOK START - POST_BUILD -------"
 
-curl -X POST https://hooks.microbadger.com/images/vladgh/awscli/mbMppUV6he_zmIGik-MeJ22K8a0=
+curl -X POST https://hooks.microbadger.com/images/vladgh/apache/1LIUNGTtioEcpHJoQZzwK3qQPhE=
 
 echo "------ HOOK END - POST_BUILD -------"
