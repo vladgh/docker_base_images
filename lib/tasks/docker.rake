@@ -1,6 +1,7 @@
 require 'rspec/core/rake_task'
 
 require 'common'
+require 'git'
 require 'release'
 
 # Docker tasks
