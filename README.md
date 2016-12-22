@@ -14,3 +14,51 @@ You can find published versions of these images on [Docker Hub](https://hub.dock
 * [vladgh/puppetserver](https://hub.docker.com/r/vladgh/puppetserver)
 * [vladgh/r10k](https://hub.docker.com/r/vladgh/r10k)
 * [vladgh/s3sync](https://hub.docker.com/r/vladgh/s3sync)
+
+## Development
+
+### List images
+
+```
+bundle exec rake docker:list
+```
+
+### Lint images
+
+```
+bundle exec rake docker:lint
+bundle exec rake docker:{IMAGE}:lint
+```
+
+### Test images
+
+```
+bundle exec rake docker:spec
+bundle exec rake docker:{IMAGE}:spec
+```
+
+### Build images
+
+```
+bundle exec rake docker:build
+bundle exec rake docker:{IMAGE}:build
+```
+
+### Push images
+
+```
+bundle exec rake docker:push
+bundle exec rake docker:{IMAGE}:push
+```
+
+## Contribute
+
+1. Open an issue to discuss proposed changes
+2. Fork the repository
+3. Create your feature branch: `git checkout -b my-new-feature`
+4. Commit your changes: `git commit -am 'Add some feature'`
+5. Push to the branch: `git push origin my-new-feature`
+6. Submit a pull request :D
+
+## License
+Licensed under the Apache License, Version 2.0.
