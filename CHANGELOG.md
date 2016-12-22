@@ -1,7 +1,6 @@
 # Change Log
 
-## [Unreleased](https://github.com/vladgh/docker_base_images/tree/HEAD)
-
+## [v0.0.1](https://github.com/vladgh/docker_base_images/tree/v0.0.1) (2016-12-22)
 **Implemented enhancements:**
 
 - Add metadata [\#6](https://github.com/vladgh/docker_base_images/issues/6)
