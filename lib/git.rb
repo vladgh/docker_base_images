@@ -1,5 +1,3 @@
-# Git tasks
-
 # Get git short commit hash
 def git_commit
   `git rev-parse --short HEAD`.strip

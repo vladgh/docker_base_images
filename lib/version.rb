@@ -1,8 +1,6 @@
-# Release
-
 # Get version number from git tags
 def version
-  `git describe --always --tags`.strip
+  `git describe --always --tags 2>/dev/null || echo '0.0.0-0-0'`.strip
 end
 
 # Split the version number
@@ -21,11 +19,4 @@ def version_increment(level)
   to_zero = LEVELS[LEVELS.index(level) + 1..LEVELS.size]
   to_zero.each { |z| v[z] = 0 }
   v
-end
-
-# Configure the github_changelog_generator/task
-def configure_changelog(config, release: nil)
-  config.bug_labels         = 'Type: Bug'
-  config.enhancement_labels = 'Type: Enhancement'
-  config.future_release     = "v#{release}" if release
 end
