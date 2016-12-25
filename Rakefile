@@ -9,8 +9,6 @@ require 'tasks/docker'
 Tasks::Docker.new
 require 'tasks/lint'
 Tasks::Lint.new
-require 'tasks/release'
-Tasks::Release.new
 
 # List all tasks by default
 Rake::Task[:default].clear if Rake::Task.task_defined?(:default)
