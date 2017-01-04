@@ -5,8 +5,8 @@ MAINTAINER Vlad Ghinea vlad@ghn.me
 ENV AWS_DEFAULT_REGION=us-east-1
 
 # Install packages
-RUN apk --no-cache add bash git python && \
-    apk --no-cache add --virtual build-dependencies py-pip && \
+RUN apk --no-cache add bash git python2 && \
+    apk --no-cache add --virtual build-dependencies py2-pip && \
     pip install awscli && \
     apk del build-dependencies
 
