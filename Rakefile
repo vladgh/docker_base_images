@@ -139,7 +139,7 @@ namespace :docker do
       task build: :docker do
         cmd = "cd #{docker_dir} && docker build"
 
-        if build_args
+        if DOCKER_BUILD_ARGS
           cmd += " --build-arg VERSION=#{docker_tag}"
           cmd += " --build-arg VCS_URL=#{git_url}"
           cmd += " --build-arg VCS_REF=#{git_commit}"
