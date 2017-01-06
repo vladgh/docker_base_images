@@ -1,14 +1,16 @@
 # Configure the load path so all dependencies in your Gemfile can be required
 require 'bundler/setup'
-require 'rainbow'
-require 'rspec/core/rake_task'
 
-# Get version number from git tags
+# VARs
 DOCKER_REPOSITORY = ENV['DOCKER_REPOSITORY'] || 'vladgh'
 DOCKER_NO_CACHE   = ENV['DOCKER_NO_CACHE']   || false
 DOCKER_BUILD_ARGS = ENV['DOCKER_BUILD_ARGS'] || true
 DOCKER_BUILD_DATE = Time.now.utc.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+# Semantic version (from git tags)
 VERSION = (`git describe --always --tags 2>/dev/null`.chomp || '0.0.0-0-0').freeze
+
+require 'rainbow'
 
 # Debug message
 def debug(message)
@@ -90,13 +92,6 @@ def git_clean_repo
   true
 end
 
-# Configure the github_changelog_generator/task
-def changelog(config, release: nil)
-  config.bug_labels         = 'Type: Bug'
-  config.enhancement_labels = 'Type: Enhancement'
-  config.future_release     = "v#{release}" if release
-end
-
 # List all folders containing Dockerfiles
 def docker_images
   @docker_images = Dir.glob('*').select do |dir|
@@ -120,6 +115,8 @@ namespace :docker do
       sh 'docker rmi $(docker images -f "dangling=true" -q)'
     end
   end
+
+  require 'rspec/core/rake_task'
 
   docker_images.each do |image|
     docker_dir       = File.basename(image)
