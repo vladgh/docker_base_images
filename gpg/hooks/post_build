@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+echo "------ HOOK START - POST_BUILD -------"
+
+curl -X POST https://hooks.microbadger.com/images/vladgh/gpg/ZjbRHMtrAhl9V2MWjWmOR0KWlGc=
+
+echo "------ HOOK END - POST_BUILD -------"
