@@ -5,7 +5,7 @@ MAINTAINER Vlad Ghinea vlad@ghn.me
 ENV AWS_DEFAULT_REGION=us-east-1
 
 # Install packages
-RUN apk --no-cache add bash git python2
+RUN apk --no-cache add bash git groff less python2
 
 # Install pip packages
 RUN apk --no-cache add --virtual build-dependencies py2-pip && \
