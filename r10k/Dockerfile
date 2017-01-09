@@ -2,14 +2,14 @@ FROM ruby:2.4-alpine
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Install packages
-RUN apk --no-cache add bash git
+RUN apk --no-cache add git
 
 # Install R10K
 RUN gem install r10k --no-ri --no-rdoc
 
 # Entrypoint
-ENTRYPOINT ["r10k"]
-CMD ["version"]
+COPY entrypoint.sh /
+ENTRYPOINT ["/entrypoint.sh"]
 
 # Metadata params
 ARG VERSION

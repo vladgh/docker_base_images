@@ -10,10 +10,18 @@ https://github.com/puppetlabs/r10k
 
 ## Run example
 
+- Provide the R10K configuration file as a mount point
 ```
 docker run -it \
   -v $(pwd)/r10k.yaml:/etc/puppetlabs/r10k/r10k.yaml \
-  -v $(pwd)/environments:/etc/puppetlabs/code/environments \
   vladgh/r10k \
-  deploy environment --puppetfile --verbose
+  r10k deploy environment --puppetfile --verbose
+```
+
+- Provide the URL of the remote Puppet control repository
+```
+docker run -it \
+  -e REMOTE='https://github.com/me/example.git' \
+  vladgh/r10k \
+  r10k deploy environment --puppetfile --verbose
 ```
