@@ -43,7 +43,7 @@ end
 
 # Docker always running container
 # Overwrite the entrypoint so that we can run the tests
-shared_context 'with a docker container (overwrite entrypoint)' do
+shared_context 'with a docker container (override entrypoint)' do
   include_context 'shared docker image'
 
   before(:all) do
@@ -61,7 +61,7 @@ end
 
 # Docker always running container
 # Overwrite the command so that we can run the tests
-shared_context 'with a docker container (overwrite command)' do
+shared_context 'with a docker container (override command)' do
   include_context 'shared docker image'
 
   before(:all) do
