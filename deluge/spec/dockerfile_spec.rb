@@ -3,7 +3,7 @@ require 'spec_helper'
 DOCKER_IMAGE_DIRECTORY = File.dirname(File.dirname(__FILE__))
 
 describe 'Dockerfile' do
-  include_context 'with a dummy docker container'
+  include_context 'with a docker container (overwrite command)'
 
   it 'uses the correct version of Ubuntu' do
     os_version = command('cat /etc/lsb-release').stdout
