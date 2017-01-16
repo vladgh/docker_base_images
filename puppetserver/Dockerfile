@@ -7,18 +7,18 @@ ENV PATH=/opt/puppetlabs/server/bin:/opt/puppetlabs/puppet/bin:/opt/puppetlabs/b
     PUPPET_SERVER_VERSION="2.7.2" \
     JAVA_ARGS="-Xms512m -Xmx512m"
 
-  # Installation
-  RUN export DEBIAN_FRONTEND=noninteractive && \
-      apt-get update -y && \
-      apt-get install -y --no-install-recommends wget ca-certificates && \
-      wget -O "/tmp/${PUPPETLABS_RELEASE}.deb" \
-      "https://apt.puppetlabs.com/${PUPPETLABS_RELEASE}.deb" && \
-      dpkg -i "/tmp/${PUPPETLABS_RELEASE}.deb" && \
-      apt-get update -y && apt-get install -y --no-install-recommends \
-      puppetserver="$PUPPET_SERVER_VERSION"-1puppetlabs1 && \
-      sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{JAVA_ARGS:-\1\}@' \
-      /etc/default/puppetserver && \
-      apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# Installation
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update -y && \
+    apt-get install -y --no-install-recommends wget ca-certificates && \
+    wget -O "/tmp/${PUPPETLABS_RELEASE}.deb" \
+    "https://apt.puppetlabs.com/${PUPPETLABS_RELEASE}.deb" && \
+    dpkg -i "/tmp/${PUPPETLABS_RELEASE}.deb" && \
+    apt-get update -y && apt-get install -y --no-install-recommends \
+    puppetserver="$PUPPET_SERVER_VERSION"-1puppetlabs1 && \
+    sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{JAVA_ARGS:-\1\}@' \
+    /etc/default/puppetserver && \
+    apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Ports
 EXPOSE 8140
