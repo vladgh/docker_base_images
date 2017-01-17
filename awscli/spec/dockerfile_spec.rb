@@ -9,12 +9,16 @@ describe 'Dockerfile' do
     expect(os[:family]).to eq('alpine')
   end
 
-  describe package('bash') do
-    it { is_expected.to be_installed }
+  packages = %w(bash findutils git groff less openssl python2)
+  packages.each do |pkg|
+    describe package(pkg) do
+      it { is_expected.to be_installed }
+    end
   end
 
-  describe package('git') do
-    it { is_expected.to be_installed }
+  describe command('find --version') do
+    its(:stdout) { is_expected.to contain('(GNU findutils)') }
+    its(:exit_status) { is_expected.to eq 0 }
   end
 
   describe command('git version') do
