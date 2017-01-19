@@ -1,14 +1,16 @@
-FROM python:2-alpine
+FROM alpine:3.5
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Environment
 ENV AWS_DEFAULT_REGION=us-east-1
 
 # Install packages
-RUN apk --no-cache add bash findutils git groff less
+RUN apk --no-cache add bash findutils git groff less python2
 
 # Install pip packages
-RUN pip --no-cache-dir install awscli
+RUN apk --no-cache add --virtual build-dependencies py2-pip && \
+    pip --no-cache-dir install awscli && \
+    apk del build-dependencies
 
 # Default command
 CMD ["/bin/bash"]
