@@ -37,7 +37,7 @@ HEALTHCHECK --interval=30s --timeout=30s --retries=20 CMD \
   --cert   $(puppet config print hostcert) \
   --key    $(puppet config print hostprivkey) \
   --cacert $(puppet config print localcacert) \
-  https://$(puppet config print server):8140/production/status/test \
+  https://$(hostname):8140/production/status/test \
   |  grep -q '"is_alive":true' \
   || exit 1
 
