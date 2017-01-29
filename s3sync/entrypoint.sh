@@ -1,72 +1,70 @@
 #!/usr/bin/env bash
 
-# Bash strict mode
 set -euo pipefail
 IFS=$'\n\t'
 
-# VARs
 S3PATH=${S3PATH:-}
-WATCHDIR=${WATCHDIR:-/watch}
-INTERVAL=${INTERVAL:-600}
-EVENTS=${EVENTS:-'CREATE,DELETE,MODIFY,MOVE,MOVED_FROM,MOVED_TO'}
+WATCHDIR=${WATCHDIR:-}
+INTERVAL=${INTERVAL:-}
+DESTINATION=${DESTINATION:-/sync}
 
 log(){
   echo "[$(date "+%Y-%m-%dT%H:%M:%S%z") - $(hostname)] ${*}"
 }
 
-sanity_checks() {
-  mkdir -p "$WATCHDIR" # Ensure watched directory exists
-
-  if [[ ! "${S3PATH:-}" =~ s3:// ]]; then
-    log 'No S3 path specified' >&2; exit 1
-  fi
-  if [[ ! "${INTERVAL:-}" =~ ^[0-9]+$ ]]; then
-    log 'The INTERVAL is not an integer' >&2; exit 1
-  fi
+cleanup() {
+  log 'Exit detected'; exit 0
 }
 
-sync_down(){
-  log 'Downloading files...'
-  aws s3 sync --delete --exact-timestamps "$S3PATH" "$WATCHDIR" || true
-}
+sync_files(){
+  local src="${1:-}"
+  local dst="${2:-}"
 
-sync_up(){
-  log 'Uploading files...'
-  aws s3 sync --delete --exact-timestamps "$WATCHDIR" "$S3PATH" || true
+  mkdir -p "$dst"
+
+  log "Sync '${src}' to '${dst}'"
+  if ! aws s3 sync --delete --exact-timestamps "$src" "$dst"; then
+    log "Could not sync '${src}' to '${dst}'" >&2; exit 1
+  fi
 }
 
 sync_event(){
   case "$@" in
     DELETE* | MOVED_FROM*)
-      sync_up
+      sync_files "$WATCHDIR" "$S3PATH"
       ;;
     *)
-      sync_up
+      sync_files "$WATCHDIR" "$S3PATH"
       ;;
   esac
 }
 
-cleanup() {
-  log 'Exit detected; trying to run final sync'
-  sync_up; exit "${1:-0}"
-}
+watch_directory(){
+  sync_files "$S3PATH" "$WATCHDIR"
 
-main(){
-  # Sanity checks
-  sanity_checks
-
-  # Trap exit
-  trap 'cleanup $?' HUP INT QUIT TERM
-
-  # Initial download
-  sync_down
-
-  # Watch
-  inotifywait -e "$EVENTS" -m -r --format '%:e %f' "$WATCHDIR" | (
+  inotifywait -e 'CREATE,DELETE,MODIFY,MOVE,MOVED_FROM,MOVED_TO' -m -r --format '%:e %f' "$WATCHDIR" | (
     while true; do read -r -t 1 EVENT && sync_event "$EVENT"; unset EVENT; done
-  ) & (
-    while true; do sync_up; sleep "$INTERVAL" & wait ${!}; done
   )
 }
 
-main
+run_loop(){
+  while true; do sync_files "$S3PATH" "$DESTINATION"; sleep "$INTERVAL"; done
+}
+
+main(){
+  trap 'cleanup $?' HUP INT QUIT TERM
+
+  if [[ ! "$S3PATH" =~ s3:// ]]; then
+    log 'No S3PATH specified' >&2; exit 1
+  fi
+
+  if [[ -n "$WATCHDIR" ]]; then
+    watch_directory
+  elif [[ "$INTERVAL" =~ ^[0-9]+$ ]]; then
+    run_loop
+  else
+    sync_files "$S3PATH" "$DESTINATION"
+  fi
+}
+
+main "$@"
