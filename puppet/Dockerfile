@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Environment
-ENV PATH=/opt/puppetlabs/server/bin:/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH \
+ENV PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH \
     PUPPETLABS_RELEASE="puppetlabs-release-pc1-xenial" \
     PUPPET_AGENT_VERSION="1.9.0"
 

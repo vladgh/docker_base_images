@@ -1,19 +1,13 @@
-FROM ubuntu:16.04
+FROM vladgh/puppet:latest
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Environment
-ENV PATH=/opt/puppetlabs/server/bin:/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH \
-    PUPPETLABS_RELEASE="puppetlabs-release-pc1-xenial" \
+ENV PATH=/opt/puppetlabs/server/bin:$PATH \
     PUPPET_SERVER_VERSION="2.7.2" \
     JAVA_ARGS="-Xms512m -Xmx512m"
 
 # Installation
 RUN export DEBIAN_FRONTEND=noninteractive && \
-    apt-get update -y && \
-    apt-get install -y --no-install-recommends wget ca-certificates && \
-    wget -O "/tmp/${PUPPETLABS_RELEASE}.deb" \
-    "https://apt.puppetlabs.com/${PUPPETLABS_RELEASE}.deb" && \
-    dpkg -i "/tmp/${PUPPETLABS_RELEASE}.deb" && \
     apt-get update -y && apt-get install -y --no-install-recommends \
     puppetserver="$PUPPET_SERVER_VERSION"-1puppetlabs1 && \
     sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{JAVA_ARGS:-\1\}@' \
