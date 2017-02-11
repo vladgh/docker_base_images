@@ -4,7 +4,7 @@ MAINTAINER Vlad Ghinea vlad@ghn.me
 # Environment
 ENV PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH \
     PUPPETLABS_RELEASE="puppetlabs-release-pc1-xenial" \
-    PUPPET_AGENT_VERSION="1.9.0"
+    PUPPET_AGENT_VERSION="1.9.1"
 
 # Install Puppet release package
 RUN export DEBIAN_FRONTEND=noninteractive && \
