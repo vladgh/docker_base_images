@@ -8,13 +8,17 @@ IFS=$'\n\t'
 [ -f /cfg/deluged.pid ] && rm -f /cfg/deluged.pid
 
 # Ensure user is present
-useradd -u "$USER_ID" deluge || true
+groupadd -g "$GROUP_ID" deluge || true
+useradd -u "$USER_ID" -g deluge deluge || true
 
 # Ensure config directory exists
 mkdir -p /cfg
 
 # Ensure the right permissions
-chown -R deluge: /cfg
+chown -R deluge:deluge /cfg
+
+# Set umask
+umask "$UMASK"
 
 # Start Deluge Daemon
 su - deluge -c '/usr/bin/deluged --config /cfg --loglevel info'

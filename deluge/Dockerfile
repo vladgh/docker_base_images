@@ -14,7 +14,9 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 EXPOSE 8112
 
 # User
-ENV USER_ID=1000
+ENV USER_ID=1000 \
+    GROUP_ID=1000 \
+    UMASK=022
 
 # Entrypoint
 COPY entrypoint.sh /entrypoint.sh
