@@ -11,7 +11,8 @@
 - `AWS_DEFAULT_REGION`: the default region (defaults to 'us-east-1')
 - `AWS_S3_BUCKET`: the name of the bucket (defaults to backups_{ID})
 - `GPG_RECIPIENT`: the id of the intended recipient; if it's missing, the archive will NOT be encrypted
-- `GPG_KEYS_PATH`: container path to the GPG keys (defaults to '/keys')
+- `GPG_KEY_PATH`: container path to the GPG key (defaults to '/keys')
+- `GPG_KEY_URL`:  URL to the public GPG key
 - `BACKUP_PATH`: container path to be archived (defaults to '/backup')
 - `RESTORE_PATH`: container path to restore (defaults to '/restore')
 - `CRON_TIME`: a valid cron expression (it only applies to the "hourly" backups; defaults to every 8 hours, at midnight, Sunday, and the first day of each month; see Rotation below)

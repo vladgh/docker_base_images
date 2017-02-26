@@ -8,7 +8,8 @@ IFS=$'\n\t'
 AWS_S3_BUCKET="${AWS_S3_BUCKET:-backup_$(date +%s | sha256sum | base64 | head -c 16 ; echo)}"
 AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
 GPG_RECIPIENT="${GPG_RECIPIENT:-}"
-GPG_KEYS_PATH="${GPG_KEYS_PATH:-/keys}"
+GPG_KEY_PATH="${GPG_KEY_PATH:-/keys}"
+GPG_KEY_URL="${GPG_KEY_URL:-}"
 BACKUP_PATH="${BACKUP_PATH:-/backup}"
 CRON_TIME="${CRON_TIME:-8 */8 * * *}"
 NOW=$(date +"%Y-%m-%d_%H-%M-%S")
@@ -21,9 +22,12 @@ log(){
 
 # Import public GPG key
 import_gpg_keys(){
-  if [[ "$(ls -A "$GPG_KEYS_PATH" 2>&1)" ]]; then
-    log "Import all keys in '/keys' folder"
-    gpg --batch --import ${GPG_KEYS_PATH}/*
+  if ls -A "$GPG_KEY_PATH" >/dev/null 2>&1; then
+    log 'Import all keys in /keys folder'
+    gpg --batch --import "$GPG_KEY_PATH"/*
+  elif [[ "$GPG_KEY_URL" =~ ^https://.* ]]; then
+    log "Import key from ${GPG_KEY_URL}"
+    curl "$GPG_KEY_URL" | gpg --import
   fi
 }
 
@@ -117,7 +121,7 @@ extract_archive(){
 
 # Restore archive
 restore_archive(){
-  export RESTORE_FILE="$(get_latest_s3_archive)"
+  export RESTORE_FILE; RESTORE_FILE="$(get_latest_s3_archive)"
 
   download_s3_archive
   decrypt_archive

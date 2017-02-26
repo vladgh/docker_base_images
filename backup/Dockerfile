@@ -2,7 +2,7 @@ FROM vladgh/awscli:latest
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Install packages
-RUN apk --no-cache add gnupg haveged xz
+RUN apk --no-cache add curl gnupg haveged xz
 
 # Entrypoint
 COPY entrypoint.sh /
