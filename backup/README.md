@@ -11,7 +11,9 @@
 - `AWS_DEFAULT_REGION`: the default region (defaults to 'us-east-1')
 - `AWS_S3_BUCKET`: the name of the bucket (defaults to backups_{ID})
 - `GPG_RECIPIENT`: the id of the intended recipient; if it's missing, the archive will NOT be encrypted
-- `BACKUP_PATHS`: a space separated list of paths from inside de container that will be archived (defaults to '/backup')
+- `GPG_KEYS_PATH`: container path to the GPG keys (defaults to '/keys')
+- `BACKUP_PATH`: container path to be archived (defaults to '/backup')
+- `RESTORE_PATH`: container path to restore (defaults to '/restore')
 - `CRON_TIME`: a valid cron expression (it only applies to the "hourly" backups; defaults to every 8 hours, at midnight, Sunday, and the first day of each month; see Rotation below)
 
 ## One time backup
@@ -22,13 +24,12 @@ docker run --rm -it \
   -e AWS_SECRET_ACCESS_KEY=5678 \
   -e AWS_DEFAULT_REGION=us-east-1 \
   -e AWS_S3_BUCKET=mybucket \
-  -e GPG_RECIPIENT=ADBCDEFGH \
-  -e BACKUP_PATHS=/backup1 /backup2 \
+  -e GPG_RECIPIENT=me@example.com \
   -v ~/.aws:/root/.aws:ro \
   -v /etc/localtime:/etc/localtime:ro
-  -v ~/KeysPath:/keys:ro \
-  -v ~/path/to/first/backup/dir:/backup1 \
-  -v ~/path/to/second/backup/dir:/backup2 \
+  -v ~/GPGKeysPath:/keys:ro \
+  -v ~/path/to/backup/dir1:/backup/dir1 \
+  -v ~/path/to/backup/dir2:/backup/dir2 \
   vladgh/backup
 ```
 
@@ -40,14 +41,14 @@ docker run -d \
   -e AWS_SECRET_ACCESS_KEY=5678 \
   -e AWS_DEFAULT_REGION=us-east-1 \
   -e AWS_S3_BUCKET=mybucket \
-  -e GPG_RECIPIENT=ADBCDEFGH \
+  -e GPG_RECIPIENT=me@example.com \
   -e BACKUP_PATHS=/backup1 /backup2 \
   -e CRON_TIME= '0 */2 * * *'\
   -v ~/.aws:/root/.aws:ro \
   -v /etc/localtime:/etc/localtime:ro
-  -v ~/KeysPath:/keys:ro \
-  -v ~/path/to/first/backup/dir:/backup1 \
-  -v ~/path/to/second/backup/dir:/backup2 \
+  -v ~/GPGKeysPath:/keys:ro \
+  -v ~/path/to/backup/dir1:/backup/dir1 \
+  -v ~/path/to/backup/dir2:/backup/dir2 \
   vladgh/backup cron
 ```
 
@@ -59,9 +60,8 @@ docker run --rm -it \
   -e AWS_SECRET_ACCESS_KEY=5678 \
   -e AWS_DEFAULT_REGION=us-east-1 \
   -e AWS_S3_BUCKET=mybucket \
-  -e BACKUP_RESTORE=true \
   -v ~/.aws:/root/.aws:ro \
-  -v ~/KeysPath:/keys:ro \
+  -v ~/GPGKeysPath:/keys:ro \
   -v ~/RestorePath:/restore \
   vladgh/backup restore
 ```
