@@ -10,6 +10,7 @@
 - `AWS_SECRET_ACCESS_KEY`: the secret key (or functional IAM profile)
 - `AWS_DEFAULT_REGION`: the default region (defaults to 'us-east-1')
 - `AWS_S3_BUCKET`: the name of the bucket (defaults to backups_{ID})
+- `AWS_S3_PREFIX`: the prefix of the keys inside the bucket (no leading or trailing slashes)
 - `GPG_RECIPIENT`: the id of the intended recipient; if it's missing, the archive will NOT be encrypted
 - `GPG_KEY_PATH`: container path to the GPG key (defaults to '/keys')
 - `GPG_KEY_URL`:  URL to the public GPG key

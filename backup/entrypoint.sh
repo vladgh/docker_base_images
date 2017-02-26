@@ -6,6 +6,7 @@ IFS=$'\n\t'
 
 # VARs
 AWS_S3_BUCKET="${AWS_S3_BUCKET:-backup_$(date +%s | sha256sum | base64 | head -c 16 ; echo)}"
+AWS_S3_PREFIX="${AWS_S3_PREFIX:-}"
 AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
 GPG_RECIPIENT="${GPG_RECIPIENT:-}"
 GPG_KEY_PATH="${GPG_KEY_PATH:-/keys}"
@@ -66,11 +67,9 @@ ensure_s3_bucket(){
 upload_archive(){
   # Copy to AWS S3
   if [[ -s "$BACKUP_FILE_ENCRYPTED" ]]; then
-    aws s3 cp "$BACKUP_FILE_ENCRYPTED" \
-      "s3://${AWS_S3_BUCKET}/${BACKUP_PREFIX}/${BACKUP_FILE_ENCRYPTED}"
+    aws s3 cp "$BACKUP_FILE_ENCRYPTED" "${AWS_S3_PATH}/${BACKUP_PREFIX}/${BACKUP_FILE_ENCRYPTED}"
   elif [[ -s "$BACKUP_FILE" ]]; then
-    aws s3 cp "$BACKUP_FILE" \
-      "s3://${AWS_S3_BUCKET}/${BACKUP_PREFIX}/${BACKUP_FILE}"
+    aws s3 cp "$BACKUP_FILE" "${AWS_S3_PATH}/${BACKUP_PREFIX}/${BACKUP_FILE}"
   fi
 }
 
@@ -88,6 +87,7 @@ backup_archive(){
 get_latest_s3_archive(){
   if ! aws s3api list-objects \
     --bucket "$AWS_S3_BUCKET" \
+    --prefix "$AWS_S3_PREFIX" \
     --query 'reverse(sort_by(Contents, &LastModified))[0].Key' \
     --output text
   then
@@ -97,7 +97,7 @@ get_latest_s3_archive(){
 
 # Download the latest archive from S3
 download_s3_archive(){
-  aws s3 cp "s3://${AWS_S3_BUCKET}/${RESTORE_FILE}" "$RESTORE_FILE"
+  aws s3 cp "s3://${AWS_S3_PATH}/${RESTORE_FILE}" "$RESTORE_FILE"
 }
 
 # Decrypt archive
@@ -143,6 +143,12 @@ bye(){
 main(){
     # Trap exit
   trap 'bye $?' HUP INT QUIT TERM
+
+  if [[ -n "$AWS_S3_PREFIX" ]]; then
+    AWS_S3_PATH="s3://${AWS_S3_BUCKET}/${AWS_S3_PREFIX}"
+  else
+    AWS_S3_PATH="s3://${AWS_S3_BUCKET}"
+  fi
 
   # Import GPG keys
   import_gpg_keys
