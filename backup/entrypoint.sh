@@ -67,15 +67,15 @@ ensure_s3_bucket(){
 upload_archive(){
   # Copy to AWS S3
   if [[ -s "$BACKUP_FILE_ENCRYPTED" ]]; then
-    aws s3 cp "$BACKUP_FILE_ENCRYPTED" "${AWS_S3_PATH}/${BACKUP_PREFIX}/${BACKUP_FILE_ENCRYPTED}"
+    aws s3 cp "$BACKUP_FILE_ENCRYPTED" "${AWS_S3_PATH}/${BACKUP_TYPE}/${BACKUP_FILE_ENCRYPTED}"
   elif [[ -s "$BACKUP_FILE" ]]; then
-    aws s3 cp "$BACKUP_FILE" "${AWS_S3_PATH}/${BACKUP_PREFIX}/${BACKUP_FILE}"
+    aws s3 cp "$BACKUP_FILE" "${AWS_S3_PATH}/${BACKUP_TYPE}/${BACKUP_FILE}"
   fi
 }
 
 # Backup archive
 backup_archive(){
-  export BACKUP_PREFIX=${1:-hourly}
+  export BACKUP_TYPE=${1:-hourly}
 
   create_archive
   encrypt_archive
