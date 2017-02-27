@@ -18,6 +18,7 @@ Optional variables :
 docker run -it \
   -e AWS_ACCESS_KEY_ID=1234 \
   -e AWS_SECRET_ACCESS_KEY=5678 \
+  -e AWS_DEFAULT_REGION=us-west-2 \
   vladgh/awscli
 ```
 

@@ -9,22 +9,33 @@
 - `AWS_ACCESS_KEY_ID`: the key id (or functional IAM profile)
 - `AWS_SECRET_ACCESS_KEY`: the secret key (or functional IAM profile)
 - `AWS_DEFAULT_REGION`: the default region (defaults to 'us-east-1')
-- `AWS_S3_BUCKET`: the name of the bucket (defaults to backups_{ID})
-- `AWS_S3_PREFIX`: the prefix of the keys inside the bucket (no leading or trailing slashes)
+- `AWS_S3_BUCKET`: the name of the bucket (defaults to backup_{ID})
+- `AWS_S3_PREFIX`: the prefix for the keys inside the bucket (no leading or trailing slashes)
 - `GPG_RECIPIENT`: the id of the intended recipient; if it's missing, the archive will NOT be encrypted
-- `GPG_KEY_PATH`: container path to the GPG key (defaults to '/keys')
 - `GPG_KEY_URL`:  URL to the public GPG key
+- `GPG_KEY_PATH`: container path to the GPG key (defaults to '/keys')
 - `BACKUP_PATH`: container path to be archived (defaults to '/backup')
 - `RESTORE_PATH`: container path to restore (defaults to '/restore')
 - `CRON_TIME`: a valid cron expression (it only applies to the "hourly" backups; defaults to every 8 hours, at midnight, Sunday, and the first day of each month; see Rotation below)
+
+## AWS credentials
+
+You can declare AWS credentials in 2 ways:
+
+```SH
+...
+-e AWS_ACCESS_KEY_ID=1234 \
+-e AWS_SECRET_ACCESS_KEY=5678 \
+-e AWS_DEFAULT_REGION=us-east-1 \
+# OR
+-v ~/.aws:/root/.aws:ro
+...
+```
 
 ## One time backup
 
 ```SH
 docker run --rm -it \
-  -e AWS_ACCESS_KEY_ID=1234 \
-  -e AWS_SECRET_ACCESS_KEY=5678 \
-  -e AWS_DEFAULT_REGION=us-east-1 \
   -e AWS_S3_BUCKET=mybucket \
   -e GPG_RECIPIENT=me@example.com \
   -v ~/.aws:/root/.aws:ro \
@@ -39,12 +50,8 @@ docker run --rm -it \
 
 ```SH
 docker run -d \
-  -e AWS_ACCESS_KEY_ID=1234 \
-  -e AWS_SECRET_ACCESS_KEY=5678 \
-  -e AWS_DEFAULT_REGION=us-east-1 \
   -e AWS_S3_BUCKET=mybucket \
   -e GPG_RECIPIENT=me@example.com \
-  -e BACKUP_PATHS=/backup1 /backup2 \
   -e CRON_TIME= '0 */2 * * *'\
   -v ~/.aws:/root/.aws:ro \
   -v /etc/localtime:/etc/localtime:ro
@@ -58,9 +65,6 @@ docker run -d \
 
 ```SH
 docker run --rm -it \
-  -e AWS_ACCESS_KEY_ID=1234 \
-  -e AWS_SECRET_ACCESS_KEY=5678 \
-  -e AWS_DEFAULT_REGION=us-east-1 \
   -e AWS_S3_BUCKET=mybucket \
   -v ~/.aws:/root/.aws:ro \
   -v ~/GPGKeysPath:/keys:ro \
