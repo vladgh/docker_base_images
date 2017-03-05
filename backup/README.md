@@ -46,6 +46,19 @@ docker run --rm -it \
   vladgh/backup
 ```
 
+## One time backup (w/ passphrase)
+
+```SH
+docker run --rm -it \
+  -e AWS_S3_BUCKET=mybucket \
+  -e GPG_PASSPHRASE='mysuperstrongpassword' \
+  -v ~/.aws:/root/.aws:ro \
+  -v /etc/localtime:/etc/localtime:ro
+  -v ~/path/to/backup/dir1:/backup/dir1 \
+  -v ~/path/to/backup/dir2:/backup/dir2 \
+  vladgh/backup
+```
+
 ## Cronjob
 
 ```SH

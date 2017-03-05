@@ -8,6 +8,7 @@ IFS=$'\n\t'
 AWS_S3_BUCKET="${AWS_S3_BUCKET:-backup_$(date +%s | sha256sum | base64 | head -c 16 ; echo)}"
 AWS_S3_PREFIX="${AWS_S3_PREFIX:-}"
 AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
+GPG_PASSPHRASE="${GPG_PASSPHRASE:-}"
 GPG_RECIPIENT="${GPG_RECIPIENT:-}"
 GPG_KEY_PATH="${GPG_KEY_PATH:-/keys}"
 GPG_KEY_URL="${GPG_KEY_URL:-}"
@@ -46,7 +47,22 @@ encrypt_archive(){
   export BACKUP_FILE_ENCRYPTED="${BACKUP_FILE}.gpg"
   if [[ -n "$GPG_RECIPIENT" ]] && [[ -s "$BACKUP_FILE" ]]; then
     log "Encrypt ${BACKUP_FILE_ENCRYPTED}"
-    gpg --trust-model always --output "$BACKUP_FILE_ENCRYPTED" --batch --encrypt --recipient "$GPG_RECIPIENT" "$BACKUP_FILE"
+    gpg \
+      --trust-model always \
+      --output "$BACKUP_FILE_ENCRYPTED" \
+      --batch --yes \
+      --encrypt \
+      --recipient "$GPG_RECIPIENT" \
+      "$BACKUP_FILE"
+  elif [[ -n "$GPG_PASSPHRASE" ]] && [[ -s "$BACKUP_FILE" ]]; then
+    echo "$GPG_PASSPHRASE" | gpg \
+      --output "$BACKUP_FILE_ENCRYPTED" \
+      --batch --yes \
+      --passphrase-fd 0 \
+      --armor \
+      --symmetric \
+      --cipher-algo=aes256 \
+      "$BACKUP_FILE"
   fi
 }
 
