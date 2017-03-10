@@ -24,15 +24,6 @@ module Tasks
     end
 
     def define_tasks
-      begin
-        require 'github_changelog_generator/task'
-        GitHubChangelogGenerator::RakeTask.new(:unreleased) do |config|
-          changelog(config)
-        end
-      rescue LoadError
-        nil # Might be in a group that is not installed
-      end
-
       namespace :tag do
         Version::LEVELS.each do |level|
           desc "Tag #{level} version"
@@ -66,6 +57,14 @@ module Tasks
             sh "git checkout -b #{release_branch}"
 
             info 'Generate new changelog'
+            begin
+              require 'github_changelog_generator/task'
+              GitHubChangelogGenerator::RakeTask.new(:unreleased) do |config|
+                changelog(config)
+              end
+            rescue LoadError
+              nil # Might be in a group that is not installed
+            end
             GitHubChangelogGenerator::RakeTask.new(:latest_release) do |config|
               changelog(config, release: release)
             end
@@ -76,7 +75,6 @@ module Tasks
             sh "git push --set-upstream origin #{release_branch}"
 
             info 'Waiting for CI to finish'
-            puts 'Waiting for CI to finish'
             sleep 5 until git_ci_status(release_branch) == 'success'
 
             info 'Merge release branch'
