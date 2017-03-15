@@ -68,9 +68,13 @@ encrypt_archive(){
 
 # Create bucket, if it doesn't already exist and persist the name
 ensure_s3_bucket(){
-  if [[ -s /var/run/backup_bucket_name ]]; then
+  if grep -q "${AWS_S3_BUCKET}" /var/run/backup_bucket_name; then
     log "Using '${AWS_S3_BUCKET}' bucket"
     export AWS_S3_BUCKET; AWS_S3_BUCKET="$(cat /var/run/backup_bucket_name)"
+  elif [[ -s /var/run/backup_bucket_name ]]; then
+    log "Updating to the '${AWS_S3_BUCKET}' bucket"
+    export AWS_S3_BUCKET
+    echo "$AWS_S3_BUCKET" > /var/run/backup_bucket_name
   elif aws s3 ls "$AWS_S3_BUCKET" >/dev/null 2>&1; then
     log "Set-up '${AWS_S3_BUCKET}' bucket"
     echo "$AWS_S3_BUCKET" > /var/run/backup_bucket_name
