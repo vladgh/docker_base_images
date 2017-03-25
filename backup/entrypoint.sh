@@ -152,8 +152,15 @@ restore_archive(){
 
 # Remove archives
 clean_up(){
-  log  'Remove working files'
-  rm -r "$TMPDIR"
+  # Clean-up
+  if [[ -d "$TMPDIR" ]]; then
+    if [[ "$TMPDIR" =~ tmp. ]]; then
+      log  'Remove working files'
+      rm -rf "${TMPDIR:?}"
+    else
+      log 'Could not remove working files'
+    fi
+  fi
 }
 
 # Trap exit
@@ -163,7 +170,7 @@ bye(){
 }
 
 main(){
-    # Trap exit
+  # Trap exit
   trap 'bye $?' HUP INT QUIT TERM
 
   if [[ -n "$AWS_S3_PREFIX" ]]; then
