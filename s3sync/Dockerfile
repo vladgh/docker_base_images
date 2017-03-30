@@ -4,9 +4,9 @@ MAINTAINER Vlad Ghinea vlad@ghn.me
 # Install iNotify tools
 RUN apk --no-cache add inotify-tools
 
-# Configure entrypoint
+# Entrypoint
 COPY entrypoint.sh /
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
 
 # Metadata params
 ARG VERSION

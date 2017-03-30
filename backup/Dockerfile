@@ -6,7 +6,7 @@ RUN apk --no-cache add curl gnupg haveged xz
 
 # Entrypoint
 COPY entrypoint.sh /
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
 
 # Metadata params
 ARG VERSION

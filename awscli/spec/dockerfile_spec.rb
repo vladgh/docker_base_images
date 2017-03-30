@@ -9,7 +9,7 @@ describe 'Dockerfile' do
     expect(os[:family]).to eq('alpine')
   end
 
-  packages = %w(bash findutils git groff less openssl python2)
+  packages = %w(bash findutils git groff less python2 tini)
   packages.each do |pkg|
     describe package(pkg) do
       it { is_expected.to be_installed }
