@@ -1,21 +1,22 @@
 #!/usr/bin/env bash
+# S3Sync Entry Point
 
+# Bash strict mode
 set -euo pipefail
 IFS=$'\n\t'
 
+# VARs
 S3PATH=${S3PATH:-}
 WATCHDIR=${WATCHDIR:-}
-INTERVAL=${INTERVAL:-}
+CRON_TIME="${CRON_TIME:-}"
 DESTINATION=${DESTINATION:-/sync}
 
+# Log message
 log(){
   echo "[$(date "+%Y-%m-%dT%H:%M:%S%z") - $(hostname)] ${*}"
 }
 
-cleanup() {
-  log 'Exit detected'; exit 0
-}
-
+# Sync files
 sync_files(){
   local src="${1:-}"
   local dst="${2:-}"
@@ -28,6 +29,7 @@ sync_files(){
   fi
 }
 
+# Sync event
 sync_event(){
   case "$@" in
     DELETE* | MOVED_FROM*)
@@ -39,31 +41,37 @@ sync_event(){
   esac
 }
 
+# Watch directory
 watch_directory(){
-  sync_files "$S3PATH" "$WATCHDIR"
-
   inotifywait -e 'CREATE,DELETE,MODIFY,MOVE,MOVED_FROM,MOVED_TO' -m -r --format '%:e %f' "$WATCHDIR" | (
     while true; do read -r -t 1 EVENT && sync_event "$EVENT"; unset EVENT; done
   )
 }
 
-run_loop(){
-  while true; do sync_files "$S3PATH" "$DESTINATION"; sleep "$INTERVAL"; done
+# Install cron job
+run_cron(){
+  log "Setup the cron job (${CRON_TIME})"
+  echo "${CRON_TIME} /entrypoint.sh once" > /etc/crontabs/root
+  exec crond -f -l 6
 }
 
+# Main function
 main(){
-  trap 'cleanup $?' HUP INT QUIT TERM
-
   if [[ ! "$S3PATH" =~ s3:// ]]; then
     log 'No S3PATH specified' >&2; exit 1
   fi
 
+  # Run initial sync
+  sync_files "$S3PATH" "$DESTINATION"
+
+  # Exit if argument is 'once'
+  if [[ "${*:-}" == 'once' ]]; then exit; fi
+
+  # Setup inotify or cron job
   if [[ -n "$WATCHDIR" ]]; then
     watch_directory
-  elif [[ "$INTERVAL" =~ ^[0-9]+$ ]]; then
-    run_loop
-  else
-    sync_files "$S3PATH" "$DESTINATION"
+  elif [[ -n "$CRON_TIME" ]]; then
+    run_cron
   fi
 }
 
