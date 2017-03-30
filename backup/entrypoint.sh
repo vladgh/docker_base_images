@@ -19,7 +19,13 @@ TMPDIR=$(mktemp -d 2>/dev/null || mktemp -d -t 'tmp')
 
 # Log message
 log(){
-  echo "$(date): ${*}"
+  echo "[$(date "+%Y-%m-%dT%H:%M:%S%z") - $(hostname)] ${*}"
+}
+
+# Trap exit
+bye(){
+  log 'Exit detected; trying to clean up'
+  clean_up; exit "${1:-0}"
 }
 
 # Import public GPG key
@@ -99,6 +105,7 @@ upload_archive(){
 backup_archive(){
   export BACKUP_TYPE=${1:-hourly}
 
+  log 'Start backup'
   create_archive
   encrypt_archive
   ensure_s3_bucket
@@ -145,6 +152,7 @@ extract_archive(){
 restore_archive(){
   export RESTORE_FILE; RESTORE_FILE="$(get_latest_s3_archive)"
 
+  log 'Restoring files'
   download_s3_archive
   decrypt_archive
   extract_archive
@@ -153,7 +161,7 @@ restore_archive(){
 # Remove archives
 clean_up(){
   # Clean-up
-  if [[ -d "$TMPDIR" ]]; then
+  if [[ -d "${TMPDIR:-}" ]]; then
     if [[ "$TMPDIR" =~ tmp. ]]; then
       log  'Remove working files'
       rm -rf "${TMPDIR:?}"
@@ -163,15 +171,20 @@ clean_up(){
   fi
 }
 
-# Trap exit
-bye(){
-  log 'Exit detected; trying to clean up'
-  clean_up; exit "${1:-0}"
+run_cron(){
+  log "Run backups as a cron job for (${CRON_TIME})"
+  cat > /etc/crontabs/root <<CRON
+${CRON_TIME} /entrypoint.sh hourly
+2 2 * * * /entrypoint.sh daily
+3 3 * * 6 /entrypoint.sh weekly
+5 5 1 * * /entrypoint.sh monthly
+CRON
+  exec crond -l 6 -f
 }
 
 main(){
   # Trap exit
-  trap 'bye $?' HUP INT QUIT TERM
+  trap 'EXCODE=$?; bye; trap - EXIT; echo $EXCODE' EXIT HUP INT QUIT PIPE TERM
 
   if [[ -n "$AWS_S3_PREFIX" ]]; then
     AWS_S3_PATH="s3://${AWS_S3_BUCKET}/${AWS_S3_PREFIX}"
@@ -193,17 +206,8 @@ main(){
       backup_archive
       ;;
     cron)
-      log 'Start initial backup'
       backup_archive 'hourly'
-
-      cat > /etc/crontabs/root <<CRON
-${CRON_TIME} /entrypoint.sh hourly
-2 2 * * * /entrypoint.sh daily
-3 3 * * 6 /entrypoint.sh weekly
-5 5 1 * * /entrypoint.sh monthly
-CRON
-      log "Run backups as a cronjob for ${CRON_TIME}"
-      exec crond -l 2 -f
+      run_cron
       ;;
     hourly)
       backup_archive 'hourly'
@@ -218,7 +222,6 @@ CRON
       backup_archive 'monthly'
       ;;
     restore)
-      log 'Restoring files'
       restore_archive
       ;;
     *)
