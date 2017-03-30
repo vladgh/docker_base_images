@@ -29,23 +29,24 @@ sync_files(){
   fi
 }
 
-# Sync event
-sync_event(){
-  case "$@" in
-    DELETE* | MOVED_FROM*)
-      sync_files "$WATCHDIR" "$S3PATH"
-      ;;
-    *)
-      sync_files "$WATCHDIR" "$S3PATH"
-      ;;
-  esac
-}
-
 # Watch directory
 watch_directory(){
-  inotifywait -e 'CREATE,DELETE,MODIFY,MOVE,MOVED_FROM,MOVED_TO' -m -r --format '%:e %f' "$WATCHDIR" | (
-    while true; do read -r -t 1 EVENT && sync_event "$EVENT"; unset EVENT; done
-  )
+  log "Watching directory '${WATCHDIR}' for changes"
+  inotifywait \
+    --event create \
+    --event delete \
+    --event modify \
+    --event move \
+    --format "%e %w%f" \
+    --monitor \
+    --quiet \
+    --recursive \
+    "$WATCHDIR" |
+  while read -r CHANGED
+  do
+    log "$CHANGED"
+    sync_files "$WATCHDIR" "$S3PATH"
+  done
 }
 
 # Install cron job
