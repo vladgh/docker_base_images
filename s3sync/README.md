@@ -4,64 +4,81 @@
 [![](https://images.microbadger.com/badges/commit/vladgh/s3sync.svg)](https://microbadger.com/images/vladgh/s3sync "Get your own version badge on microbadger.com")
 [![](https://images.microbadger.com/badges/license/vladgh/s3sync.svg)](https://microbadger.com/images/vladgh/s3sync "Get your own license badge on microbadger.com")
 
-This container synchronizes a local directory with AWS S3.
-By default, it downloads the S3 files and stops.
+This container keeps a local directory synced to an AWS S3 bucket.
+It does an initial sync from the specified S3 bucket to a local directory (if it's empty), and then syncs that directory with that S3 bucket. If the local directory was not empty to begin with, it will not do an initial sync.
+This is an easy way to back a recent backup copy of data in S3 and have a new node grab it when launched.
 
-If you pass the `WATCHDIR` environment variable, it will watch for changes in
-a directory and synchronize them to S3. This script is intended for a single
-machine to sync it's files to S3, and SHOULD NOT be used as a backup solution.
+_This script is intended for a single node to sync it's files to S3, and SHOULD NOT be used as a permanent backup solution._
 
-If you pass the `CRON_TIME` environment variable, it will run once and then setup a cron job to rerun it periodically (ex: CRON_TIME='0 */6 * * *' runs every 6 hours).
+The download location inside the container defaults to `/sync` and can be changed via the `SYNCDIR` environment variable.
 
-Environment variables:
+### Commands
+- `download`: (default) downloads the files and exit
+- `upload`: (default) uploads the files and exit
+- `sync`: uses inotify to upload a directory to S3 when files change (see `SYNCDIR`)
+- `cron`: sets-up a cron job to upload files to S3 periodically (see `CRON_TIME`)
+
+### Required environment variables
 - `AWS_ACCESS_KEY_ID` (or functional IAM profile)
 - `AWS_SECRET_ACCESS_KEY` (or functional IAM profile)
 - `AWS_DEFAULT_REGION` (or functional IAM profile)
-- `S3PATH`: the S3 sync destination (ex: `s3://mybucket/myprefix`)
-- `DESTINATION`: the local destination (defaults to `/sync`)
-- `WATCHDIR`: the watched directory (ex: `/watch`)
-- `CRON_TIME`: a valid cron expression (ex: CRON_TIME='0 */6 * * *' runs every 6 hours)
+- `S3PATH`: the S3 synchronize location (ex: `s3://mybucket/myprefix`)
 
-Run command examples:
+### Optional environment variables
+- `SYNCDIR`: the local synchronize location (defaults to `/sync`)
+- `CRON_TIME`: a valid cron expression (ex: `CRON_TIME='0 */6 * * *'` runs every 6 hours; defaults to hourly)
+- `INITIAL_DOWNLOAD`: whether to download files initially (defaults to `true`)
 
-- Simple
+### Usage:
+
+- Download files and exit
 ```
 docker run \
   -e S3PATH='s3://mybucket/myprefix' \
   vladgh/s3sync
 ```
 
-- Synchronize periodically
+- Uplaod files and exit
+```
+docker run \
+  -e S3PATH='s3://mybucket/myprefix' \
+  vladgh/s3sync \
+  upload
+```
+
+- Upload files periodically (every 6 hours)
 ```
 docker run -d \
   -e S3PATH='s3://mybucket/myprefix' \
   -e CRON_TIME='0 */6 * * *' \
-  vladgh/s3sync
+  vladgh/s3sync \
+  cron
 ```
 
 - Watch local directory
 ```
 docker run -d \
   -e S3PATH='s3://mybucket/myprefix' \
-  -e WATCHDIR='/watch' \
-  vladgh/s3sync
+  vladgh/s3sync \
+  sync
+```
+
+- Watch the specified local directory (host mount)
+```
+docker run -d \
+  -e S3PATH='s3://mybucket/myprefix' \
+  -e SYNCDIR='/mydir' \
+  -v $(pwd):/mydir \
+  vladgh/s3sync \
+  sync
 ```
 
 - External AWS credentials
 ```
 docker run -d \
-  -e S3PATH='s3://mybucket/myprefix' \
+  -e S3PATH='s3://textvgh' \
   -v ~/.aws:/root/.aws:ro \
   vladgh/s3sync
 ```
 
-- External mounted `/watch` directory
-```
-docker run -d \
-  -e S3PATH='s3://mybucket/myprefix' \
-  -e WATCHDIR='/watch' \
-  -v $(pwd):/watch \
-  vladgh/s3sync
-```
-
-Based on https://github.com/danieldreier/docker-puppet-master-ssl
+Thanks to https://github.com/danieldreier/docker-puppet-master-ssl

@@ -7,9 +7,9 @@ IFS=$'\n\t'
 
 # VARs
 S3PATH=${S3PATH:-}
-WATCHDIR=${WATCHDIR:-}
-CRON_TIME="${CRON_TIME:-}"
-DESTINATION=${DESTINATION:-/sync}
+SYNCDIR="${SYNCDIR:-/sync}"
+CRON_TIME="${CRON_TIME:-10 * * * *}"
+INITIAL_DOWNLOAD="${INITIAL_DOWNLOAD:-true}"
 
 # Log message
 log(){
@@ -21,7 +21,7 @@ sync_files(){
   local src="${1:-}"
   local dst="${2:-}"
 
-  mkdir -p "$dst"
+  mkdir -p "$dst" # Make sure directory exists
 
   log "Sync '${src}' to '${dst}'"
   if ! aws s3 sync --delete --exact-timestamps "$src" "$dst"; then
@@ -29,9 +29,40 @@ sync_files(){
   fi
 }
 
-# Watch directory
+# Download files
+download_files(){
+  sync_files "$S3PATH" "$SYNCDIR"
+}
+
+# Upload files
+upload_files(){
+  sync_files "$SYNCDIR" "$S3PATH"
+}
+
+# Run initial download
+initial_download(){
+  if [[ "$INITIAL_DOWNLOAD" == 'true' ]]; then
+    if [[ -d "$SYNCDIR" ]]; then
+      # directory exists
+      if [[ $(ls -A "$SYNCDIR" 2>/dev/null) ]]; then
+        # directory is not empty
+        log "${SYNCDIR} is not empty; skipping initial download"
+      else
+        # directory is empty
+      download_files
+      fi
+    else
+      # directory does not exist
+    download_files
+    fi
+  fi
+}
+
+# Watch directory using inotify
 watch_directory(){
-  log "Watching directory '${WATCHDIR}' for changes"
+  initial_download # Run initial download
+
+  log "Watching directory '${SYNCDIR}' for changes"
   inotifywait \
     --event create \
     --event delete \
@@ -41,18 +72,20 @@ watch_directory(){
     --monitor \
     --quiet \
     --recursive \
-    "$WATCHDIR" |
-  while read -r CHANGED
+    "$SYNCDIR" |
+  while read -r changed
   do
-    log "$CHANGED"
-    sync_files "$WATCHDIR" "$S3PATH"
+    log "$changed"
+    upload_files
   done
 }
 
 # Install cron job
 run_cron(){
+  initial_download # Run initial download
+
   log "Setup the cron job (${CRON_TIME})"
-  echo "${CRON_TIME} /entrypoint.sh once" > /etc/crontabs/root
+  echo "${CRON_TIME} /entrypoint.sh upload" > /etc/crontabs/root
   exec crond -f -l 6
 }
 
@@ -62,18 +95,27 @@ main(){
     log 'No S3PATH specified' >&2; exit 1
   fi
 
-  # Run initial sync
-  sync_files "$S3PATH" "$DESTINATION"
+  mkdir -p "$SYNCDIR" # Make sure directory exists
 
-  # Exit if argument is 'once'
-  if [[ "${*:-}" == 'once' ]]; then exit; fi
-
-  # Setup inotify or cron job
-  if [[ -n "$WATCHDIR" ]]; then
-    watch_directory
-  elif [[ -n "$CRON_TIME" ]]; then
-    run_cron
-  fi
+  # Parse command line arguments
+  cmd="${1:-download}"
+  case "$cmd" in
+    download)
+      download_files
+      ;;
+    upload)
+      upload_files
+      ;;
+    sync)
+      watch_directory
+      ;;
+    cron)
+      run_cron
+      ;;
+    *)
+      log "Unknown command: ${cmd}"; exit 1
+      ;;
+  esac
 }
 
 main "$@"
