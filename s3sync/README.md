@@ -14,7 +14,7 @@ The download location inside the container defaults to `/sync` and can be change
 
 ### Commands
 - `download`: (default) downloads the files and exit
-- `upload`: (default) uploads the files and exit
+- `upload`: uploads the files and exit
 - `sync`: uses inotify to upload a directory to S3 when files change (see `SYNCDIR`)
 - `cron`: sets-up a cron job to upload files to S3 periodically (see `CRON_TIME`)
 
