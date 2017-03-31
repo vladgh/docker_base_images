@@ -198,7 +198,7 @@ main(){
   # Set working directory
   cd "$TMPDIR" || exit
 
-  # Parse CLI
+  # Parse command line arguments
   cmd="${1:-once}"
   case "$cmd" in
     once)
