@@ -62,9 +62,11 @@ main(){
     log 'No S3PATH specified' >&2; exit 1
   fi
 
-  # Run initial sync
-  sync_files "$S3PATH" "$DESTINATION"
-
+  if [[ -z "$WATCHDIR" ]]; then
+    # Run initial sync
+    sync_files "$S3PATH" "$DESTINATION"
+  fi
+  
   # Exit if argument is 'once'
   if [[ "${*:-}" == 'once' ]]; then exit; fi
 
