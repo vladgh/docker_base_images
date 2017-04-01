@@ -7,11 +7,14 @@ set -x
 # Get git tag
 GIT_TAG="$(git describe --always --tags)"
 
-gkit status
+git status
 git describe --tags
 git rev-parse HEAD
 git symbolic-ref HEAD
 git tag
+git log --oneline --decorate=short
+git fetch
+git checkout master
 git log --oneline --decorate=short
 
 # Build image with arguments
