@@ -2,20 +2,12 @@
 
 echo "------ HOOK START - BUILD -------"
 
-set -x
+# Deepen the history of the original shallow repository created by git clone
+# with --depth=1 option (git desribe needs the latest tags to work)
+git pull --depth=50
 
 # Get git tag
 GIT_TAG="$(git describe --always --tags)"
-
-git status
-git describe --tags
-git rev-parse HEAD
-git symbolic-ref HEAD
-git tag
-git log --oneline --decorate=short
-git fetch
-git checkout master
-git log --oneline --decorate=short
 
 # Build image with arguments
 docker build \
