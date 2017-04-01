@@ -2,6 +2,8 @@
 
 echo "------ HOOK START - BUILD -------"
 
+set -x
+
 # Get git tag
 GIT_TAG="$(git describe --always --tags)"
 
