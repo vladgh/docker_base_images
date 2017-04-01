@@ -2,10 +2,10 @@
 
 echo "------ HOOK START - POST_PUSH -------"
 
-# shellcheck disable=1091
-. 'shlib/hooks.sh'
+# shellcheck disable=1090
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)/../../shlib/hooks.sh"
 
-post_push_hook
+run_post_push_hook
 
 # Notify MicroBadger
 echo 'Notify MicroBadger'

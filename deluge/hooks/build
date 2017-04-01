@@ -9,9 +9,9 @@ echo "------ HOOK START - BUILD -------"
 echo 'Deepen repository history'
 git pull --depth=50
 
-# shellcheck disable=1091
-. 'shlib/hooks.sh'
+# shellcheck disable=1090
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)/../../shlib/hooks.sh"
 
-build_hook
+run_build_hook
 
 echo "------ HOOK END - BUILD -------"

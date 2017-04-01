@@ -4,13 +4,13 @@
 GIT_TAG="$(git describe --always --tags)"
 
 # Build hook
-build_hook(){
+run_build_hook(){
   git_change_depth
   docker_build_image
 }
 
 # Post-Push hook
-post_push_hook(){
+run_post_push_hook(){
   tag_semantic_versions
 }
 
