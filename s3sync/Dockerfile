@@ -1,4 +1,4 @@
-FROM vladgh/awscli:latest
+FROM vladgh/awscli:0.1
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Install iNotify tools
