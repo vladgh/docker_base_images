@@ -4,14 +4,14 @@ echo "------ HOOK START - BUILD -------"
 
 # Deepen the history of the original shallow repository created by git clone
 # with --depth=1 option (git describe needs the latest tags to work)
+# Setting this to '50' should incorporate the latest tags, while still keeping
+# the size rather small
+echo 'Deepen repository history'
 git pull --depth=50
 
-# Build image with arguments
-docker build \
-  --build-arg VERSION="$(git describe --always --tags)" \
-  --build-arg VCS_URL="$(git config --get remote.origin.url)" \
-  --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
-  --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
-  -t "$IMAGE_NAME" .
+# shellcheck disable=1091
+. 'shlib/hooks.sh'
+
+build_hook
 
 echo "------ HOOK END - BUILD -------"

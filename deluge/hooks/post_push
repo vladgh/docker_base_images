@@ -2,37 +2,10 @@
 
 echo "------ HOOK START - POST_PUSH -------"
 
-# Get git tag
-GIT_TAG="$(git describe --always --tags)"
+# shellcheck disable=1091
+. 'shlib/hooks.sh'
 
-# If tag matches semantic version
-if [[ "$GIT_TAG" != v* ]]; then
-  echo 'Version number does not match semantic version; Skipping...'; exit
-else
-  # Break the version into components
-  semver="${GIT_TAG#v}"
-  semver="${semver%%-*}"
-  semver=( ${semver//./ } )
-
-  major="${semver[0]}"
-  minor="${semver[1]}"
-  patch="${semver[2]}"
-
-  # Publish patch version
-  echo "Publish patch version (${major}.${minor}.${patch})"
-  docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${major}.${minor}.${patch}"
-  docker push "${DOCKER_REPO}:${major}.${minor}.${patch}"
-
-  # Publish minor version
-  echo "Publish minor version (${major}.${minor})"
-  docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${major}.${minor}"
-  docker push "${DOCKER_REPO}:${major}.${minor}"
-
-  # Publish major version
-  echo "Publish major version (${major})"
-  docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${major}"
-  docker push "${DOCKER_REPO}:${major}"
-fi
+post_push_hook
 
 # Notify MicroBadger
 echo 'Notify MicroBadger'
