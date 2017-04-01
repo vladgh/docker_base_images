@@ -3,43 +3,15 @@
 echo "------ HOOK START - BUILD -------"
 
 # Deepen the history of the original shallow repository created by git clone
-# with --depth=1 option (git desribe needs the latest tags to work)
+# with --depth=1 option (git describe needs the latest tags to work)
 git pull --depth=50
-
-# Get git tag
-GIT_TAG="$(git describe --always --tags)"
 
 # Build image with arguments
 docker build \
-  --build-arg VERSION="$GIT_TAG" \
+  --build-arg VERSION="$(git describe --always --tags)" \
   --build-arg VCS_URL="$(git config --get remote.origin.url)" \
   --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
   --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
   -t "$IMAGE_NAME" .
-
-# If tag matches semantic version
-if [[ "$GIT_TAG" != v* ]]; then
-  echo 'Version number does not match semantic version'
-  exit
-fi
-
-# Break the version into components
-semver="${GIT_TAG#v}"
-semver="${semver%%-*}"
-semver=( ${semver//./ } )
-
-major="${semver[0]}"
-minor="${semver[1]}"
-patch="${semver[2]}"
-
-# Tag image
-docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${major}.${minor}.${patch}"
-docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${major}.${minor}"
-docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${major}"
-
-# Push images
-docker push "${DOCKER_REPO}:${major}.${minor}.${patch}"
-docker push "${DOCKER_REPO}:${major}.${minor}"
-docker push "${DOCKER_REPO}:${major}"
 
 echo "------ HOOK END - BUILD -------"
