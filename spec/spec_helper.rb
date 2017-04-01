@@ -1,4 +1,4 @@
-require 'vtasks/docker/shared_context'
+require 'vtasks/utils/docker_shared_context'
 
 # Configura RSpec
 ::RSpec.configure do |config|

@@ -3,7 +3,7 @@ require 'spec_helper'
 DOCKER_IMAGE_DIRECTORY = File.dirname(File.dirname(__FILE__))
 
 describe 'Dockerfile' do
-  include Vtasks::Docker::SharedContext::RunningCommandContainer
+  include Vtasks::Utils::DockerSharedContext::RunningCommandContainer
 
   describe package('gnupg') do
     it { is_expected.to be_installed }
