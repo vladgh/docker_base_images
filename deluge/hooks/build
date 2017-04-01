@@ -35,4 +35,9 @@ docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${major}.${minor}.${patch}"
 docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${major}.${minor}"
 docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${major}"
 
+# Push images
+docker push "${DOCKER_REPO}:${major}.${minor}.${patch}"
+docker push "${DOCKER_REPO}:${major}.${minor}"
+docker push "${DOCKER_REPO}:${major}"
+
 echo "------ HOOK END - BUILD -------"
