@@ -65,8 +65,9 @@ tag_semantic_versions(){
 }
 
 notify_webhook(){
-  [[ -z "${WEBHOOK:-}" ]] || return
-  echo 'Notify webhook'
-  curl -X POST "$WEBHOOK"
+  if [[ -n "${WEBHOOK:-}" ]]; then
+    echo 'Notify webhook'
+    curl -X POST "$WEBHOOK"
+  fi
 }
 
