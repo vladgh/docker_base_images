@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
+pwd; exit
 
 echo "------ HOOK START - POST_PUSH -------"
 
 # shellcheck disable=1090
-. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)/../../shlib/hooks.sh"
+. "$(pwd -P)/shlib/hooks.sh"
 
 run_post_push_hook
 

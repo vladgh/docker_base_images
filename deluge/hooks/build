@@ -10,7 +10,7 @@ echo 'Deepen repository history'
 git pull --depth=50
 
 # shellcheck disable=1090
-. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)/../../shlib/hooks.sh"
+. "$(pwd -P)/shlib/hooks.sh"
 
 run_build_hook
 
