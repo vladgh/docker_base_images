@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
-pwd; exit
 
 echo "------ HOOK START - POST_PUSH -------"
 
+# Bash strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Load libraries
 # shellcheck disable=1090
 . "$(pwd -P)/../shlib/hooks.sh"
 

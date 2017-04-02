@@ -5,7 +5,6 @@ GIT_TAG="$(git describe --always --tags)"
 
 # Build hook
 run_build_hook(){
-  git_change_depth
   docker_build_image
 }
 
