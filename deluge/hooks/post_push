@@ -4,7 +4,7 @@ pwd; exit
 echo "------ HOOK START - POST_PUSH -------"
 
 # shellcheck disable=1090
-. "$(pwd -P)/shlib/hooks.sh"
+. "$(pwd -P)/../shlib/hooks.sh"
 
 run_post_push_hook
 
