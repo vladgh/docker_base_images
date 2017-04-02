@@ -4,7 +4,6 @@ echo "------ HOOK START - POST_PUSH -------"
 
 # Bash strict mode
 set -euo pipefail
-IFS=$'\n\t'
 
 # Load libraries
 # shellcheck disable=1090

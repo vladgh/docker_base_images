@@ -4,7 +4,6 @@ echo "------ HOOK START - BUILD -------"
 
 # Bash strict mode
 set -euo pipefail
-IFS=$'\n\t'
 
 # Deepen the history of the original shallow repository created by git clone
 # with --depth=1 option (git describe needs the latest tags to work)
