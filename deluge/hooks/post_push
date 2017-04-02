@@ -1,18 +1,15 @@
 #!/usr/bin/env bash
 
-echo "------ HOOK START - POST_PUSH -------"
+echo '------ HOOK START - POST_PUSH -------'
 
-# Bash strict mode
 set -euo pipefail
 
-# Load libraries
+echo 'Load libraries'
 # shellcheck disable=1090
 . "$(pwd -P)/../shlib/hooks.sh"
 
+export WEBHOOK='https://hooks.microbadger.com/images/vladgh/deluge/BvOV7ec7tt2N207sgMKqFrGzSxs='
+
 run_post_push_hook
 
-# Notify MicroBadger
-echo 'Notify MicroBadger'
-curl -X POST https://hooks.microbadger.com/images/vladgh/deluge/BvOV7ec7tt2N207sgMKqFrGzSxs=
-
-echo "------ HOOK END - POST_PUSH -------"
+echo '------ HOOK END - POST_PUSH -------'

@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# NOTE:
+# By default Docker HUB clones the repository with `--depth=1`. You should
+# deepen the history of the original shallow repository (git describe needs the
+# latest tags to work). Setting this to '50' should incorporate the latest tags,
+# while still keeping the size rather small.
+#     $ git pull --depth=50
+
 # VARs
 GIT_TAG="$(git describe --always --tags)"
 
@@ -11,6 +18,7 @@ run_build_hook(){
 # Post-Push hook
 run_post_push_hook(){
   tag_semantic_versions
+  notify_webhook
 }
 
 # Build the image with the specified arguments
@@ -55,3 +63,10 @@ tag_semantic_versions(){
   docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${major}"
   docker push "${DOCKER_REPO}:${major}"
 }
+
+notify_webhook(){
+  [[ -z "${WEBHOOK:-}" ]] || return
+  echo 'Notify webhook'
+  curl -X POST "$WEBHOOK"
+}
+

@@ -1,21 +1,16 @@
 #!/usr/bin/env bash
 
-echo "------ HOOK START - BUILD -------"
+echo '------ HOOK START - BUILD -------'
 
-# Bash strict mode
 set -euo pipefail
 
-# Deepen the history of the original shallow repository created by git clone
-# with --depth=1 option (git describe needs the latest tags to work)
-# Setting this to '50' should incorporate the latest tags, while still keeping
-# the size rather small
 echo 'Deepen repository history'
 git pull --depth=50
 
-# Load libraries
+echo 'Load libraries'
 # shellcheck disable=1090
 . "$(pwd -P)/../shlib/hooks.sh"
 
 run_build_hook
 
-echo "------ HOOK END - BUILD -------"
+echo '------ HOOK END - BUILD -------'

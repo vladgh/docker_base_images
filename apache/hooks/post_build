@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
 
-echo "------ HOOK START - POST_BUILD -------"
+echo '------ HOOK START - POST_PUSH -------'
 
-curl -X POST https://hooks.microbadger.com/images/vladgh/apache/1LIUNGTtioEcpHJoQZzwK3qQPhE=
+set -euo pipefail
 
-echo "------ HOOK END - POST_BUILD -------"
+echo 'Load libraries'
+# shellcheck disable=1090
+. "$(pwd -P)/../shlib/hooks.sh"
+
+export WEBHOOK='https://hooks.microbadger.com/images/vladgh/apache/1LIUNGTtioEcpHJoQZzwK3qQPhE='
+
+run_post_push_hook
+
+echo '------ HOOK END - POST_PUSH -------'
