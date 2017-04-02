@@ -1,4 +1,4 @@
-FROM vladgh/awscli:0.1
+FROM vladgh/awscli:latest
 MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Install packages
