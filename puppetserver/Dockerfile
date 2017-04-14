@@ -3,14 +3,14 @@ MAINTAINER Vlad Ghinea vlad@ghn.me
 
 # Environment
 ENV PATH=/opt/puppetlabs/server/bin:$PATH \
-    PUPPET_SERVER_VERSION="2.7.2" \
-    JAVA_ARGS="-Xms512m -Xmx512m"
+    PUPPETSERVER_VERSION="2.7.2" \
+    PUPPETSERVER_JAVA_ARGS="-Xms256m -Xmx256m"
 
 # Installation
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && apt-get install -y --no-install-recommends \
-    puppetserver="$PUPPET_SERVER_VERSION"-1puppetlabs1 && \
-    sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{JAVA_ARGS:-\1\}@' \
+    puppetserver="$PUPPETSERVER_VERSION"-1puppetlabs1 && \
+    sed -i -e 's@^PUPPETSERVER_JAVA_ARGS=\(.*\)$@PUPPETSERVER_JAVA_ARGS=\$\{PUPPETSERVER_JAVA_ARGS:-\1\}@' \
     /etc/default/puppetserver && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -22,7 +22,7 @@ COPY logback.xml request-logging.xml /etc/puppetlabs/puppetserver/
 
 # Entrypoint
 COPY entrypoint.sh /
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
 CMD ["puppetserver", "foreground"]
 
 # Health check
