@@ -4,7 +4,8 @@ MAINTAINER Vlad Ghinea vlad@ghn.me
 # Environment
 ENV PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH \
     PUPPET_RELEASE="puppetlabs-release-pc1-xenial" \
-    PUPPET_AGENT_VERSION="1.10.0"
+    PUPPET_AGENT_VERSION="1.10.0" \
+    TINI_VERSION="v0.14.0"
 
 # Install Puppet release package
 RUN export DEBIAN_FRONTEND=noninteractive && \
@@ -16,8 +17,12 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends puppet-agent="$PUPPET_AGENT_VERSION"-1xenial && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Tini
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /sbin/tini
+RUN chmod +x /sbin/tini
+
 # Entrypoint
-ENTRYPOINT ["puppet"]
+ENTRYPOINT ["/sbin/tini", "--", "puppet"]
 CMD ["agent", "--verbose", "--onetime", "--no-daemonize", "--summarize"]
 
 # Metadata params
