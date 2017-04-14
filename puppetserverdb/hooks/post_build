@@ -8,7 +8,7 @@ echo 'Load libraries'
 # shellcheck disable=1090
 . "$(pwd -P)/../shlib/hooks.sh"
 
-export WEBHOOK='https://hooks.microbadger.com/images/vladgh/puppetserver/Z8Ruox6vyG737HPGY6VKyeuL5qU='
+export WEBHOOK='https://hooks.microbadger.com/images/vladgh/puppetserverdb/8d7IFiC0YkD1xJinK5UtgkQ88V0='
 
 run_post_push_hook
 
