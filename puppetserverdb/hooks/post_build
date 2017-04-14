@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+echo '------ HOOK START - POST_PUSH -------'
+
+set -euo pipefail
+
+echo 'Load libraries'
+# shellcheck disable=1090
+. "$(pwd -P)/../shlib/hooks.sh"
+
+export WEBHOOK='https://hooks.microbadger.com/images/vladgh/puppetserver/Z8Ruox6vyG737HPGY6VKyeuL5qU='
+
+run_post_push_hook
+
+echo '------ HOOK END - POST_PUSH -------'
