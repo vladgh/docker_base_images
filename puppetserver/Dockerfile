@@ -10,7 +10,7 @@ ENV PATH=/opt/puppetlabs/server/bin:$PATH \
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && apt-get install -y --no-install-recommends \
     puppetserver="$PUPPETSERVER_VERSION"-1puppetlabs1 && \
-    sed -i -e 's@^PUPPETSERVER_JAVA_ARGS=\(.*\)$@PUPPETSERVER_JAVA_ARGS=\$\{PUPPETSERVER_JAVA_ARGS:-\1\}@' \
+    sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{PUPPETSERVER_JAVA_ARGS:-\1\}@' \
     /etc/default/puppetserver && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

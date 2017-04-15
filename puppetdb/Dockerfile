@@ -15,7 +15,7 @@ ENV PATH=/opt/puppetlabs/server/bin:$PATH \
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && apt-get install -y --no-install-recommends netcat \
     puppetdb="${PUPPETDB_VERSION}-1puppetlabs1" && \
-    sed -i -e 's@^PUPPETDB_JAVA_ARGS=\(.*\)$@PUPPETDB_JAVA_ARGS=\$\{PUPPETDB_JAVA_ARGS:-\1\}@' \
+    sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{PUPPETDB_JAVA_ARGS:-\1\}@' \
     /etc/default/puppetdb && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
