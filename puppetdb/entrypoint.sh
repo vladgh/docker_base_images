@@ -15,7 +15,6 @@ then
   while ! nc -z puppet 8140; do
     sleep 1
   done
-  puppet config set certname "$(hostname)" --section main
   puppet agent --verbose --onetime --no-daemonize --waitforcert 120
 else
   echo 'Puppet certificates already configured'
