@@ -4,7 +4,7 @@ MAINTAINER Vlad Ghinea vlad@ghn.me
 # Environment
 ENV PATH=/opt/puppetlabs/server/bin:$PATH \
     PUPPETSERVER_VERSION="2.7.2" \
-    PUPPETSERVER_JAVA_ARGS="-Xms256m -Xmx256m"
+    PUPPETSERVER_JAVA_ARGS="-Xms256M -Xmx256M"
 
 # Installation
 RUN export DEBIAN_FRONTEND=noninteractive && \
