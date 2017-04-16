@@ -16,7 +16,8 @@ The download location inside the container defaults to `/sync` and can be change
 - `download`: (default) downloads the files and exits
 - `upload`: uploads the files and exits
 - `sync`: uses inotify to upload a directory to S3 when files change (see `SYNCDIR`)
-- `cron`: sets up a cron job to upload files to S3 periodically (see `CRON_TIME`)
+- `periodic_upload`: sets up a cron job to upload files to S3 periodically (see `CRON_TIME` and `INITIAL_DOWNLOAD`)
+- `periodic_download`: sets up a cron job to download files from S3 periodically (see `CRON_TIME` and `INITIAL_DOWNLOAD`)
 
 ### Required environment variables
 - `AWS_ACCESS_KEY_ID` (or functional IAM profile)

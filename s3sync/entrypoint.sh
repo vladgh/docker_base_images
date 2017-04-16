@@ -82,10 +82,13 @@ watch_directory(){
 
 # Install cron job
 run_cron(){
-  initial_download # Run initial download
+  local action="${1:-upload}"
+
+  # Run initial download
+  initial_download
 
   log "Setup the cron job (${CRON_TIME})"
-  echo "${CRON_TIME} /entrypoint.sh upload" > /etc/crontabs/root
+  echo "${CRON_TIME} /entrypoint.sh ${action}" > /etc/crontabs/root
   exec crond -f -l 6
 }
 
@@ -109,8 +112,11 @@ main(){
     sync)
       watch_directory
       ;;
-    cron)
-      run_cron
+    periodic_upload)
+      run_cron upload
+      ;;
+    periodic_download)
+      run_cron download
       ;;
     *)
       log "Unknown command: ${cmd}"; exit 1
