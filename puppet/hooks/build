@@ -2,11 +2,6 @@
 
 echo '------ HOOK START - BUILD -------'
 
-set -euo pipefail
-
-echo 'Deepen repository history'
-git pull --depth=50
-
 echo 'Load libraries'
 # shellcheck disable=1090
 . "$(pwd -P)/../shlib/hooks.sh"
