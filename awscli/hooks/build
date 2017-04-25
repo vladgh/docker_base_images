@@ -6,6 +6,6 @@ echo 'Load libraries'
 # shellcheck disable=1090
 . "$(pwd -P)/../shlib/hooks.sh"
 
-run_build_hook
+docker_build_image
 
 echo '------ HOOK END - BUILD -------'
