@@ -17,7 +17,7 @@ describe 'Dockerfile' do
   end
 
   describe command('find --version') do
-    its(:stdout) { is_expected.to contain('(GNU findutils)') }
+    its(:stdout) { is_expected.to contain('GNU findutils') }
     its(:exit_status) { is_expected.to eq 0 }
   end
 
