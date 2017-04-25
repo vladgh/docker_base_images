@@ -1,5 +1,5 @@
 FROM php:7.1-fpm
-MAINTAINER Vlad Ghinea vlad@ghn.me
+LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpng12-dev libjpeg-dev libxml2-dev libmcrypt-dev \

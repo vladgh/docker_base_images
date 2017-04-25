@@ -1,5 +1,5 @@
 FROM alpine:3.5
-MAINTAINER Vlad Ghinea vlad@ghn.me
+LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Install packages
 RUN apk --no-cache add bash minidlna

@@ -1,5 +1,5 @@
 FROM ruby:2.4-alpine
-MAINTAINER Vlad Ghinea vlad@ghn.me
+LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Install packages
 RUN apk --no-cache add bash git tini

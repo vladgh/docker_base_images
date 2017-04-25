@@ -1,5 +1,5 @@
 FROM vladgh/awscli:latest
-MAINTAINER Vlad Ghinea vlad@ghn.me
+LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Install iNotify tools
 RUN apk --no-cache add inotify-tools

@@ -1,5 +1,5 @@
 FROM almir/webhook:2.6.3
-MAINTAINER Vlad Ghinea vlad@ghn.me
+LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Install packages
 RUN apk --no-cache add bash curl

@@ -1,5 +1,5 @@
 FROM php:7.1-apache
-MAINTAINER Vlad Ghinea vlad@ghn.me
+LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Install the PHP extensions we need
 RUN apt-get update && \

@@ -1,5 +1,5 @@
 FROM vladgh/puppetserver:latest
-MAINTAINER Vlad Ghinea vlad@ghn.me
+LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
 ENV PUPPETDB_TERMINUS_VERSION="4.4.0"
