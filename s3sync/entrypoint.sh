@@ -55,6 +55,8 @@ initial_download(){
       # directory does not exist
     download_files
     fi
+  elif [[ "$INITIAL_DOWNLOAD" == 'force' ]]; then
+    download_files
   fi
 }
 

@@ -28,7 +28,7 @@ The download location inside the container defaults to `/sync` and can be change
 ### Optional environment variables
 - `SYNCDIR`: the local synchronize location (defaults to `/sync`)
 - `CRON_TIME`: a valid cron expression (ex: `CRON_TIME='0 */6 * * *'` runs every 6 hours; defaults to hourly)
-- `INITIAL_DOWNLOAD`: whether to download files initially (defaults to `true`)
+- `INITIAL_DOWNLOAD`: whether to download files initially (defaults to `true`); this will only download the files if the directory is empty. Set this to `force` to skip this check
 
 ### Usage:
 
