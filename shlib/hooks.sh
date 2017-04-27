@@ -61,9 +61,13 @@ docker_build_image(){
 # Publish version
 publish_version(){
   local version="${1:-}"
-  echo "Pushing version (${DOCKER_REPO}:${version})"
-  docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${version}"
-  docker push "${DOCKER_REPO}:${version}"
+
+  # Publish semantic versions based on latest only
+  if [[ "$DOCKER_TAG" == 'latest' ]]; then
+    echo "Pushing version (${DOCKER_REPO}:${version})"
+    docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${version}"
+    docker push "${DOCKER_REPO}:${version}"
+  fi
 }
 
 # Generate semantic version tags
@@ -97,7 +101,7 @@ tag_semantic_versions(){
 
 notify_microbadger(){
   local repo="${DOCKER_REPO#*/}"
-  local token="${MICROBADGER_TOKENS[${repo}]}"
+  local token="${MICROBADGER_TOKENS[${repo:-}]}"
   local url="https://hooks.microbadger.com/images/${repo}/${token}"
 
   if [[ -n "${token:-}" ]]; then
