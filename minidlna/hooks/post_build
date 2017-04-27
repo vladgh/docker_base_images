@@ -6,6 +6,6 @@ echo 'Load libraries'
 # shellcheck disable=1090
 . "$(pwd -P)/../shlib/hooks.sh"
 
-run_post_push_hook 'https://hooks.microbadger.com/images/vladgh/minidlna/Qr9rUtKpdDGoUVh3tGwGTBzSmQ8='
+run_post_push_hook
 
 echo '------ HOOK END - POST_PUSH -------'

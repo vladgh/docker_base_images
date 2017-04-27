@@ -6,6 +6,6 @@ echo 'Load libraries'
 # shellcheck disable=1090
 . "$(pwd -P)/../shlib/hooks.sh"
 
-notify_webhook 'https://hooks.microbadger.com/images/vladgh/backup/ZjbRHMtrAhl9V2MWjWmOR0KWlGc='
+run_post_push_hook
 
 echo '------ HOOK END - POST_PUSH -------'

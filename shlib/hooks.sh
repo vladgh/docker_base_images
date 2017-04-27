@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Docker build hooks
+# https://docs.docker.com/docker-cloud/builds/advanced/
 
 # Bash strict mode
 set -euo pipefail
@@ -6,6 +8,22 @@ IFS=$'\n\t'
 
 # VARs
 GIT_TAG="$(git describe --always --tags)"
+declare -A MICROBADGER_TOKENS=(
+  ['vladgh/apache']='1LIUNGTtioEcpHJoQZzwK3qQPhE='
+  ['vladgh/awscli']='mbMppUV6he_zmIGik-MeJ22K8a0='
+  ['vladgh/backup']='ZjbRHMtrAhl9V2MWjWmOR0KWlGc='
+  ['vladgh/:wdeluge']='BvOV7ec7tt2N207sgMKqFrGzSxs='
+  ['vladgh/fpm']='OG17Glgq8CvSRFJjkK5vdC_pn_A='
+  ['vladgh/gpg']='Sg_CkaULmDjZ0K3u5W1mIqXlkOk='
+  ['vladgh/minidlna']='Qr9rUtKpdDGoUVh3tGwGTBzSmQ8='
+  ['vladgh/puppet']='uj5nZE_tFQ3DyNFvERhnamfJbis='
+  ['vladgh/puppetdb']='eLBcOfMSKHB7seTlBGvZD8VjK4A='
+  ['vladgh/puppetserver']='Z8Ruox6vyG737HPGY6VKyeuL5qU='
+  ['vladgh/puppetserverdb']='8d7IFiC0YkD1xJinK5UtgkQ88V0='
+  ['vladgh/r10k']='OvMmZQPNL_0s5G-CYxrRmNFMDxE='
+  ['vladgh/s3sync']='eB40MYq66N9GQvIisktwJVOL_tw='
+  ['vladgh/webhook']='tRhT7nPREdQwptZxaMHDTgrazYY='
+)
 
 # Build hook
 run_build_hook(){
@@ -16,17 +34,17 @@ run_build_hook(){
 # Post-Push hook
 run_post_push_hook(){
   tag_semantic_versions
-  notify_webhook "${@:-}"
+  notify_microbadger
 }
 
 # Deepen repository history
-# By default Docker HUB clones the repository with `--depth=1`. You should
-# deepen the history of the original shallow repository (git describe needs the
-# latest tags to work). Setting this to '50' should incorporate the latest tags,
-# while still keeping the size rather small.
+# When Docker Cloud pulls a branch from a source code repository, it performs a shallow clone (only the tip of the specified branch). This has the advantage of minimizing the amount of data transfer necessary from the repository and speeding up the build because it pulls only the minimal code necessary.
+# Because of this, if you need to perform a custom action that relies on a different branch (such as a post_push hook), you won’t be able checkout that branch, unless you do one of the following:
+#    $ git pull --depth=50
+#    $ git fetch --unshallow origin
 deepen_git_repo(){
   echo 'Deepen repository history'
-  git pull --depth=50
+  git fetch --unshallow origin
 }
 
 # Build the image with the specified arguments
@@ -40,6 +58,15 @@ docker_build_image(){
     -t "$IMAGE_NAME" .
 }
 
+# Publish version
+publish_version(){
+  local version="${1:-}"
+  echo "Pushing version (${DOCKER_REPO}:${version})"
+  docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${version}"
+  docker push "${DOCKER_REPO}:${version}"
+}
+
+# Generate semantic version tags
 tag_semantic_versions(){
   local IFS=$' ' # required by the version components below
 
@@ -59,25 +86,21 @@ tag_semantic_versions(){
   patch="${semver[2]}"
 
   # Publish patch version
-  echo "Pushing patch version (${DOCKER_REPO}:${major}.${minor}.${patch})"
-  docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${major}.${minor}.${patch}"
-  docker push "${DOCKER_REPO}:${major}.${minor}.${patch}"
+  publish_version "${major}.${minor}.${patch}"
 
   # Publish minor version
-  echo "Pushing minor version (${DOCKER_REPO}:${major}.${minor})"
-  docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${major}.${minor}"
-  docker push "${DOCKER_REPO}:${major}.${minor}"
+  publish_version "${major}.${minor}"
 
   # Publish major version
-  echo "Pushing major version (${DOCKER_REPO}:${major})"
-  docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${major}"
-  docker push "${DOCKER_REPO}:${major}"
+  publish_version "${major}"
 }
 
-notify_webhook(){
-  local webhook="${1:-}"
-  if [[ -n "${webhook:-}" ]]; then
-    echo 'Notify webhook'
-    curl -X POST "$webhook"
+notify_microbadger(){
+  local repo="${DOCKER_REPO#*/}"
+  local token="${MICROBADGER_TOKENS[${repo}]}"
+  local url="https://hooks.microbadger.com/images/${repo}/${token}"
+
+  if [[ -n "${token:-}" ]]; then
+    echo "Notify MicroBadger: $(curl -X POST "$url")"
   fi
 }
