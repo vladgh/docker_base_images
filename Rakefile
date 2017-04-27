@@ -10,7 +10,9 @@ Vtasks::Docker.new(
 require 'vtasks/lint'
 Vtasks::Lint.new(file_list: FileList['lib/**/*.rb', 'spec/**/*.rb', 'Rakefile'])
 require 'vtasks/release'
-Vtasks::Release.new
+Vtasks::Release.new(
+  write_changelog: true
+)
 
 # Display version
 desc 'Display version'
