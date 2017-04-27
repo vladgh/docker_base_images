@@ -2,7 +2,7 @@ FROM almir/webhook:2.6.3
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Install packages
-RUN apk --no-cache add bash curl
+RUN apk --no-cache add bash curl tini
 
 # Metadata params
 ARG VERSION
