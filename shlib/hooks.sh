@@ -12,7 +12,7 @@ declare -A MICROBADGER_TOKENS=(
   ['vladgh/apache']='1LIUNGTtioEcpHJoQZzwK3qQPhE='
   ['vladgh/awscli']='mbMppUV6he_zmIGik-MeJ22K8a0='
   ['vladgh/backup']='ZjbRHMtrAhl9V2MWjWmOR0KWlGc='
-  ['vladgh/:wdeluge']='BvOV7ec7tt2N207sgMKqFrGzSxs='
+  ['vladgh/deluge']='BvOV7ec7tt2N207sgMKqFrGzSxs='
   ['vladgh/fpm']='OG17Glgq8CvSRFJjkK5vdC_pn_A='
   ['vladgh/gpg']='Sg_CkaULmDjZ0K3u5W1mIqXlkOk='
   ['vladgh/minidlna']='Qr9rUtKpdDGoUVh3tGwGTBzSmQ8='
