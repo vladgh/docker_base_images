@@ -27,11 +27,13 @@ declare -A MICROBADGER_TOKENS=(
 
 # Build hook
 run_build_hook(){
-  docker_build_image
+  deepen_git_repo
+  build_image
 }
 
 # Post-Push hook
 run_post_push_hook(){
+  tag_image
   notify_microbadger
 }
 
@@ -46,7 +48,7 @@ deepen_git_repo(){
 }
 
 # Build the image with the specified arguments
-docker_build_image(){
+build_image(){
   echo 'Build the image with the specified arguments'
   docker build \
     --build-arg VERSION="${GIT_TAG}" \
@@ -56,27 +58,8 @@ docker_build_image(){
     -t "$IMAGE_NAME" .
 }
 
-# Publish version
-publish_version(){
-  local version="${1:-}"
-
-  # Publish semantic versions based on latest only
-  if [[ "$DOCKER_TAG" == 'latest' ]]; then
-    echo "Pushing version (${DOCKER_REPO}:${version})"
-    docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${version}"
-    docker push "${DOCKER_REPO}:${version}"
-  fi
-}
-
-# Generate semantic version tags
-# This updates the tags every  time we push to latest (this might not always be e very good idea because errors can be introduced in the updated tag)
-# A better approach would be to use build rules:
-#
-#     Type    Name                                  Location    Tag
-#     Tag     /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/     /           {\1}.{\2}.{\3}
-#     Tag     /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/     /           {\1}.{\2}
-#     Tag     /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/     /           {\1}
-tag_semantic_versions(){
+# Generate semantic version style tags
+generate_semantic_version(){
   local IFS=$' ' # required by the version components below
 
   # If tag matches semantic version
@@ -85,23 +68,37 @@ tag_semantic_versions(){
     return
   fi
 
+  echo "Using version ${GIT_TAG}"
+
   # Break the version into components
-  semver="${GIT_TAG#v}"
-  semver="${semver%%-*}"
-  semver=( ${semver//./ } )
+  semver="${GIT_TAG#v}" # Remove the 'v' prefix
+  semver="${semver%%-*}" # Remove the commit number
+  semver=( ${semver//./ } ) # Create an array with version numbers
 
-  major="${semver[0]}"
-  minor="${semver[1]}"
-  patch="${semver[2]}"
+  export major="${semver[0]}"
+  export minor="${semver[1]}"
+  export patch="${semver[2]}"
+}
 
-  # Publish patch version
-  publish_version "${major}.${minor}.${patch}"
+# Tag image
+# This creates semantic version style tags from latest (built just once).
+# An alternative approach would be to use build rules (however, this triggers multiple builds for each tag, which is inefficient).
+#
+#     Type    Name                                  Location    Tag
+#     Tag     /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/     /           {\1}.{\2}.{\3}
+#     Tag     /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/     /           {\1}.{\2}
+#     Tag     /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/     /           {\1}
+tag_image(){
+  generate_semantic_version
 
-  # Publish minor version
-  publish_version "${major}.${minor}"
-
-  # Publish major version
-  publish_version "${major}"
+  for version in "${major}.${minor}.${patch}" "${major}.${minor}" "${major}"; do
+    # Publish semantic versions based on latest only
+    if [[ "$DOCKER_TAG" == 'latest' ]]; then
+      echo "Pushing version (${DOCKER_REPO}:${version})"
+      docker tag "$IMAGE_NAME" "${DOCKER_REPO}:${version}"
+      docker push "${DOCKER_REPO}:${version}"
+    fi
+  done
 }
 
 notify_microbadger(){
