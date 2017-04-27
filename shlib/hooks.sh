@@ -27,13 +27,11 @@ declare -A MICROBADGER_TOKENS=(
 
 # Build hook
 run_build_hook(){
-  deepen_git_repo
   docker_build_image
 }
 
 # Post-Push hook
 run_post_push_hook(){
-  tag_semantic_versions
   notify_microbadger
 }
 
@@ -71,6 +69,13 @@ publish_version(){
 }
 
 # Generate semantic version tags
+# This updates the tags every  time we push to latest (this might not always be e very good idea because errors can be introduced in the updated tag)
+# A better approach would be to use build rules:
+#
+#     Type    Name                                  Location    Tag
+#     Tag     /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/     /           {\1}.{\2}.{\3}
+#     Tag     /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/     /           {\1}.{\2}
+#     Tag     /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/     /           {\1}
 tag_semantic_versions(){
   local IFS=$' ' # required by the version components below
 
