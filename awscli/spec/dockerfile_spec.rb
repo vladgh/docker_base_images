@@ -9,7 +9,7 @@ describe 'Dockerfile' do
     expect(os[:family]).to eq('alpine')
   end
 
-  packages = %w(bash findutils git groff less python2 tini)
+  packages = %w(bash findutils git groff less python tini)
   packages.each do |pkg|
     describe package(pkg) do
       it { is_expected.to be_installed }
@@ -28,6 +28,16 @@ describe 'Dockerfile' do
 
   describe command('aws --version') do
     its(:stderr) { is_expected.to contain('aws-cli') }
+    its(:exit_status) { is_expected.to eq 0 }
+  end
+
+  describe file('/sbin/tini') do
+    it { is_expected.to exist }
+    it { is_expected.to be_executable }
+  end
+
+  describe command('/sbin/tini -h') do
+    its(:stdout) { is_expected.to contain('tini') }
     its(:exit_status) { is_expected.to eq 0 }
   end
 end

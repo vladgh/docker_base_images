@@ -5,10 +5,10 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 ENV AWS_DEFAULT_REGION=us-east-1
 
 # Install packages
-RUN apk --no-cache add bash findutils git groff less python2 tini
+RUN apk --no-cache add bash findutils git groff less python tini
 
 # Install pip packages
-RUN apk --no-cache add --virtual build-dependencies py2-pip && \
+RUN apk --no-cache add --virtual build-dependencies py-pip && \
     pip --no-cache-dir install awscli && \
     apk del build-dependencies
 

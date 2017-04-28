@@ -104,10 +104,10 @@ tag_image(){
 
 notify_microbadger(){
   local repo="${DOCKER_REPO#*/}"
-  local token="${MICROBADGER_TOKENS[${repo:-}]}"
+  local token="${MICROBADGER_TOKENS[${repo:-}]:-}"
   local url="https://hooks.microbadger.com/images/${repo}/${token}"
 
-  if [[ -n "${token:-}" ]]; then
+  if [[ -n "$token" ]]; then
     echo "Notify MicroBadger: $(curl -X POST "$url")"
   fi
 }
