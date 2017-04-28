@@ -1,0 +1,41 @@
+FROM alpine:3.5
+LABEL maintainer "Vlad Ghinea vlad@ghn.me"
+
+# Environment
+ENV PUPPET_BOARD_VERSION="0.2.2" \
+    GUNICORN_VERSION="19.7.1"
+WORKDIR /var/www/puppetboard
+
+# Install packages
+RUN apk --no-cache add python tini
+
+# Install pip packages (leave pip installed for importing)
+RUN apk --no-cache add --virtual build-dependencies py-pip && \
+    pip --no-cache-dir install puppetboard=="$PUPPET_BOARD_VERSION" gunicorn=="$GUNICORN_VERSION"
+
+# Install configuration
+COPY wsgi.py settings.py /var/www/puppetboard/
+
+# Ports
+EXPOSE 8000
+
+# Entrypoint
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["/usr/bin/gunicorn", "-b", "0.0.0.0:8000", "wsgi:application"]
+
+# Metadata params
+ARG VERSION
+ARG VCS_URL
+ARG VCS_REF
+ARG BUILD_DATE
+
+# Metadata
+LABEL org.label-schema.name="VGH Puppet Board" \
+      org.label-schema.url="$VCS_URL" \
+      org.label-schema.vendor="Vlad Ghinea" \
+      org.label-schema.license="Apache-2.0" \
+      org.label-schema.version="$VERSION" \
+      org.label-schema.vcs-url="$VCS_URL" \
+      org.label-schema.vcs-ref="$VCS_REF" \
+      org.label-schema.build-date="$BUILD_DATE" \
+      org.label-schema.docker.schema-version="1.0"
