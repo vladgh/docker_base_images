@@ -2,19 +2,26 @@ FROM alpine:3.5
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
-ENV AWS_DEFAULT_REGION=us-east-1
+ENV PUPPET_BOARD_VERSION="0.2.2" \
+    GUNICORN_VERSION="19.7.1"
+WORKDIR /var/www/puppetboard
 
 # Install packages
-RUN apk --no-cache add bash findutils git groff less python tini
+RUN apk --no-cache add python tini
 
-# Install pip packages
+# Install pip packages (leave pip installed for importing)
 RUN apk --no-cache add --virtual build-dependencies py-pip && \
-    pip --no-cache-dir install awscli && \
-    apk del build-dependencies
+    pip --no-cache-dir install puppetboard=="$PUPPET_BOARD_VERSION" gunicorn=="$GUNICORN_VERSION"
+
+# Install configuration
+COPY wsgi.py settings.py /var/www/puppetboard/
+
+# Ports
+EXPOSE 8000
 
 # Entrypoint
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["/bin/bash"]
+CMD ["/usr/bin/gunicorn", "-b", "0.0.0.0:8000", "wsgi:application"]
 
 # Metadata params
 ARG VERSION
@@ -23,7 +30,7 @@ ARG VCS_REF
 ARG BUILD_DATE
 
 # Metadata
-LABEL org.label-schema.name="VGH AWS CLI" \
+LABEL org.label-schema.name="VGH Puppet Board" \
       org.label-schema.url="$VCS_URL" \
       org.label-schema.vendor="Vlad Ghinea" \
       org.label-schema.license="Apache-2.0" \

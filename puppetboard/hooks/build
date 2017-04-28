@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+echo '------ HOOK START - BUILD -------'
+
+echo 'Load libraries'
+# shellcheck disable=1090
+. "$(pwd -P)/../shlib/hooks.sh"
+
+run_build_hook
+
+echo '------ HOOK END - BUILD -------'

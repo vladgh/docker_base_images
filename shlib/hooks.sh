@@ -17,6 +17,7 @@ declare -A MICROBADGER_TOKENS=(
   ['vladgh/gpg']='Sg_CkaULmDjZ0K3u5W1mIqXlkOk='
   ['vladgh/minidlna']='Qr9rUtKpdDGoUVh3tGwGTBzSmQ8='
   ['vladgh/puppet']='uj5nZE_tFQ3DyNFvERhnamfJbis='
+  ['vladgh/puppetboard']='hS1FQBmTy1gQvGTzzBbGVkeGEYs='
   ['vladgh/puppetdb']='eLBcOfMSKHB7seTlBGvZD8VjK4A='
   ['vladgh/puppetserver']='Z8Ruox6vyG737HPGY6VKyeuL5qU='
   ['vladgh/puppetserverdb']='8d7IFiC0YkD1xJinK5UtgkQ88V0='
@@ -103,10 +104,10 @@ tag_image(){
 
 notify_microbadger(){
   local repo="${DOCKER_REPO#*/}"
-  local token="${MICROBADGER_TOKENS[${repo:-}]}"
+  local token="${MICROBADGER_TOKENS[${repo:-}]:-}"
   local url="https://hooks.microbadger.com/images/${repo}/${token}"
 
-  if [[ -n "${token:-}" ]]; then
+  if [[ -n "$token" ]]; then
     echo "Notify MicroBadger: $(curl -X POST "$url")"
   fi
 }
