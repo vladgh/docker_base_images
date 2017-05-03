@@ -26,12 +26,13 @@ ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
 CMD ["puppetserver", "foreground"]
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=30s --retries=20 CMD \
+HEALTHCHECK --interval=10s --timeout=10s --retries=90 CMD \
   curl --fail -H 'Accept: pson' \
+  --resolve 'puppet:8140:127.0.0.1' \
   --cert   $(puppet config print hostcert) \
   --key    $(puppet config print hostprivkey) \
   --cacert $(puppet config print localcacert) \
-  https://$(hostname):8140/production/status/test \
+  https://puppet:8140/production/status/test \
   |  grep -q '"is_alive":true' \
   || exit 1
 
