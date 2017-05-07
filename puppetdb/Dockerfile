@@ -4,10 +4,7 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 # Environment
 ENV PATH=/opt/puppetlabs/server/bin:$PATH \
     PUPPETDB_VERSION="4.4.0" \
-    PUPPETDB_JAVA_ARGS="-Djava.net.preferIPv4Stack=true -Xms256M -Xmx256M" \
-    PUPPETDB_SUBNAME="//postgres:5432/puppetdb" \
-    PUPPETDB_USER="puppetdb" \
-    PUPPETDB_PASSWORD="puppetdb"
+    PUPPETDB_JAVA_ARGS="-Djava.net.preferIPv4Stack=true -Xms256M -Xmx256M"
 
 # Installation
 RUN export DEBIAN_FRONTEND=noninteractive && \
@@ -20,12 +17,8 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 # Ports
 EXPOSE 8080 8081
 
-# Configuration
-RUN rm -fr /etc/puppetlabs/puppetdb/conf.d
-COPY conf.d /etc/puppetlabs/puppetdb/conf.d
-
 # Logging
-COPY logging /etc/puppetlabs/puppetdb/logging
+COPY logging/logback.xml logging/request-logging.xml /etc/puppetlabs/puppetdb/
 
 # Entrypoint
 COPY entrypoint.sh /
