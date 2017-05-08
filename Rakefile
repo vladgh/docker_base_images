@@ -11,7 +11,9 @@ require 'vtasks/lint'
 Vtasks::Lint.new(file_list: FileList['lib/**/*.rb', 'spec/**/*.rb', 'Rakefile'])
 require 'vtasks/release'
 Vtasks::Release.new(
-  write_changelog: true
+  write_changelog: true,
+  bug_labels: 'Type: Bug',
+  enhancement_labels: 'Type: Enhancement'
 )
 
 # Display version
