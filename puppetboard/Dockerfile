@@ -18,11 +18,11 @@ RUN apk --no-cache add --virtual build-dependencies py-pip && \
 COPY wsgi.py settings.py /var/www/puppetboard/
 
 # Ports
-EXPOSE 8000
+EXPOSE $PUPPETBOARD_PORT
 
 # Entrypoint
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["/usr/bin/gunicorn", "-b", "0.0.0.0:8000", "wsgi:application"]
+CMD ["/usr/bin/gunicorn", "-b", "0.0.0.0:${PUPPETBOARD_PORT}", "--access-logfile=/dev/stdout", "wsgi:application"]
 
 # Metadata params
 ARG VERSION
