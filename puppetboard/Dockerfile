@@ -1,9 +1,10 @@
-FROM alpine:3.5
+FROM alpine:3.6
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
 ENV PUPPET_BOARD_VERSION="0.2.2" \
-    GUNICORN_VERSION="19.7.1"
+    GUNICORN_VERSION="19.7.1" \
+    PUPPETBOARD_PORT="8000"
 WORKDIR /var/www/puppetboard
 
 # Install packages
