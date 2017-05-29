@@ -22,7 +22,7 @@ EXPOSE $PUPPETBOARD_PORT
 
 # Entrypoint
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["/usr/bin/gunicorn", "-b", "0.0.0.0:${PUPPETBOARD_PORT}", "--access-logfile=/dev/stdout", "wsgi:application"]
+CMD /usr/bin/gunicorn -b 0.0.0.0:${PUPPETBOARD_PORT} wsgi:application
 
 # Metadata params
 ARG VERSION
