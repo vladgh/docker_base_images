@@ -9,11 +9,16 @@ describe 'Dockerfile' do
     expect(os[:family]).to eq('alpine')
   end
 
-  packages = %w(python tini)
+  packages = %w(curl python tini)
   packages.each do |pkg|
     describe package(pkg) do
       it { is_expected.to be_installed }
     end
+  end
+
+  describe command('curl --version') do
+    its(:stdout) { is_expected.to contain('curl') }
+    its(:exit_status) { is_expected.to eq 0 }
   end
 
   describe file('/usr/bin/gunicorn') do

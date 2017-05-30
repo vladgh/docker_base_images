@@ -8,7 +8,7 @@ ENV PUPPET_BOARD_VERSION="0.2.2" \
 WORKDIR /var/www/puppetboard
 
 # Install packages
-RUN apk --no-cache add python tini
+RUN apk --no-cache add curl python tini
 
 # Install pip packages (leave pip installed for importing)
 RUN apk --no-cache add --virtual build-dependencies py-pip && \
