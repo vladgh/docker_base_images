@@ -15,4 +15,9 @@ describe 'Dockerfile' do
       it { is_expected.to be_installed }
     end
   end
+
+  describe command('curl --version') do
+    its(:stdout) { is_expected.to contain('curl') }
+    its(:exit_status) { is_expected.to eq 0 }
+  end
 end
