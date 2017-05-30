@@ -27,8 +27,7 @@ CMD ["puppetdb", "foreground"]
 
 # Health check
 HEALTHCHECK --interval=10s --timeout=10s --retries=90 CMD \
-  curl --fail -X GET \
-  http://localhost:8080/pdb/meta/v1/server-time \
+  curl --fail -X GET localhost:8080/pdb/meta/v1/server-time \
   |  grep -q 'server_time' \
   || exit 1
 
