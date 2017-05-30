@@ -24,6 +24,12 @@ EXPOSE $PUPPETBOARD_PORT
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD /usr/bin/gunicorn -b 0.0.0.0:${PUPPETBOARD_PORT} wsgi:application
 
+# Health check
+HEALTHCHECK --interval=10s --timeout=10s --retries=90 CMD \
+  curl --fail -X GET localhost:${PUPPETBOARD_PORT} \
+  |  grep -q 'Live from PuppetDB' \
+  || exit 1
+
 # Metadata params
 ARG VERSION
 ARG VCS_URL
