@@ -10,8 +10,18 @@ IFS=$'\n\t'
 PUPPETDB_HOST="${PUPPETDB_HOST:-postgres}"
 PUPPETDB_PORT="${PUPPETDB_PORT:-5432}"
 PUPPETDB_NAME="${PUPPETDB_NAME:-puppetdb}"
-PUPPETDB_USER="${PUPPETDB_USER:-puppetdb}"
-PUPPETDB_PASS="${PUPPETDB_PASS:-puppetdb}"
+
+# SECRETS (first read from Docker Secrets, then from environment variable; otherwise use default)
+if [[ -s /run/secrets/puppetdb_user ]]; then
+  PUPPETDB_USER=$(cat /run/secrets/puppetdb_user)
+else
+  PUPPETDB_USER="${PUPPETDB_USER:-puppetdb}"
+fi
+if [[ -s /run/secrets/puppetdb_pass ]]; then
+  PUPPETDB_PASS=$(cat /run/secrets/puppetdb_pass)
+else
+  PUPPETDB_PASS="${PUPPETDB_PASS:-puppetdb}"
+fi
 
 # PATHs
 PUPPETDB_CONF='/etc/puppetlabs/puppetdb/conf.d/database.ini'
