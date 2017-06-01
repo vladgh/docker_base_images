@@ -10,6 +10,7 @@ IFS=$'\n\t'
 PUPPETDB_HOST="${PUPPETDB_HOST:-postgres}"
 PUPPETDB_PORT="${PUPPETDB_PORT:-5432}"
 PUPPETDB_NAME="${PUPPETDB_NAME:-puppetdb}"
+PUPPETDB_CERTNAME="${PUPPETDB_CERTNAME:-}"
 
 # SECRETS (first read from Docker Secrets, then from environment variable; otherwise use default)
 if [[ -s /run/secrets/puppetdb_user ]]; then
@@ -31,6 +32,11 @@ PUPPETDB_HTTP='/etc/puppetlabs/puppetdb/conf.d/jetty.ini'
 if [[ -f /etc/puppetlabs/initialized ]]; then
   echo "PuppetDB already initialized"
 else
+  # Configure Puppet Certname
+  if [[ -n "$PUPPETDB_CERTNAME" ]]; then
+    puppet config set certname "$PUPPETDB_CERTNAME" --section main
+  fi
+
   # Change database connection settings
   sed -i.bak "s@# subname.*@subname = //$PUPPETDB_HOST:$PUPPETDB_PORT/$PUPPETDB_NAME@gi" "$PUPPETDB_CONF"
   sed -i "s@# username.*@username = $PUPPETDB_USER@gi" "$PUPPETDB_CONF"
