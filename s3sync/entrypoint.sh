@@ -109,7 +109,8 @@ main(){
   fi
 
   mkdir -p "$SYNCDIR" # Make sure directory exists
-
+  
+  # Get AWS Credentials
   get_credentials
 
   # Parse command line arguments
