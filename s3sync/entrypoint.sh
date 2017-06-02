@@ -16,6 +16,14 @@ log(){
   echo "[$(date "+%Y-%m-%dT%H:%M:%S%z") - $(hostname)] ${*}"
 }
 
+# Read credentials from Docker secrets (if it exists)
+get_credentials(){
+  if [[ -s /run/secrets/aws_credentials ]]; then
+    mkdir -p ~/.aws
+    ln -s /run/secrets/aws_credentials ~/.aws/credentials
+  fi
+}
+
 # Sync files
 sync_files(){
   local src="${1:-}"
@@ -101,6 +109,8 @@ main(){
   fi
 
   mkdir -p "$SYNCDIR" # Make sure directory exists
+
+  get_credentials
 
   # Parse command line arguments
   cmd="${1:-download}"
