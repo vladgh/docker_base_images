@@ -20,17 +20,25 @@
 
 ## AWS credentials
 
-You can declare AWS credentials in 2 ways:
+You can declare AWS credentials in 3 ways:
 
+1. As environment variables
 ```SH
-...
+docker run ...
 -e AWS_ACCESS_KEY_ID=1234 \
 -e AWS_SECRET_ACCESS_KEY=5678 \
 -e AWS_DEFAULT_REGION=us-east-1 \
-# OR
+...
+```
+
+2. Mount the configuration directory
+```SH
+docker run ...
 -v ~/.aws:/root/.aws:ro
 ...
 ```
+
+3. If you are using Docker Swarm secrets, the credentials file for AWS is automatically read if a `aws_credentials` secret exists. This will link to `~/.aws/credentials`. For more information on Docker Swarm secrets, read: https://docs.docker.com/engine/swarm/secrets/. For information about a AWS CLI credentials file, read: http://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html
 
 ## One time backup
 

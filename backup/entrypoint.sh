@@ -28,6 +28,14 @@ bye(){
   clean_up; exit "${1:-0}"
 }
 
+# Read credentials from Docker secrets (if it exists)
+get_credentials(){
+  if [[ -s /run/secrets/aws_credentials ]]; then
+    mkdir -p ~/.aws
+    ln -s /run/secrets/aws_credentials ~/.aws/credentials
+  fi
+}
+
 # Import public GPG key
 import_gpg_keys(){
   if ls -A "$GPG_KEY_PATH" >/dev/null 2>&1; then
@@ -191,6 +199,9 @@ main(){
   else
     AWS_S3_PATH="s3://${AWS_S3_BUCKET}"
   fi
+
+  # Get AWS Credentials
+  get_credentials
 
   # Import GPG keys
   import_gpg_keys
