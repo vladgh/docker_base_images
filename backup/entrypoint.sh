@@ -9,10 +9,12 @@ AWS_S3_BUCKET="${AWS_S3_BUCKET:-backup_$(date +%s | sha256sum | base64 | head -c
 AWS_S3_PREFIX="${AWS_S3_PREFIX:-}"
 AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
 GPG_PASSPHRASE="${GPG_PASSPHRASE:-}"
+GPG_PASSPHRASE_FILE="${GPG_PASSPHRASE_FILE:-}"
 GPG_RECIPIENT="${GPG_RECIPIENT:-}"
 GPG_KEY_PATH="${GPG_KEY_PATH:-/keys}"
 GPG_KEY_URL="${GPG_KEY_URL:-}"
 BACKUP_PATH="${BACKUP_PATH:-/backup}"
+RESTORE_PATH="${RESTORE_PATH:-/restore}"
 CRON_TIME="${CRON_TIME:-8 */8 * * *}"
 NOW=$(date +"%Y-%m-%d_%H-%M-%S")
 TMPDIR=$(mktemp -d 2>/dev/null || mktemp -d -t 'tmp')
@@ -29,18 +31,43 @@ bye(){
 }
 
 # Read credentials from Docker secrets (if it exists)
-get_credentials(){
+get_aws_credentials(){
   if [[ -s /run/secrets/aws_credentials ]]; then
     mkdir -p ~/.aws
     ln -s /run/secrets/aws_credentials ~/.aws/credentials
   fi
 }
 
+# usage: file_env VAR [DEFAULT]
+#    ie: file_env 'XYZ_DB_PASSWORD' 'example'
+# (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
+#  "$XYZ_DB_PASSWORD" from a file, especially for Docker's secrets feature)
+file_env() {
+  local var="$1"
+  local fileVar="${var}_FILE"
+  local def="${2:-}"
+  if [ "${!var:-}" ] && [ "${!fileVar:-}" ]; then
+    echo >&2 "error: both $var and $fileVar are set (but are exclusive)"
+    exit 1
+  fi
+  local val="$def"
+  if [ "${!var:-}" ]; then
+    val="${!var}"
+  elif [ "${!fileVar:-}" ]; then
+    val="$(< "${!fileVar}")"
+  fi
+  export "$var"="$val"
+  unset "$fileVar"
+}
+
 # Import public GPG key
 import_gpg_keys(){
-  if ls -A "$GPG_KEY_PATH" >/dev/null 2>&1; then
-    log 'Import all keys in /keys folder'
+  if [[ -d $GPG_KEY_PATH ]] && [[ ! "$(ls -A "${GPG_KEY_PATH}" 2>/dev/null)" ]]; then
+    log "Import all keys in ${GPG_KEY_PATH} folder"
     gpg --batch --import "$GPG_KEY_PATH"/*
+  elif [[ -s $GPG_KEY_PATH ]]; then
+    log "Import key ${GPG_KEY_PATH}"
+    gpg --batch --import "$GPG_KEY_PATH"
   elif [[ "$GPG_KEY_URL" =~ ^https://.* ]]; then
     log "Import key from ${GPG_KEY_URL}"
     curl "$GPG_KEY_URL" | gpg --import
@@ -59,6 +86,9 @@ create_archive(){
 # Encrypt the backup tar.gz
 encrypt_archive(){
   export BACKUP_FILE_ENCRYPTED="${BACKUP_FILE}.gpg"
+
+  file_env 'GPG_PASSPHRASE'
+
   if [[ -n "$GPG_RECIPIENT" ]] && [[ -s "$BACKUP_FILE" ]]; then
     log "Encrypt ${BACKUP_FILE_ENCRYPTED}"
     gpg \
@@ -82,7 +112,7 @@ encrypt_archive(){
 
 # Create bucket, if it doesn't already exist and persist the name
 ensure_s3_bucket(){
-  if grep -q "${AWS_S3_BUCKET}" /var/run/backup_bucket_name; then
+  if grep -q "${AWS_S3_BUCKET}" /var/run/backup_bucket_name 2>/dev/null; then
     log "Using '${AWS_S3_BUCKET}' bucket"
     export AWS_S3_BUCKET; AWS_S3_BUCKET="$(cat /var/run/backup_bucket_name)"
   elif [[ -s /var/run/backup_bucket_name ]]; then
@@ -201,7 +231,7 @@ main(){
   fi
 
   # Get AWS Credentials
-  get_credentials
+  get_aws_credentials
 
   # Import GPG keys
   import_gpg_keys

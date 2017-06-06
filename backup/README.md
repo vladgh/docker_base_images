@@ -11,9 +11,11 @@
 - `AWS_DEFAULT_REGION`: the default region (defaults to 'us-east-1')
 - `AWS_S3_BUCKET`: the name of the bucket (defaults to backup_{ID})
 - `AWS_S3_PREFIX`: the prefix for the keys inside the bucket (no leading or trailing slashes)
+- `GPG_PASSPHRASE`: The passphrase for symetric encryption
+- `GPG_PASSPHRASE_FILE`: The file containing the passphrase for symetric encryption (for examplea docker swarm secret mounted at /run/secrets/my_gpg_pass)
 - `GPG_RECIPIENT`: the id of the intended recipient; if it's missing, the archive will NOT be encrypted
 - `GPG_KEY_URL`:  URL to the public GPG key
-- `GPG_KEY_PATH`: container path to the GPG key (defaults to '/keys')
+- `GPG_KEY_PATH`: container path to the GPG key (if this is a folder, all files will be imported; if it is a file; defaults to '/keys')
 - `BACKUP_PATH`: container path to be archived (defaults to '/backup')
 - `RESTORE_PATH`: container path to restore (defaults to '/restore')
 - `CRON_TIME`: a valid cron expression (it only applies to the "hourly" backups; defaults to every 8 hours, at midnight, Sunday, and the first day of each month; see Rotation below)
@@ -47,7 +49,7 @@ docker run --rm -it \
   -e AWS_S3_BUCKET=mybucket \
   -e GPG_RECIPIENT=me@example.com \
   -v ~/.aws:/root/.aws:ro \
-  -v /etc/localtime:/etc/localtime:ro
+  -v /etc/localtime:/etc/localtime:ro \
   -v ~/GPGKeysPath:/keys:ro \
   -v ~/path/to/backup/dir1:/backup/dir1 \
   -v ~/path/to/backup/dir2:/backup/dir2 \
@@ -75,7 +77,7 @@ docker run -d \
   -e GPG_RECIPIENT=me@example.com \
   -e CRON_TIME= '0 */2 * * *'\
   -v ~/.aws:/root/.aws:ro \
-  -v /etc/localtime:/etc/localtime:ro
+  -v /etc/localtime:/etc/localtime:ro \
   -v ~/GPGKeysPath:/keys:ro \
   -v ~/path/to/backup/dir1:/backup/dir1 \
   -v ~/path/to/backup/dir2:/backup/dir2 \

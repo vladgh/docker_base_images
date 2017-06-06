@@ -17,7 +17,7 @@ log(){
 }
 
 # Read credentials from Docker secrets (if it exists)
-get_credentials(){
+get_aws_credentials(){
   if [[ -s /run/secrets/aws_credentials ]]; then
     mkdir -p ~/.aws
     ln -s /run/secrets/aws_credentials ~/.aws/credentials
@@ -109,9 +109,9 @@ main(){
   fi
 
   mkdir -p "$SYNCDIR" # Make sure directory exists
-  
+
   # Get AWS Credentials
-  get_credentials
+  get_aws_credentials
 
   # Parse command line arguments
   cmd="${1:-download}"
