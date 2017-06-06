@@ -1,5 +1,25 @@
 # Change Log
 
+## [v0.2.5](https://github.com/vladgh/docker_base_images/tree/v0.2.5) (2017-06-06)
+[Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.2.4...v0.2.5)
+
+**Implemented enhancements:**
+
+- Refactor Backup image for Docker Swarm secrets [\#15](https://github.com/vladgh/docker_base_images/issues/15)
+- Use the voxpupuli configuration for Puppet Board [\#13](https://github.com/vladgh/docker_base_images/issues/13)
+- Upgrade to Alpine 3.6 [\#12](https://github.com/vladgh/docker_base_images/issues/12)
+- Add health check to the PuppetDB [\#11](https://github.com/vladgh/docker_base_images/issues/11)
+- Add support for Docker Swarm secrets to the backup image [\#16](https://github.com/vladgh/docker_base_images/pull/16) ([vladgh](https://github.com/vladgh))
+- Refactor S3Sync to allow Docker Swarm secrets [\#14](https://github.com/vladgh/docker_base_images/pull/14) ([vladgh](https://github.com/vladgh))
+- Add PuppetBoard base image [\#9](https://github.com/vladgh/docker_base_images/pull/9) ([vladgh](https://github.com/vladgh))
+
+**Fixed bugs:**
+
+- Improve PuppetDB entrypoint [\#10](https://github.com/vladgh/docker_base_images/pull/10) ([vladgh](https://github.com/vladgh))
+
+## [v0.2.4](https://github.com/vladgh/docker_base_images/tree/v0.2.4) (2017-04-27)
+[Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.2.3...v0.2.4)
+
 ## [v0.2.3](https://github.com/vladgh/docker_base_images/tree/v0.2.3) (2017-04-27)
 [Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.2.2...v0.2.3)
 
