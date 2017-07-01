@@ -23,8 +23,8 @@ describe 'Dockerfile' do
   end
 
   describe command('haveged --help') do
-    its(:stdout) { is_expected.to contain('haveged') }
-    its(:exit_status) { is_expected.to eq 0 }
+    its(:stderr) { is_expected.to contain('haveged') }
+    its(:exit_status) { is_expected.to eq 1 }
   end
 
   describe command('xz --version') do

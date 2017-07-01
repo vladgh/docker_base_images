@@ -12,7 +12,7 @@
 - `AWS_S3_BUCKET`: the name of the bucket (defaults to backup_{ID})
 - `AWS_S3_PREFIX`: the prefix for the keys inside the bucket (no leading or trailing slashes)
 - `GPG_PASSPHRASE`: The passphrase for symetric encryption
-- `GPG_PASSPHRASE_FILE`: The file containing the passphrase for symetric encryption (for examplea docker swarm secret mounted at /run/secrets/my_gpg_pass)
+- `GPG_PASSPHRASE_FILE`: The file containing the passphrase for symetric encryption (for example a docker swarm secret mounted at /run/secrets/my_gpg_pass)
 - `GPG_RECIPIENT`: the id of the intended recipient; if it's missing, the archive will NOT be encrypted
 - `GPG_KEY_URL`:  URL to the public GPG key
 - `GPG_KEY_PATH`: container path to the GPG key (if this is a folder, all files will be imported; if it is a file; defaults to '/keys')
@@ -63,7 +63,7 @@ docker run --rm -it \
   -e AWS_S3_BUCKET=mybucket \
   -e GPG_PASSPHRASE='mysuperstrongpassword' \
   -v ~/.aws:/root/.aws:ro \
-  -v /etc/localtime:/etc/localtime:ro
+  -v /etc/localtime:/etc/localtime:ro \
   -v ~/path/to/backup/dir1:/backup/dir1 \
   -v ~/path/to/backup/dir2:/backup/dir2 \
   vladgh/backup
@@ -96,8 +96,38 @@ docker run --rm -it \
 ```
 
 Notes:
-* Runs one time in interactive mode and it will ask for the GPG key passphrase.
+* Runs one time in interactive mode and it will ask for the passphrase.
 * The private GPG key needs to be imported from the `/keys` folder.
+* ~/GPGKeysPath is the location of the private key file
+* ~/RestorePath is the location of the restored files on the host
+
+## Restore single file
+
+```SH
+docker run --rm -it \
+  -v ~/GPGKeysPath:/keys:ro \
+  -v ~/RestoreFile:/restore_file.xz.gpg \
+  -v ~/RestorePath:/restore \
+  vladgh/backup restore /restore_file.xz.gpg
+```
+
+## Restore single file (w/ symmetric encryption)
+
+```SH
+docker run --rm -it \
+  -v ~/RestoreFile:/restore_file.xz.gpg \
+  -v ~/RestorePath:/restore \
+  vladgh/backup restore /restore_file.xz.gpg
+```
+
+## Restore single file (w/o encryption)
+
+```SH
+docker run --rm -it \
+  -v ~/RestoreFile:/restore_file.xz \
+  -v ~/RestorePath:/restore \
+  vladgh/backup restore /restore_file.xz
+```
 
 ## Encryption
 
