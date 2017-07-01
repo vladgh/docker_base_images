@@ -3,9 +3,9 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
 ENV PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH \
-    PUPPET_RELEASE="puppetlabs-release-pc1-xenial" \
-    PUPPET_AGENT_VERSION="1.10.1" \
-    TINI_VERSION="v0.14.0"
+    PUPPET_RELEASE="puppet5-release-xenial" \
+    PUPPET_AGENT_VERSION="5.0.0" \
+    TINI_VERSION="0.14.0"
 
 # Install Puppet release package
 RUN export DEBIAN_FRONTEND=noninteractive && \
@@ -18,7 +18,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Tini
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /sbin/tini
+ADD https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini /sbin/tini
 RUN chmod +x /sbin/tini
 
 # Entrypoint

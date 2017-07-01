@@ -3,7 +3,7 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
 ENV PATH=/opt/puppetlabs/server/bin:$PATH \
-    PUPPETDB_VERSION="4.4.0" \
+    PUPPETDB_VERSION="5.0.1" \
     PUPPETDB_JAVA_ARGS="-Djava.net.preferIPv4Stack=true -Xms256M -Xmx256M"
 
 # Installation
