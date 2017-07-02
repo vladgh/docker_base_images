@@ -19,7 +19,7 @@ EXPOSE $PUPPETBOARD_PORT
 
 # Entrypoint
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD /usr/bin/gunicorn -b 0.0.0.0:${PUPPETBOARD_PORT} --access-logfile=/dev/stdout puppetboard.app:app
+CMD /usr/local/bin/gunicorn -b 0.0.0.0:${PUPPETBOARD_PORT} --access-logfile=/dev/stdout puppetboard.app:app
 
 # Health check
 HEALTHCHECK --interval=10s --timeout=10s --retries=90 CMD \
