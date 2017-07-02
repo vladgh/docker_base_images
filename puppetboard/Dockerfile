@@ -1,28 +1,25 @@
-FROM alpine:3.6
+FROM python:2.7-alpine
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
-ENV PUPPET_BOARD_VERSION="0.2.2" \
-    GUNICORN_VERSION="19.7.1" \
-    PUPPETBOARD_PORT="8000"
+ENV GUNICORN_VERSION="19.7.1" \
+    PUPPETBOARD_VERSION="0.2.2" \
+    PUPPETBOARD_PORT="8000" \
+    PUPPETBOARD_SETTINGS="docker_settings.py"
 WORKDIR /var/www/puppetboard
 
 # Install packages
-RUN apk --no-cache add curl python tini
+RUN apk --no-cache add curl tini
 
 # Install pip packages (leave pip installed for importing)
-RUN apk --no-cache add --virtual build-dependencies py-pip && \
-    pip --no-cache-dir install puppetboard=="$PUPPET_BOARD_VERSION" gunicorn=="$GUNICORN_VERSION"
-
-# Install configuration
-COPY wsgi.py settings.py /var/www/puppetboard/
+RUN pip --no-cache-dir install puppetboard=="$PUPPETBOARD_VERSION" gunicorn=="$GUNICORN_VERSION"
 
 # Ports
 EXPOSE $PUPPETBOARD_PORT
 
 # Entrypoint
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD /usr/bin/gunicorn -b 0.0.0.0:${PUPPETBOARD_PORT} --access-logfile=/dev/stdout wsgi:application
+CMD /usr/bin/gunicorn -b 0.0.0.0:${PUPPETBOARD_PORT} --access-logfile=/dev/stdout puppetboard.app:app
 
 # Health check
 HEALTHCHECK --interval=10s --timeout=10s --retries=90 CMD \
