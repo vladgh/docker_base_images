@@ -9,7 +9,12 @@ describe 'Dockerfile' do
     expect(os[:family]).to eq('alpine')
   end
 
-  packages = %w(curl python tini)
+  describe file('/sbin/tini') do
+    it { is_expected.to exist }
+    it { is_expected.to be_executable }
+  end
+
+  packages = %w(curl tini)
   packages.each do |pkg|
     describe package(pkg) do
       it { is_expected.to be_installed }
@@ -21,19 +26,19 @@ describe 'Dockerfile' do
     its(:exit_status) { is_expected.to eq 0 }
   end
 
-  describe file('/usr/bin/gunicorn') do
+  describe file('/usr/local/bin/gunicorn') do
     it { should exist }
     it { should be_executable }
   end
 
-  describe command('/usr/bin/gunicorn --version') do
+  describe command('/usr/local/bin/gunicorn --version') do
     its(:stderr) { is_expected.to contain('gunicorn') }
     its(:exit_status) { is_expected.to eq 0 }
   end
 
-  describe file('/sbin/tini') do
-    it { is_expected.to exist }
-    it { is_expected.to be_executable }
+  describe file('/usr/local/bin/pip') do
+    it { should exist }
+    it { should be_executable }
   end
 
   describe command('/sbin/tini -h') do
