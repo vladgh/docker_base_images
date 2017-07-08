@@ -30,14 +30,6 @@ bye(){
   clean_up; exit "${1:-0}"
 }
 
-# Read credentials from Docker secrets (if present)
-get_aws_credentials(){
-  if [[ -s /run/secrets/aws_credentials ]]; then
-    mkdir -p ~/.aws
-    ln -s /run/secrets/aws_credentials ~/.aws/credentials
-  fi
-}
-
 # usage: file_env VAR [DEFAULT]
 #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
 # (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
@@ -154,8 +146,6 @@ set_up_s3(){
   else
     _aws_s3_path="s3://${AWS_S3_BUCKET}"
   fi
-
-  get_aws_credentials
 }
 
 # Upload archive to AWS S3
