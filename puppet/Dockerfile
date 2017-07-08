@@ -3,7 +3,7 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
 ENV PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH \
-    PUPPET_RELEASE="puppet5-release-xenial" \
+    PUPPET_RELEASE="puppet-release-xenial" \
     PUPPET_AGENT_VERSION="5.0.0" \
     TINI_VERSION="0.14.0"
 
