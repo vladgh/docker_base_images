@@ -1,5 +1,19 @@
 # Change Log
 
+## [v0.2.6](https://github.com/vladgh/docker_base_images/tree/v0.2.6) (2017-07-11)
+[Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.2.5...v0.2.6)
+
+**Implemented enhancements:**
+
+- Adhere to recommended community standards [\#21](https://github.com/vladgh/docker_base_images/issues/21)
+- Remove hardcoded AWS credentials location [\#20](https://github.com/vladgh/docker_base_images/issues/20)
+- Use the new Puppet rolling repos [\#19](https://github.com/vladgh/docker_base_images/issues/19)
+- Allow restore single file from backup [\#18](https://github.com/vladgh/docker_base_images/issues/18)
+
+**Fixed bugs:**
+
+- Backup restore doesn't work [\#17](https://github.com/vladgh/docker_base_images/issues/17)
+
 ## [v0.2.5](https://github.com/vladgh/docker_base_images/tree/v0.2.5) (2017-06-06)
 [Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.2.4...v0.2.5)
 
