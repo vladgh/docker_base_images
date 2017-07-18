@@ -109,7 +109,6 @@ encrypt_archive(){
       --output "$_backup_file_encrypted" \
       --batch --yes \
       --passphrase-fd 0 \
-      --armor \
       --symmetric \
       --cipher-algo=aes256 \
       "$_backup_file"
