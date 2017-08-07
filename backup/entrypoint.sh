@@ -249,6 +249,9 @@ main(){
   # Trap exit
   trap 'EXCODE=$?; bye; trap - EXIT; echo $EXCODE' EXIT HUP INT QUIT PIPE TERM
 
+  # Set Umask
+  umask 077
+
   # Set working directory
   cd "$TMPDIR" || exit
 
