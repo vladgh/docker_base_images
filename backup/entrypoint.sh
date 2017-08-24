@@ -177,10 +177,11 @@ get_archive(){
   else
     # Download the latest archive from S3
     set_up_s3
-    _restore_file="$(get_latest_s3_archive)"
+    _restore_path="$(get_latest_s3_archive)"
+    _restore_file="$(basename "$_restore_path")"
 
     if [[ -n "$_restore_file" ]]; then
-      aws s3 cp "${_aws_s3_path}/${_restore_file}" "$_restore_file"
+      aws s3 cp "s3://${AWS_S3_BUCKET}/${_restore_path}" "${_restore_file}"
     fi
   fi
 }
