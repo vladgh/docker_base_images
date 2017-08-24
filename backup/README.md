@@ -6,9 +6,6 @@
 
 ## Environment variables :
 
-- `AWS_ACCESS_KEY_ID`: the key id (or functional IAM profile)
-- `AWS_SECRET_ACCESS_KEY`: the secret key (or functional IAM profile)
-- `AWS_DEFAULT_REGION`: the default region (defaults to 'us-east-1')
 - `AWS_S3_BUCKET`: the name of the bucket (defaults to backup_{ID})
 - `AWS_S3_PREFIX`: the prefix for the keys inside the bucket (no leading or trailing slashes)
 - `GPG_PASSPHRASE`: The passphrase for symetric encryption
@@ -22,10 +19,11 @@
 
 ## AWS credentials
 
-You can declare AWS credentials in 3 ways:
+You can declare AWS credentials in several ways:
 
 1. As environment variables
-```SH
+
+```
 docker run ...
 -e AWS_ACCESS_KEY_ID=1234 \
 -e AWS_SECRET_ACCESS_KEY=5678 \
@@ -34,104 +32,140 @@ docker run ...
 ```
 
 2. Mount the configuration directory
-```SH
+
+```
 docker run ...
 -v ~/.aws:/root/.aws:ro
 ...
 ```
 
-3. If you are using Docker Swarm secrets, the credentials file for AWS is automatically read if a `aws_credentials` secret exists. This will link to `~/.aws/credentials`. For more information on Docker Swarm secrets, read: https://docs.docker.com/engine/swarm/secrets/. For information about a AWS CLI credentials file, read: http://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html
+3. If you are using Docker Swarm Secrets, you can create a secret with a target to `/root/.aws/credentials`.
+
+```
+docker service create ...
+--secret source=aws_credentials,target=/root/.aws/credentials,mode=0400
+...
+```
+
+For more information on Docker Swarm secrets, read: https://docs.docker.com/engine/swarm/secrets/. For information about a AWS CLI credentials file, read: http://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html
+
+## GPG keys
+
+You can import the GPG keys in several ways:
+
+1. From an URL
+
+```
+docker run ...
+-e GPG_KEY_URL: 'https://keybase.io/example/key.asc' \
+...
+```
+
+2. From a file (which needs to be mounted from the host)
+
+```
+docker run ...
+-v /host/path/to/GPG/key:/key:ro \
+-e GPG_KEY_PATH: '/key' \
+...
+```
+
+2. From a folder (which needs to be mounted from the host)
+
+```
+docker run ...
+-v /host/path/to/GPG/keys:/keys:ro \
+-e GPG_KEY_PATH: '/keys' \
+...
+```
 
 ## One time backup
 
-```SH
+```
 docker run --rm -it \
   -e AWS_S3_BUCKET=mybucket \
   -e GPG_RECIPIENT=me@example.com \
+  -e GPG_KEY_URL: 'https://keybase.io/example/key.asc' \
   -v ~/.aws:/root/.aws:ro \
   -v /etc/localtime:/etc/localtime:ro \
-  -v ~/GPGKeysPath:/keys:ro \
-  -v ~/path/to/backup/dir1:/backup/dir1 \
-  -v ~/path/to/backup/dir2:/backup/dir2 \
+  -v /path/to/backup/dir1:/backup/dir1 \
+  -v /path/to/backup/dir2:/backup/dir2 \
   vladgh/backup
 ```
 
-## One time backup (w/ passphrase)
+## One time backup (symmetric encryption with passphrase)
 
-```SH
+```
 docker run --rm -it \
   -e AWS_S3_BUCKET=mybucket \
   -e GPG_PASSPHRASE='mysuperstrongpassword' \
   -v ~/.aws:/root/.aws:ro \
   -v /etc/localtime:/etc/localtime:ro \
-  -v ~/path/to/backup/dir1:/backup/dir1 \
-  -v ~/path/to/backup/dir2:/backup/dir2 \
+  -v /path/to/backup/dir1:/backup/dir1 \
+  -v /path/to/backup/dir2:/backup/dir2 \
   vladgh/backup
 ```
 
 ## Cronjob
 
-```SH
+```
 docker run -d \
   -e AWS_S3_BUCKET=mybucket \
   -e GPG_RECIPIENT=me@example.com \
   -e CRON_TIME= '0 */2 * * *'\
   -v ~/.aws:/root/.aws:ro \
   -v /etc/localtime:/etc/localtime:ro \
-  -v ~/GPGKeysPath:/keys:ro \
-  -v ~/path/to/backup/dir1:/backup/dir1 \
-  -v ~/path/to/backup/dir2:/backup/dir2 \
+  -v /host/path/to/GPG/keys:/keys:ro \
+  -v /path/to/backup/dir1:/backup/dir1 \
+  -v /path/to/backup/dir2:/backup/dir2 \
   vladgh/backup cron
 ```
 
 ## Restore
+Downloads the latest object uploaded in the specified bucket (with the specified prefix).
+The private GPG key needs to be imported (see [GPG keys](#gpg-keys)). It runs one time in interactive mode and it will ask for the passphrase.
 
-```SH
+```
 docker run --rm -it \
   -e AWS_S3_BUCKET=mybucket \
+  -e AWS_S3_PREFIX=myprefix \
   -v ~/.aws:/root/.aws:ro \
-  -v ~/GPGKeysPath:/keys:ro \
-  -v ~/RestorePath:/restore \
+  -v /host/path/to/GPG/private/key:/keys/my_private_key:ro \
+  -v /host/path/to/restore:/restore \
   vladgh/backup restore
 ```
 
-Notes:
-* Runs one time in interactive mode and it will ask for the passphrase.
-* The private GPG key needs to be imported from the `/keys` folder.
-* ~/GPGKeysPath is the location of the private key file
-* ~/RestorePath is the location of the restored files on the host
-
 ## Restore single file
 
-```SH
+```
 docker run --rm -it \
-  -v ~/GPGKeysPath:/keys:ro \
-  -v ~/RestoreFile:/restore_file.xz.gpg \
-  -v ~/RestorePath:/restore \
+  -v /host/path/to/GPG/private/key:/keys/my_private_key:ro \
+  -v /host/path/to/restore:/restore \
+  -v /host/path/to/restore_file.xz.gpg:/restore_file.xz.gpg \
   vladgh/backup restore /restore_file.xz.gpg
 ```
 
-## Restore single file (w/ symmetric encryption)
+## Restore single file (with symmetric encryption)
 
-```SH
+```
 docker run --rm -it \
-  -v ~/RestoreFile:/restore_file.xz.gpg \
-  -v ~/RestorePath:/restore \
+  -v /host/path/to/restore:/restore \
+  -v /host/path/to/restore_file.xz.gpg:/restore_file.xz.gpg \
   vladgh/backup restore /restore_file.xz.gpg
 ```
 
-## Restore single file (w/o encryption)
+## Restore single file (without encryption)
 
-```SH
+```
 docker run --rm -it \
-  -v ~/RestoreFile:/restore_file.xz \
-  -v ~/RestorePath:/restore \
+  -v /host/path/to/restore:/restore \
+  -v /host/path/to/restore_file.xz:/restore_file.xz \
   vladgh/backup restore /restore_file.xz
 ```
 
 ## Encryption
 
-```SH
+```
 # Start container
 docker run --rm -it -v /path/to/keys/store:/keys -e GPG_TTY=/dev/console --entrypoint bash vladgh/backup
 
@@ -158,6 +192,6 @@ The recommended rotation method is by using lifecycle rules for the S3 bucket. A
 - daily backups expire after 7 days
 - monthly backups expire after 30 days
 
-```SH
+```
 aws s3api put-bucket-lifecycle --bucket mybucket --lifecycle-configuration file://lifecycle.json
 ```
