@@ -66,7 +66,7 @@ clean_up(){
 
 # Import public GPG key
 import_gpg_keys(){
-  if [[ -d $GPG_KEY_PATH ]] && [[ ! $(ls -A "${GPG_KEY_PATH}" 2>/dev/null) ]]; then
+  if [[ -d $GPG_KEY_PATH ]] && [[ $(ls -A "${GPG_KEY_PATH}" 2>/dev/null) ]]; then
     log "Import all keys in ${GPG_KEY_PATH} folder"
     gpg --batch --import "$GPG_KEY_PATH"/*
   elif [[ -s $GPG_KEY_PATH ]]; then
