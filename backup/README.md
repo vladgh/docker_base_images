@@ -8,11 +8,11 @@
 
 - `AWS_S3_BUCKET`: the name of the bucket (defaults to backup_{ID})
 - `AWS_S3_PREFIX`: the prefix for the keys inside the bucket (no leading or trailing slashes)
-- `GPG_PASSPHRASE`: The passphrase for symetric encryption
-- `GPG_PASSPHRASE_FILE`: The file containing the passphrase for symetric encryption (for example a docker swarm secret mounted at /run/secrets/my_gpg_pass)
+- `GPG_PASSPHRASE`: The passphrase for symmetric encryption
+- `GPG_PASSPHRASE_FILE`: The file containing the passphrase for symmetric encryption (for example a docker swarm secret mounted at /run/secrets/my_gpg_pass)
 - `GPG_RECIPIENT`: the id of the intended recipient; if it's missing, the archive will NOT be encrypted
 - `GPG_KEY_URL`:  URL to the public GPG key
-- `GPG_KEY_PATH`: container path to the GPG key (if this is a folder, all files will be imported; if it is a file; defaults to '/keys')
+- `GPG_KEY_PATH`: container path to the GPG key (can be a file or a folder; if this is a folder, all files will be imported; defaults to '/keys')
 - `BACKUP_PATH`: container path to be archived (defaults to '/backup')
 - `RESTORE_PATH`: container path to restore (defaults to '/restore')
 - `CRON_TIME`: a valid cron expression (it only applies to the "hourly" backups; defaults to every 8 hours, at midnight, Sunday, and the first day of each month; see Rotation below)
@@ -57,7 +57,7 @@ You can import the GPG keys in several ways:
 
 ```
 docker run ...
--e GPG_KEY_URL: 'https://keybase.io/example/key.asc' \
+-e GPG_KEY_URL='https://keybase.io/example/key.asc' \
 ...
 ```
 
@@ -66,7 +66,7 @@ docker run ...
 ```
 docker run ...
 -v /host/path/to/GPG/key:/key:ro \
--e GPG_KEY_PATH: '/key' \
+-e GPG_KEY_PATH='/key' \
 ...
 ```
 
@@ -75,7 +75,7 @@ docker run ...
 ```
 docker run ...
 -v /host/path/to/GPG/keys:/keys:ro \
--e GPG_KEY_PATH: '/keys' \
+-e GPG_KEY_PATH='/keys' \
 ...
 ```
 
@@ -85,7 +85,7 @@ docker run ...
 docker run --rm -it \
   -e AWS_S3_BUCKET=mybucket \
   -e GPG_RECIPIENT=me@example.com \
-  -e GPG_KEY_URL: 'https://keybase.io/example/key.asc' \
+  -e GPG_KEY_URL='https://keybase.io/example/key.asc' \
   -v ~/.aws:/root/.aws:ro \
   -v /etc/localtime:/etc/localtime:ro \
   -v /path/to/backup/dir1:/backup/dir1 \
@@ -122,13 +122,14 @@ docker run -d \
 ```
 
 ## Restore
-Downloads the latest object uploaded in the specified bucket (with the specified prefix).
-The private GPG key needs to be imported (see [GPG keys](#gpg-keys)). It runs one time in interactive mode and it will ask for the passphrase.
+If the right AWS credentials are specified, it will try to download the latest object from the specified bucket (with the specified prefix).
+The private GPG key needs to be imported (see [GPG keys](#gpg-keys)), and the passphrase needs to be declared (via `GPG_PASSPHRASE` or `GPG_PASSPHRASE_FILE`)
 
 ```
 docker run --rm -it \
   -e AWS_S3_BUCKET=mybucket \
   -e AWS_S3_PREFIX=myprefix \
+  -e GPG_PASSPHRASE=myverystrongpassword \
   -v ~/.aws:/root/.aws:ro \
   -v /host/path/to/GPG/private/key:/keys/my_private_key:ro \
   -v /host/path/to/restore:/restore \
@@ -136,22 +137,33 @@ docker run --rm -it \
 ```
 
 ## Restore single file
+You can also restore a single encrypted file by piping it into the container (**Note: do not allocate a TTY to this container**)
 
 ```
-docker run --rm -it \
+docker run --rm -i \
+  -e GPG_PASSPHRASE=myverystrongpassword \
   -v /host/path/to/GPG/private/key:/keys/my_private_key:ro \
   -v /host/path/to/restore:/restore \
-  -v /host/path/to/restore_file.xz.gpg:/restore_file.xz.gpg \
-  vladgh/backup restore /restore_file.xz.gpg
+  vladgh/backup restore < /path/to/host/restore_file.tar.xz.gpg
 ```
 
 ## Restore single file (with symmetric encryption)
+**Note: do not allocate a TTY to this container**
+
+```
+docker run --rm -i \
+  -e GPG_PASSPHRASE=myverystrongpassword \
+  -v /host/path/to/restore:/restore \
+  vladgh/backup restore < /path/to/host/restore_file.tar.xz.gpg
+```
+## Restore single file (mounted inside the container)
 
 ```
 docker run --rm -it \
+  -e GPG_PASSPHRASE=myverystrongpassword \
   -v /host/path/to/restore:/restore \
-  -v /host/path/to/restore_file.xz.gpg:/restore_file.xz.gpg \
-  vladgh/backup restore /restore_file.xz.gpg
+  -v /host/path/to/restore_file.tar.xz:/container/path/to/restore_file.tar.xz.gpg \
+  vladgh/backup restore /container/path/to/restore_file.tar.xz.gpg
 ```
 
 ## Restore single file (without encryption)
@@ -159,8 +171,8 @@ docker run --rm -it \
 ```
 docker run --rm -it \
   -v /host/path/to/restore:/restore \
-  -v /host/path/to/restore_file.xz:/restore_file.xz \
-  vladgh/backup restore /restore_file.xz
+  -v /host/path/to/restore_file.tar.xz:/container/path/to/restore_file.tar.xz \
+  vladgh/backup restore /container/path/to/restore_file.tar.xz
 ```
 
 ## Encryption
@@ -187,7 +199,7 @@ gpg --list-keys
 
 ## Rotation
 
-The recommended rotation method is by using lifecycle rules for the S3 bucket. A json file is included as example. It will remove backups according to the following schedule:
+The recommended rotation method is by using life cycle rules for the S3 bucket. A json file is included as example. It will remove backups according to the following schedule:
 - hourly backups expire after 1 day
 - daily backups expire after 7 days
 - monthly backups expire after 30 days

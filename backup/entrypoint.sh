@@ -98,23 +98,23 @@ encrypt_archive(){
   if [[ -n "$GPG_RECIPIENT" ]] && [[ -s $_backup_file ]]; then
     log "Encrypt ${_backup_file_encrypted}"
     gpg \
-      --trust-model always \
-      --output "$_backup_file_encrypted" \
-      --batch --yes \
       --encrypt \
+      --batch --yes \
+      --trust-model always \
       --recipient "$GPG_RECIPIENT" \
+      --output "$_backup_file_encrypted" \
       "$_backup_file"
   elif [[ -n "$GPG_PASSPHRASE" ]] && [[ -s $_backup_file ]]; then
-    echo "$GPG_PASSPHRASE" | gpg \
-      --output "$_backup_file_encrypted" \
-      --batch --yes \
-      --passphrase-fd 0 \
+    gpg \
       --symmetric \
+      --batch --yes \
+      --passphrase "$GPG_PASSPHRASE" \
       --cipher-algo AES256 \
       --s2k-digest-algo SHA512 \
+      --output "$_backup_file_encrypted" \
       "$_backup_file"
   else
-    return
+    return 0
   fi
 
   _backup_file="${_backup_file_encrypted}"
@@ -170,13 +170,13 @@ get_latest_s3_archive(){
   fi
 }
 
-# Get the archive to restore
+# Download the latest archive from S3
 get_archive(){
-  if [[ -s $_restore_file ]]; then
-    return
-  else
-    # Download the latest archive from S3
+  # Skip unless a bucket exists and you have permission to access it
+  if aws s3api head-bucket --bucket "$AWS_S3_BUCKET" >/dev/null 2>&1; then
+    log "Found AWS S3 bucket '${AWS_S3_BUCKET}'"
     set_up_s3
+
     _restore_path="$(get_latest_s3_archive)"
     _restore_file="$(basename "$_restore_path")"
 
@@ -188,25 +188,38 @@ get_archive(){
 
 # Decrypt archive
 decrypt_archive(){
-  _decrypted_restore_file="decrypted.tar.xz"
+  _restore_file_decrypted="decrypted.tar.xz"
+
+  # Skip unless the file is encrypted
+  if [[ "$_restore_file" != *.gpg ]]; then
+    return 0
+  fi
 
   import_gpg_keys
 
-  if [[ -s $_restore_file ]] && [[ $_restore_file == *.gpg ]]; then
-    log "Decrypt ${_restore_file}"
-    export GPG_TTY=/dev/console
-    gpg --batch --output "$_decrypted_restore_file" --decrypt "$_restore_file"
+  if [[ -s "$_restore_file" ]]; then
+    log "Restore '${_restore_file}'"
+  else
+    log 'Reading file for STDIN'
   fi
+
+  gpg \
+    --decrypt \
+    --batch --yes \
+    --pinentry-mode loopback \
+    --passphrase "$GPG_PASSPHRASE" \
+    --output "$_restore_file_decrypted" \
+    "${_restore_file:-/dev/stdin}"
 }
 
 # Extract the latest archive
 extract_archive(){
-  if [[ -s $_decrypted_restore_file ]]; then
-    _extract_file="${_decrypted_restore_file}"
+  if [[ -s $_restore_file_decrypted ]]; then
+    _extract_file="${_restore_file_decrypted}"
   elif [[ -s $_restore_file ]]; then
     _extract_file="${_restore_file}"
   else
-    return
+    return 0
   fi
 
   log "Extract '${_extract_file}' to '/restore'"
@@ -228,8 +241,7 @@ CRON
 
 # Backup archive
 run_backup(){
-  _backup_type=${1:-hourly}
-
+  _backup_type="${1:-hourly}"
   log 'Start backup'
   create_archive
   encrypt_archive
@@ -238,8 +250,7 @@ run_backup(){
 
 # Restore archive
 restore_backup(){
-  _restore_file=${1:-}
-
+  _restore_file="${1:-}"
   log 'Restore backup'
   get_archive
   decrypt_archive
@@ -248,7 +259,7 @@ restore_backup(){
 
 main(){
   # Trap exit
-  trap 'EXCODE=$?; bye; trap - EXIT; echo $EXCODE' EXIT HUP INT QUIT PIPE TERM
+  trap 'EXCODE=$?; bye; trap - EXIT; echo $EXCODE' EXIT INT TERM
 
   # Set Umask
   umask 077
