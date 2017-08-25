@@ -1,5 +1,27 @@
 # Change Log
 
+## [v0.3.0](https://github.com/vladgh/docker_base_images/tree/v0.3.0) (2017-08-25)
+[Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.2.6...v0.3.0)
+
+**Implemented enhancements:**
+
+- Improve Backup image [\#35](https://github.com/vladgh/docker_base_images/issues/35)
+- Backup image should allow file decryption through standard input [\#33](https://github.com/vladgh/docker_base_images/issues/33)
+- Update README [\#31](https://github.com/vladgh/docker_base_images/issues/31)
+- Update Puppet Agent to 5.1.0 [\#29](https://github.com/vladgh/docker_base_images/issues/29)
+- Add Hiera EYaml to the Puppet Server image [\#28](https://github.com/vladgh/docker_base_images/issues/28)
+- Move MicroBadger tokens to .env [\#26](https://github.com/vladgh/docker_base_images/issues/26)
+- Upgrade Tini [\#25](https://github.com/vladgh/docker_base_images/issues/25)
+- Upgrade Puppet Agent [\#24](https://github.com/vladgh/docker_base_images/issues/24)
+- Improve symmetric encryption algorithm [\#23](https://github.com/vladgh/docker_base_images/issues/23)
+- Remove ASCII-armored format for the encrypted files [\#22](https://github.com/vladgh/docker_base_images/issues/22)
+- Set a very restrictive umask [\#27](https://github.com/vladgh/docker_base_images/pull/27) ([vladgh](https://github.com/vladgh))
+
+**Fixed bugs:**
+
+- Fix GPG key importing from folder [\#32](https://github.com/vladgh/docker_base_images/issues/32)
+- Prefix gets doubled when restoring a backup so archive not copied [\#30](https://github.com/vladgh/docker_base_images/issues/30)
+
 ## [v0.2.6](https://github.com/vladgh/docker_base_images/tree/v0.2.6) (2017-07-11)
 [Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.2.5...v0.2.6)
 
