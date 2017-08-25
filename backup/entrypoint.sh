@@ -83,6 +83,7 @@ import_gpg_keys(){
 # Tar GZ the backup path
 create_archive(){
   _backup_file="${NOW}.tar.xz"
+
   if [[ $(ls -A "$BACKUP_PATH" 2>/dev/null) ]]; then
     log "Create ${_backup_file}"
     tar cJf "$_backup_file" -C "$BACKUP_PATH" .
@@ -93,35 +94,48 @@ create_archive(){
 encrypt_archive(){
   _backup_file_encrypted="${_backup_file}.gpg"
 
-  import_gpg_keys
+  if [[ -s $_backup_file ]]; then
+    import_gpg_keys
 
-  if [[ -n "$GPG_RECIPIENT" ]] && [[ -s $_backup_file ]]; then
-    log "Encrypt ${_backup_file_encrypted}"
-    gpg \
-      --encrypt \
-      --batch --yes \
-      --trust-model always \
-      --recipient "$GPG_RECIPIENT" \
-      --output "$_backup_file_encrypted" \
-      "$_backup_file"
-  elif [[ -n "$GPG_PASSPHRASE" ]] && [[ -s $_backup_file ]]; then
-    gpg \
-      --symmetric \
-      --batch --yes \
-      --passphrase "$GPG_PASSPHRASE" \
-      --cipher-algo AES256 \
-      --s2k-digest-algo SHA512 \
-      --output "$_backup_file_encrypted" \
-      "$_backup_file"
-  else
-    return 0
+    if [[ -n "$GPG_RECIPIENT" ]]; then
+      log "Encrypt ${_backup_file_encrypted}"
+      gpg \
+        --encrypt \
+        --batch --yes \
+        --trust-model always \
+        --recipient "$GPG_RECIPIENT" \
+        --output "$_backup_file_encrypted" \
+        "$_backup_file"
+    elif [[ -n "$GPG_PASSPHRASE" ]]; then
+      gpg \
+        --symmetric \
+        --batch --yes \
+        --passphrase "$GPG_PASSPHRASE" \
+        --cipher-algo AES256 \
+        --s2k-digest-algo SHA512 \
+        --output "$_backup_file_encrypted" \
+        "$_backup_file"
+    else
+      return 0
+    fi
+
+    _backup_file="${_backup_file_encrypted}"
   fi
+}
 
-  _backup_file="${_backup_file_encrypted}"
+# Set-up S3
+set_up_s3(){
+  if [[ -n "$AWS_S3_PREFIX" ]]; then
+    _aws_s3_path="s3://${AWS_S3_BUCKET}/${AWS_S3_PREFIX}"
+  else
+    _aws_s3_path="s3://${AWS_S3_BUCKET}"
+  fi
 }
 
 # Create bucket, if it doesn't already exist and persist the name
 ensure_s3_bucket(){
+  set_up_s3
+
   if grep -q "${AWS_S3_BUCKET}" /var/run/backup_bucket_name 2>/dev/null; then
     log "Using '${AWS_S3_BUCKET}' bucket"
     export AWS_S3_BUCKET; AWS_S3_BUCKET="$(cat /var/run/backup_bucket_name)"
@@ -139,18 +153,8 @@ ensure_s3_bucket(){
   fi
 }
 
-# Set-up S3
-set_up_s3(){
-  if [[ -n "$AWS_S3_PREFIX" ]]; then
-    _aws_s3_path="s3://${AWS_S3_BUCKET}/${AWS_S3_PREFIX}"
-  else
-    _aws_s3_path="s3://${AWS_S3_BUCKET}"
-  fi
-}
-
 # Upload archive to AWS S3
 upload_archive(){
-  set_up_s3
   ensure_s3_bucket
 
   if [[ -s $_backup_file ]]; then
@@ -188,18 +192,18 @@ get_archive(){
 
 # Decrypt archive
 decrypt_archive(){
-  _restore_file_decrypted="decrypted.tar.xz"
-
-  # Skip unless the file is encrypted
-  if [[ "$_restore_file" != *.gpg ]]; then
+  # Skip if the file is not encrypted
+  if [[ -s "$_restore_file" ]] && [[ "$_restore_file" != *.gpg ]]; then
     return 0
   fi
 
   import_gpg_keys
 
-  if [[ -s "$_restore_file" ]]; then
-    log "Restore '${_restore_file}'"
+  if [[ -s "$_restore_file" ]] && [[ "$_restore_file" == *.gpg ]]; then
+    _restore_file_decrypted="${_restore_file%.gpg}"
+    log "Restore encrypted archive '${_restore_file}'"
   else
+    _restore_file_decrypted="${NOW}.tar.xz"
     log 'Reading file for STDIN'
   fi
 
@@ -210,21 +214,16 @@ decrypt_archive(){
     --passphrase "$GPG_PASSPHRASE" \
     --output "$_restore_file_decrypted" \
     "${_restore_file:-/dev/stdin}"
+  _restore_file="$_restore_file_decrypted"
 }
 
 # Extract the latest archive
 extract_archive(){
-  if [[ -s $_restore_file_decrypted ]]; then
-    _extract_file="${_restore_file_decrypted}"
-  elif [[ -s $_restore_file ]]; then
-    _extract_file="${_restore_file}"
-  else
-    return 0
+  if [[ -s $_restore_file ]]; then
+    log "Extract '${_restore_file}' to '/restore'"
+    mkdir -p /restore
+    tar xJf "$_restore_file" --directory /restore
   fi
-
-  log "Extract '${_extract_file}' to '/restore'"
-  mkdir -p /restore
-  tar xJf "$_extract_file" --directory /restore
 }
 
 # Run cron job

@@ -6,10 +6,10 @@
 
 ## Environment variables :
 
-- `AWS_S3_BUCKET`: the name of the bucket (defaults to backup_{ID})
-- `AWS_S3_PREFIX`: the prefix for the keys inside the bucket (no leading or trailing slashes)
-- `GPG_PASSPHRASE`: The passphrase for symmetric encryption
-- `GPG_PASSPHRASE_FILE`: The file containing the passphrase for symmetric encryption (for example a docker swarm secret mounted at /run/secrets/my_gpg_pass)
+- `AWS_S3_BUCKET`: the name of the AWS S3 bucket (defaults to backup_{ID})
+- `AWS_S3_PREFIX`: the prefix for the keys inside the AWS S3 bucket (no leading or trailing slashes)
+- `GPG_PASSPHRASE`: The GPG passphrase
+- `GPG_PASSPHRASE_FILE`: The file containing the GPG passphrase (for example a docker swarm secret mounted at /run/secrets/my_gpg_pass)
 - `GPG_RECIPIENT`: the id of the intended recipient; if it's missing, the archive will NOT be encrypted
 - `GPG_KEY_URL`:  URL to the public GPG key
 - `GPG_KEY_PATH`: container path to the GPG key (can be a file or a folder; if this is a folder, all files will be imported; defaults to '/keys')
@@ -128,7 +128,6 @@ The private GPG key needs to be imported (see [GPG keys](#gpg-keys)), and the pa
 ```
 docker run --rm -it \
   -e AWS_S3_BUCKET=mybucket \
-  -e AWS_S3_PREFIX=myprefix \
   -e GPG_PASSPHRASE=myverystrongpassword \
   -v ~/.aws:/root/.aws:ro \
   -v /host/path/to/GPG/private/key:/keys/my_private_key:ro \
