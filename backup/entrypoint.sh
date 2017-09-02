@@ -13,6 +13,7 @@ GPG_PASSPHRASE_FILE="${GPG_PASSPHRASE_FILE:-}"
 GPG_RECIPIENT="${GPG_RECIPIENT:-}"
 GPG_KEY_PATH="${GPG_KEY_PATH:-/keys}"
 GPG_KEY_URL="${GPG_KEY_URL:-}"
+GPG_CMD='gpg --batch --yes'
 BACKUP_PATH="${BACKUP_PATH:-/backup}"
 RESTORE_PATH="${RESTORE_PATH:-/restore}"
 CRON_TIME="${CRON_TIME:-8 */8 * * *}"
@@ -68,13 +69,13 @@ clean_up(){
 import_gpg_keys(){
   if [[ -d $GPG_KEY_PATH ]] && [[ $(ls -A "${GPG_KEY_PATH}" 2>/dev/null) ]]; then
     log "Import all keys in ${GPG_KEY_PATH} folder"
-    gpg --batch --import "$GPG_KEY_PATH"/*
+    "$GPG_CMD" --import "$GPG_KEY_PATH"/*
   elif [[ -s $GPG_KEY_PATH ]]; then
     log "Import key ${GPG_KEY_PATH}"
-    gpg --batch --import "$GPG_KEY_PATH"
+    "$GPG_CMD" --import "$GPG_KEY_PATH"
   elif [[ "$GPG_KEY_URL" =~ ^https://.* ]]; then
     log "Import key from ${GPG_KEY_URL}"
-    curl "$GPG_KEY_URL" | gpg --import
+    curl "$GPG_KEY_URL" | "$GPG_CMD" --import
   else
     file_env 'GPG_PASSPHRASE'
   fi
@@ -99,17 +100,15 @@ encrypt_archive(){
 
     if [[ -n "$GPG_RECIPIENT" ]]; then
       log "Encrypt ${_backup_file_encrypted}"
-      gpg \
+      "$GPG_CMD" \
         --encrypt \
-        --batch --yes \
         --trust-model always \
         --recipient "$GPG_RECIPIENT" \
         --output "$_backup_file_encrypted" \
         "$_backup_file"
     elif [[ -n "$GPG_PASSPHRASE" ]]; then
-      gpg \
+      "$GPG_CMD" \
         --symmetric \
-        --batch --yes \
         --passphrase "$GPG_PASSPHRASE" \
         --cipher-algo AES256 \
         --s2k-digest-algo SHA512 \
@@ -207,9 +206,8 @@ decrypt_archive(){
     log 'Reading file for STDIN'
   fi
 
-  gpg \
+  "$GPG_CMD" \
     --decrypt \
-    --batch --yes \
     --pinentry-mode loopback \
     --passphrase "$GPG_PASSPHRASE" \
     --output "$_restore_file_decrypted" \
