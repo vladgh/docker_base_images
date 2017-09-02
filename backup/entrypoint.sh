@@ -99,11 +99,15 @@ encrypt_archive(){
     import_gpg_keys
 
     if [[ -n "$GPG_RECIPIENT" ]]; then
+      IFS=', ' read -ra GPG_RECIPIENT <<< "${GPG_RECIPIENT:-}"
+      for recipient in "${GPG_RECIPIENT[@]}"; do
+        GPG_CMD+=" --recipient '${recipient}'"
+      done
+
       log "Encrypt ${_backup_file_encrypted}"
       "$GPG_CMD" \
         --encrypt \
         --trust-model always \
-        --recipient "$GPG_RECIPIENT" \
         --output "$_backup_file_encrypted" \
         "$_backup_file"
     elif [[ -n "$GPG_PASSPHRASE" ]]; then
