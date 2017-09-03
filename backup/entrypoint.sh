@@ -13,7 +13,7 @@ GPG_PASSPHRASE_FILE="${GPG_PASSPHRASE_FILE:-}"
 GPG_RECIPIENT="${GPG_RECIPIENT:-}"
 GPG_KEY_PATH="${GPG_KEY_PATH:-/keys}"
 GPG_KEY_URL="${GPG_KEY_URL:-}"
-GPG_CMD_OPTIONS='--batch --yes'
+GPG_CMD_OPTIONS=(--batch --yes)
 BACKUP_PATH="${BACKUP_PATH:-/backup}"
 RESTORE_PATH="${RESTORE_PATH:-/restore}"
 CRON_TIME="${CRON_TIME:-8 */8 * * *}"
@@ -68,14 +68,14 @@ clean_up(){
 # Import public GPG key
 import_gpg_keys(){
   if [[ -d $GPG_KEY_PATH ]] && [[ $(ls -A "${GPG_KEY_PATH}" 2>/dev/null) ]]; then
-    log "Import all keys in ${GPG_KEY_PATH} folder"
-    gpg ${GPG_CMD_OPTIONS} --import "$GPG_KEY_PATH"/*
+    log "Import key(s) in ${GPG_KEY_PATH} folder"
+    gpg "${GPG_CMD_OPTIONS[@]}" --import "$GPG_KEY_PATH"/*
   elif [[ -s $GPG_KEY_PATH ]]; then
     log "Import key ${GPG_KEY_PATH}"
-    gpg ${GPG_CMD_OPTIONS} --import "$GPG_KEY_PATH"
+    gpg "${GPG_CMD_OPTIONS[@]}" --import "$GPG_KEY_PATH"
   elif [[ "$GPG_KEY_URL" =~ ^https://.* ]]; then
     log "Import key from ${GPG_KEY_URL}"
-    curl "$GPG_KEY_URL" | gpg ${GPG_CMD_OPTIONS} --import
+      curl "$key_url" | gpg "${GPG_CMD_OPTIONS[@]}" --import
   else
     file_env 'GPG_PASSPHRASE'
   fi
@@ -99,25 +99,25 @@ encrypt_archive(){
     import_gpg_keys
 
     if [[ -n "$GPG_RECIPIENT" ]]; then
-      GPG_CMD_OPTIONS+=' --trust-model always'
+      GPG_CMD_OPTIONS+=(--trust-model always)
 
       IFS=', ' read -ra GPG_RECIPIENT <<< "${GPG_RECIPIENT:-}"
       for recipient in "${GPG_RECIPIENT[@]}"; do
-        GPG_CMD_OPTIONS+=' --recipient ${recipient}'
+        GPG_CMD_OPTIONS+=(--recipient ${recipient})
       done
 
       log "Encrypt ${_backup_file_encrypted}"
       gpg \
-        ${GPG_CMD_OPTIONS} \
+        "${GPG_CMD_OPTIONS[@]}" \
         --encrypt \
         --output "$_backup_file_encrypted" \
         "$_backup_file"
     elif [[ -n "$GPG_PASSPHRASE" ]]; then
-      GPG_CMD_OPTIONS+=' --cipher-algo AES256 --s2k-digest-algo SHA512'
+      GPG_CMD_OPTIONS+=(--cipher-algo AES256 --s2k-digest-algo SHA512)
 
       log "Encrypt ${_backup_file_encrypted}"
       gpg \
-        ${GPG_CMD_OPTIONS} \
+        "${GPG_CMD_OPTIONS[@]}" \
         --symmetric \
         --passphrase "$GPG_PASSPHRASE" \
         --output "$_backup_file_encrypted" \
@@ -214,10 +214,10 @@ decrypt_archive(){
     log 'Reading file for STDIN'
   fi
 
-  GPG_CMD_OPTIONS+=' --pinentry-mode loopback'
+  GPG_CMD_OPTIONS+=(--pinentry-mode loopback)
 
   gpg \
-    ${GPG_CMD_OPTIONS} \
+    "${GPG_CMD_OPTIONS[@]}" \
     --decrypt \
     --passphrase "$GPG_PASSPHRASE" \
     --output "$_restore_file_decrypted" \
