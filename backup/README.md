@@ -11,7 +11,7 @@
 - `GPG_PASSPHRASE`: The GPG passphrase
 - `GPG_PASSPHRASE_FILE`: The file containing the GPG passphrase (for example a docker swarm secret mounted at /run/secrets/my_gpg_pass)
 - `GPG_RECIPIENT`: the id of the intended recipient (can also be a comma separated list)
-- `GPG_KEY_URL`:  URL to the public GPG key
+- `GPG_KEY_URL`:  URL to the public GPG key (can also be a comma separated list)
 - `GPG_KEY_PATH`: container path to the GPG key (can be a file or a folder; if this is a folder, all files will be imported; defaults to '/keys')
 - `BACKUP_PATH`: container path to be archived (defaults to '/backup')
 - `RESTORE_PATH`: container path to restore (defaults to '/restore')

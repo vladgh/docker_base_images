@@ -74,8 +74,11 @@ import_gpg_keys(){
     log "Import key ${GPG_KEY_PATH}"
     gpg "${GPG_CMD_OPTIONS[@]}" --import "$GPG_KEY_PATH"
   elif [[ "$GPG_KEY_URL" =~ ^https://.* ]]; then
-    log "Import key from ${GPG_KEY_URL}"
+    log "Import key(s) from ${GPG_KEY_URL}"
+    IFS=', ' read -ra GPG_KEY_URL <<< "${GPG_KEY_URL:-}"
+    for key_url in "${GPG_KEY_URL[@]}"; do
       curl "$key_url" | gpg "${GPG_CMD_OPTIONS[@]}" --import
+    done
   else
     file_env 'GPG_PASSPHRASE'
   fi
@@ -155,16 +158,18 @@ ensure_s3_bucket(){
     echo "$AWS_S3_BUCKET" > /var/run/backup_bucket_name
   else
     log "Create '${AWS_S3_BUCKET}' bucket"
-    aws s3 mb "s3://${AWS_S3_BUCKET}"
-    echo "$AWS_S3_BUCKET" > /var/run/backup_bucket_name
+    if aws s3 mb "s3://${AWS_S3_BUCKET}"; then
+      echo "$AWS_S3_BUCKET" > /var/run/backup_bucket_name
+    else
+      log 'Could not create bucket!'
+      return 1
+    fi
   fi
 }
 
 # Upload archive to AWS S3
 upload_archive(){
-  ensure_s3_bucket
-
-  if [[ -s $_backup_file ]]; then
+  if [[ -s $_backup_file ]] && ensure_s3_bucket; then
     aws s3 cp "$_backup_file" "${_aws_s3_path}/${_backup_type}/${_backup_file}"
   fi
 }
