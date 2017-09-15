@@ -3,7 +3,7 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
 ENV PATH=/opt/puppetlabs/server/bin:$PATH \
-    PUPPETSERVER_VERSION="5.0.0" \
+    PUPPETSERVER_VERSION="5.1.0" \
     PUPPETSERVER_JAVA_ARGS="-Xms256M -Xmx256M" \
     HIERA_EYAML_VERSION='~> 2.0'
 
@@ -16,7 +16,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install Hiera EYaml
-RUN puppetserver gem install gettext-setup hiera-eyaml:"${HIERA_EYAML_VERSION}" --no-ri --no-rdoc && \
+RUN puppetserver gem install hiera-eyaml:"${HIERA_EYAML_VERSION}" --no-ri --no-rdoc && \
     gem install hiera-eyaml:"${HIERA_EYAML_VERSION}" --no-ri --no-rdoc
 
 # Ports
