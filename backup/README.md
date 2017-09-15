@@ -10,8 +10,8 @@
 - `AWS_S3_PREFIX`: the prefix for the keys inside the AWS S3 bucket (no leading or trailing slashes)
 - `GPG_PASSPHRASE`: The GPG passphrase
 - `GPG_PASSPHRASE_FILE`: The file containing the GPG passphrase (for example a docker swarm secret mounted at /run/secrets/my_gpg_pass)
-- `GPG_RECIPIENT`: the id of the intended recipient (can also be a comma separated list)
-- `GPG_KEY_URL`:  URL to the public GPG key (can also be a comma separated list)
+- `GPG_RECIPIENT`: the intended recipient or comma separated list of recipients; it can be a key ID, a full fingerprint, an email address, or anything else that uniquely identifies a public key to GPG (see "HOW TO SPECIFY A USER ID" in the gpg man page)
+- `GPG_KEY_URL`:  URL or comma separated list of URLs to the public GPG key(s)
 - `GPG_KEY_PATH`: container path to the GPG key (can be a file or a folder; if this is a folder, all files will be imported; defaults to '/keys')
 - `BACKUP_PATH`: container path to be archived (defaults to '/backup')
 - `RESTORE_PATH`: container path to restore (defaults to '/restore')
