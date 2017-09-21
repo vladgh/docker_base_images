@@ -4,7 +4,7 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 # Environment
 ENV PATH=/opt/puppetlabs/server/bin:$PATH \
     PUPPETDB_VERSION="5.1.0" \
-    PUPPETDB_JAVA_ARGS="-Djava.net.preferIPv4Stack=true -Xms256M -Xmx256M"
+    PUPPETDB_JAVA_ARGS="-Djava.net.preferIPv4Stack=true -Xms128M -Xmx512M"
 
 # Installation
 RUN export DEBIAN_FRONTEND=noninteractive && \

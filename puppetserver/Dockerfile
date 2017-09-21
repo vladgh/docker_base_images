@@ -4,7 +4,7 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 # Environment
 ENV PATH=/opt/puppetlabs/server/bin:$PATH \
     PUPPETSERVER_VERSION="5.1.0" \
-    PUPPETSERVER_JAVA_ARGS="-Xms256M -Xmx256M" \
+    PUPPETSERVER_JAVA_ARGS="-Xms128M -Xmx512M" \
     HIERA_EYAML_VERSION='~> 2.0'
 
 # Installation
