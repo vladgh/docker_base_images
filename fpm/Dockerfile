@@ -1,4 +1,4 @@
-FROM php:7.1.8-fpm
+FROM php:7-fpm
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
