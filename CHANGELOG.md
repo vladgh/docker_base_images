@@ -1,5 +1,15 @@
 # Change Log
 
+## [v0.3.1](https://github.com/vladgh/docker_base_images/tree/v0.3.1) (2017-10-01)
+[Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.0...v0.3.1)
+
+**Implemented enhancements:**
+
+- Backup: Allow GPG public key importing from multiple URLs [\#38](https://github.com/vladgh/docker_base_images/issues/38)
+- Allow multiple GPG recipients [\#37](https://github.com/vladgh/docker_base_images/issues/37)
+- Upgrade Tini [\#36](https://github.com/vladgh/docker_base_images/issues/36)
+- Allow GPG passphrase from environment variable or Docker Secret [\#34](https://github.com/vladgh/docker_base_images/issues/34)
+
 ## [v0.3.0](https://github.com/vladgh/docker_base_images/tree/v0.3.0) (2017-08-25)
 [Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.2.6...v0.3.0)
 
