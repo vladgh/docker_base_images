@@ -3,14 +3,14 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
 ENV PATH=/opt/puppetlabs/server/bin:$PATH \
-    PUPPETSERVER_VERSION="5.1.0" \
+    PUPPETSERVER_VERSION="5.1.3" \
     PUPPETSERVER_JAVA_ARGS="-Xms128M -Xmx512M" \
     HIERA_EYAML_VERSION='~> 2.0'
 
 # Installation
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && apt-get install -y --no-install-recommends \
-    puppetserver="$PUPPETSERVER_VERSION"-1puppetlabs1 && \
+    puppetserver="$PUPPETSERVER_VERSION"-1xenial && \
     sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{PUPPETSERVER_JAVA_ARGS:-\1\}@' \
     /etc/default/puppetserver && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

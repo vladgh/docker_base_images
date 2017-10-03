@@ -4,7 +4,7 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 # Environment
 ENV PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH \
     PUPPET_RELEASE="puppet-release-xenial" \
-    PUPPET_AGENT_VERSION="5.2.0" \
+    PUPPET_AGENT_VERSION="5.3.1" \
     TINI_VERSION="0.16.1"
 
 # Install Puppet release package
