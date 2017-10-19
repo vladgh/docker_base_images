@@ -3,7 +3,7 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
 ENV GUNICORN_VERSION="19.7.1" \
-    PUPPETBOARD_VERSION="0.2.2" \
+    PUPPETBOARD_VERSION="0.3.0" \
     PUPPETBOARD_PORT="8000" \
     PUPPETBOARD_SETTINGS="docker_settings.py"
 WORKDIR /var/www/puppetboard
