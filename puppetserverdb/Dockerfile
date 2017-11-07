@@ -2,12 +2,12 @@ FROM vladgh/puppetserver:latest
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
-ENV PUPPETDB_TERMINUS_VERSION="5.1.1"
+ENV PUPPETDB_TERMINUS_VERSION="5.1.3"
 
 # Installation
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && apt-get install -y --no-install-recommends \
-    puppetdb-termini="$PUPPETDB_TERMINUS_VERSION"-1puppetlabs1 && \
+    puppetdb-termini="$PUPPETDB_TERMINUS_VERSION"-1xenial && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Configure Puppet for PuppetDB
