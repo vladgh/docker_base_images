@@ -75,8 +75,8 @@ import_gpg_keys(){
     gpg "${GPG_CMD_OPTIONS[@]}" --import "$GPG_KEY_PATH"
   elif [[ "$GPG_KEY_URL" =~ ^https://.* ]]; then
     log "Import key(s) from ${GPG_KEY_URL}"
-    IFS=', ' read -ra GPG_KEY_URL <<< "${GPG_KEY_URL:-}"
-    for key_url in "${GPG_KEY_URL[@]}"; do
+    IFS=', ' read -ra GPG_KEY_URL_ARRAY <<< "${GPG_KEY_URL:-}"
+    for key_url in "${GPG_KEY_URL_ARRAY[@]}"; do
       curl "$key_url" | gpg "${GPG_CMD_OPTIONS[@]}" --import
     done
   else
@@ -104,8 +104,8 @@ encrypt_archive(){
     if [[ -n "$GPG_RECIPIENT" ]]; then
       GPG_CMD_OPTIONS+=(--trust-model always)
 
-      IFS=', ' read -ra GPG_RECIPIENT <<< "${GPG_RECIPIENT:-}"
-      for recipient in "${GPG_RECIPIENT[@]}"; do
+      IFS=', ' read -ra GPG_RECIPIENT_ARRAY <<< "${GPG_RECIPIENT:-}"
+      for recipient in "${GPG_RECIPIENT_ARRAY[@]}"; do
         GPG_CMD_OPTIONS+=(--recipient ${recipient})
       done
 
