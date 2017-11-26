@@ -1,8 +1,16 @@
-FROM vladgh/awscli:latest
+FROM alpine:3.6
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
-# Install iNotify tools
-RUN apk --no-cache add inotify-tools
+# Environment
+ENV AWS_DEFAULT_REGION=us-east-1
+
+# Install packages
+RUN apk --no-cache add bash findutils groff less python tini inotify-tools
+
+# Install AWS CLI
+RUN apk --no-cache add --virtual build-dependencies py-pip && \
+    pip --no-cache-dir install awscli && \
+    apk del build-dependencies
 
 # Entrypoint
 COPY entrypoint.sh /
