@@ -1,5 +1,19 @@
 # Change Log
 
+## [v0.3.2](https://github.com/vladgh/docker_base_images/tree/v0.3.2) (2017-12-23)
+[Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.1...v0.3.2)
+
+**Implemented enhancements:**
+
+- Improve R10K cron job [\#43](https://github.com/vladgh/docker_base_images/issues/43)
+- Update Puppet [\#40](https://github.com/vladgh/docker_base_images/issues/40)
+- Switch to new Bundler file names [\#39](https://github.com/vladgh/docker_base_images/pull/39) ([vladgh](https://github.com/vladgh))
+
+**Fixed bugs:**
+
+- Fix healthcheck high CPU usage [\#42](https://github.com/vladgh/docker_base_images/issues/42)
+- \[backup\] Missing environment variables in cron jobs [\#41](https://github.com/vladgh/docker_base_images/issues/41)
+
 ## [v0.3.1](https://github.com/vladgh/docker_base_images/tree/v0.3.1) (2017-10-01)
 [Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.0...v0.3.1)
 
