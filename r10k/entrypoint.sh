@@ -39,14 +39,11 @@ EOF
 
 # Install cron job
 run_cron(){
-  IFS=' '
-  cmd="${*:-}"
-
-  log "Run '${cmd}'"
-  eval "$cmd"
-
   log "Setup the cron job (${CRON_TIME})"
-  echo "${CRON_TIME} sh -c '${cmd}'" > /etc/crontabs/root
+  # $* produces all the scripts arguments separated by the first character of
+  # $IFS which we set earlier to newline and tab, so we change it back to space
+  local IFS=' '
+  echo "${CRON_TIME} sh -c '${*:-}'" > /etc/crontabs/root
   exec crond -f -l 6
 }
 
@@ -54,10 +51,12 @@ run_cron(){
 main(){
   generate_configuration
 
+  # Run command
+  "${@:-}"
+
+  # Run cronjob
   if [[ -n "$CRON_TIME" ]]; then
     run_cron "${@:-}"
-  else
-    exec "${@:-}"
   fi
 }
 
