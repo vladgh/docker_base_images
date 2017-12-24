@@ -170,7 +170,7 @@ ensure_s3_bucket(){
 # Upload archive to AWS S3
 upload_archive(){
   if [[ -s $_backup_file ]] && ensure_s3_bucket; then
-    aws s3 cp "$_backup_file" "${_aws_s3_path}/${_backup_type}/${_backup_file}"
+    aws s3 cp --no-progress "$_backup_file" "${_aws_s3_path}/${_backup_type}/${_backup_file}"
   fi
 }
 
@@ -197,7 +197,7 @@ get_archive(){
     _restore_file="$(basename "$_restore_path")"
 
     if [[ -n "$_restore_file" ]]; then
-      aws s3 cp "s3://${AWS_S3_BUCKET}/${_restore_path}" "${_restore_file}"
+      aws s3 cp --no-progress "s3://${AWS_S3_BUCKET}/${_restore_path}" "${_restore_file}"
     fi
   fi
 }

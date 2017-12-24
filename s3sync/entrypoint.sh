@@ -24,7 +24,7 @@ sync_files(){
   mkdir -p "$dst" # Make sure directory exists
 
   log "Sync '${src}' to '${dst}'"
-  if ! aws s3 sync --delete --exact-timestamps "$src" "$dst"; then
+  if ! aws s3 sync --no-progress --delete --exact-timestamps "$src" "$dst"; then
     log "Could not sync '${src}' to '${dst}'" >&2; exit 1
   fi
 }
