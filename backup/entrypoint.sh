@@ -106,7 +106,7 @@ encrypt_archive(){
 
       IFS=', ' read -ra GPG_RECIPIENT_ARRAY <<< "${GPG_RECIPIENT:-}"
       for recipient in "${GPG_RECIPIENT_ARRAY[@]}"; do
-        GPG_CMD_OPTIONS+=(--recipient ${recipient})
+        GPG_CMD_OPTIONS+=(--recipient "$recipient")
       done
 
       log "Encrypt ${_backup_file_encrypted}"
