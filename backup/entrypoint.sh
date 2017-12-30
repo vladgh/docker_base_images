@@ -286,7 +286,7 @@ main(){
       run_backup
       ;;
     cron)
-      run_backup && run_cron
+      run_backup & run_cron
       ;;
     hourly)
       run_backup 'hourly'
