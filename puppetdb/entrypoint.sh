@@ -38,12 +38,14 @@ else
   fi
 
   # Change database connection settings
-  sed -i.bak "s@# subname.*@subname = //$PUPPETDB_HOST:$PUPPETDB_PORT/$PUPPETDB_NAME@gi" "$PUPPETDB_CONF"
-  sed -i "s@# username.*@username = $PUPPETDB_USER@gi" "$PUPPETDB_CONF"
-  sed -i "s@# password.*@password = $PUPPETDB_PASS@gi" "$PUPPETDB_CONF"
+  sed -i.bak \
+    -e "s@# subname.*@subname = //$PUPPETDB_HOST:$PUPPETDB_PORT/$PUPPETDB_NAME@gi" \
+    -e "s@# username.*@username = $PUPPETDB_USER@gi" \
+    -e "s@# password.*@password = $PUPPETDB_PASS@gi" \
+    "$PUPPETDB_CONF"
 
   # Other settings
-  sed -i.bak "s@# host.*@host = 0\.0\.0\.0@gi" "$PUPPETDB_HTTP"
+  sed -i.bak "s@# host.*@host = 0\\.0\\.0\\.0@gi" "$PUPPETDB_HTTP"
 
   # Generate Puppet Certificates
   if [[ ! -s "$(puppet config print hostcert)" ]] && \
