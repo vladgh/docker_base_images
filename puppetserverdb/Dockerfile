@@ -11,9 +11,9 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Configure Puppet for PuppetDB
-RUN puppet config set storeconfigs_backend puppetdb --section main && \
-    puppet config set storeconfigs true --section main && \
-    puppet config set reports puppetdb --section main
+RUN puppet config set storeconfigs_backend puppetdb --section master && \
+    puppet config set storeconfigs true --section master && \
+    puppet config set reports puppetdb --section master
 COPY puppetdb.conf /etc/puppetlabs/puppet/
 
 # Metadata params
