@@ -25,13 +25,7 @@ log(){
   echo "[$(date "+%Y-%m-%dT%H:%M:%S%z") - $(hostname)] ${*}"
 }
 
-# Trap exit
-bye(){
-  log 'Exit detected; trying to clean up'
-  clean_up; exit "${1:-0}"
-}
-
-# usage: file_env VAR [DEFAULT]
+# Usage: file_env VAR [DEFAULT]
 #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
 # (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
 #  "$XYZ_DB_PASSWORD" from a file, especially for Docker's secrets feature)
@@ -63,6 +57,8 @@ clean_up(){
       log 'Could not remove working files'
     fi
   fi
+
+  exit "${1:-0}"
 }
 
 # Import public GPG key
@@ -271,7 +267,7 @@ restore_backup(){
 
 main(){
   # Trap exit
-  trap 'EXCODE=$?; bye; trap - EXIT; echo $EXCODE' EXIT INT TERM
+  trap 'clean_up $?' EXIT INT TERM
 
   # Set Umask
   umask 077
@@ -308,9 +304,6 @@ main(){
       log "Unknown command: ${cmd}" >&2; exit 1
       ;;
   esac
-
-  # Clean-up
-  clean_up
 }
 
 main "${@:-}"
