@@ -88,8 +88,8 @@ docker run --rm -it \
   -e GPG_KEY_URL='https://keybase.io/example/key.asc' \
   -v ~/.aws:/root/.aws:ro \
   -v /etc/localtime:/etc/localtime:ro \
-  -v /path/to/backup/dir1:/backup/dir1 \
-  -v /path/to/backup/dir2:/backup/dir2 \
+  -v /path/to/backup/dir1:/backup/dir1:ro \
+  -v /path/to/backup/dir2:/backup/dir2:ro \
   vladgh/backup
 ```
 
@@ -101,8 +101,8 @@ docker run --rm -it \
   -e GPG_PASSPHRASE='mysuperstrongpassword' \
   -v ~/.aws:/root/.aws:ro \
   -v /etc/localtime:/etc/localtime:ro \
-  -v /path/to/backup/dir1:/backup/dir1 \
-  -v /path/to/backup/dir2:/backup/dir2 \
+  -v /path/to/backup/dir1:/backup/dir1:ro \
+  -v /path/to/backup/dir2:/backup/dir2:ro \
   vladgh/backup
 ```
 
@@ -116,8 +116,8 @@ docker run -d \
   -v ~/.aws:/root/.aws:ro \
   -v /etc/localtime:/etc/localtime:ro \
   -v /host/path/to/GPG/keys:/keys:ro \
-  -v /path/to/backup/dir1:/backup/dir1 \
-  -v /path/to/backup/dir2:/backup/dir2 \
+  -v /path/to/backup/dir1:/backup/dir1:ro \
+  -v /path/to/backup/dir2:/backup/dir2:ro \
   vladgh/backup cron
 ```
 
