@@ -1,5 +1,20 @@
 # Change Log
 
+## [v0.3.3](https://github.com/vladgh/docker_base_images/tree/v0.3.3) (2018-01-17)
+[Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.2...v0.3.3)
+
+**Implemented enhancements:**
+
+- \[backup\] Avoid writing temporary files to disk [\#49](https://github.com/vladgh/docker_base_images/issues/49)
+- \[backup\] Mount readonly backup folders [\#48](https://github.com/vladgh/docker_base_images/issues/48)
+- \[backup\] Improve trap functions [\#47](https://github.com/vladgh/docker_base_images/issues/47)
+- \[puppetserver\] Move storeconfigs and reports to the master section [\#46](https://github.com/vladgh/docker_base_images/issues/46)
+- \[backup\] Do not wait for the backup to finish in order to install cron [\#45](https://github.com/vladgh/docker_base_images/issues/45)
+
+**Fixed bugs:**
+
+- Do not log S3 copy and sync progress [\#44](https://github.com/vladgh/docker_base_images/issues/44)
+
 ## [v0.3.2](https://github.com/vladgh/docker_base_images/tree/v0.3.2) (2017-12-23)
 [Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.1...v0.3.2)
 
