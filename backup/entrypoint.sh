@@ -13,12 +13,10 @@ GPG_PASSPHRASE_FILE="${GPG_PASSPHRASE_FILE:-}"
 GPG_RECIPIENT="${GPG_RECIPIENT:-}"
 GPG_KEY_PATH="${GPG_KEY_PATH:-/keys}"
 GPG_KEY_URL="${GPG_KEY_URL:-}"
-GPG_CMD_OPTIONS=(--batch --yes)
 BACKUP_PATH="${BACKUP_PATH:-/backup}"
 RESTORE_PATH="${RESTORE_PATH:-/restore}"
 CRON_TIME="${CRON_TIME:-8 */8 * * *}"
 NOW=$(date +"%Y-%m-%d_%H-%M-%S")
-TMPDIR=$(mktemp -d 2>/dev/null || mktemp -d -t 'tmp')
 
 # Log message
 log(){
@@ -47,85 +45,24 @@ file_env() {
   unset "$fileVar"
 }
 
-# Clean-up
-clean_up(){
-  if [[ -d "${TMPDIR:-}" ]]; then
-    if [[ "$TMPDIR" =~ tmp. ]]; then
-      log  'Remove working files'
-      rm -rf "${TMPDIR:?}"
-    else
-      log 'Could not remove working files'
-    fi
-  fi
-
-  exit "${1:-0}"
-}
-
 # Import public GPG key
 import_gpg_keys(){
+  _gpg_cmd_options='--batch --yes'
+
   if [[ -d $GPG_KEY_PATH ]] && [[ $(ls -A "${GPG_KEY_PATH}" 2>/dev/null) ]]; then
     log "Import key(s) in ${GPG_KEY_PATH} folder"
-    gpg "${GPG_CMD_OPTIONS[@]}" --import "$GPG_KEY_PATH"/*
+    eval "gpg ${_gpg_cmd_options} --import ${GPG_KEY_PATH}/*"
   elif [[ -s $GPG_KEY_PATH ]]; then
     log "Import key ${GPG_KEY_PATH}"
-    gpg "${GPG_CMD_OPTIONS[@]}" --import "$GPG_KEY_PATH"
+    eval "gpg ${_gpg_cmd_options} --import ${GPG_KEY_PATH}"
   elif [[ "$GPG_KEY_URL" =~ ^https://.* ]]; then
     log "Import key(s) from ${GPG_KEY_URL}"
     IFS=', ' read -ra GPG_KEY_URL_ARRAY <<< "${GPG_KEY_URL:-}"
     for key_url in "${GPG_KEY_URL_ARRAY[@]}"; do
-      curl "$key_url" | gpg "${GPG_CMD_OPTIONS[@]}" --import
+      curl "$key_url" | eval "gpg ${_gpg_cmd_options} --import"
     done
   else
     file_env 'GPG_PASSPHRASE'
-  fi
-}
-
-# Tar GZ the backup path
-create_archive(){
-  _backup_file="${NOW}.tar.xz"
-
-  if [[ $(ls -A "$BACKUP_PATH" 2>/dev/null) ]]; then
-    log "Create ${_backup_file}"
-    tar cJf "$_backup_file" -C "$BACKUP_PATH" .
-  fi
-}
-
-# Encrypt the backup tar.gz
-encrypt_archive(){
-  _backup_file_encrypted="${_backup_file}.gpg"
-
-  if [[ -s $_backup_file ]]; then
-    import_gpg_keys
-
-    if [[ -n "$GPG_RECIPIENT" ]]; then
-      GPG_CMD_OPTIONS+=(--trust-model always)
-
-      IFS=', ' read -ra GPG_RECIPIENT_ARRAY <<< "${GPG_RECIPIENT:-}"
-      for recipient in "${GPG_RECIPIENT_ARRAY[@]}"; do
-        GPG_CMD_OPTIONS+=(--recipient "$recipient")
-      done
-
-      log "Encrypt ${_backup_file_encrypted}"
-      gpg \
-        "${GPG_CMD_OPTIONS[@]}" \
-        --encrypt \
-        --output "$_backup_file_encrypted" \
-        "$_backup_file"
-    elif [[ -n "$GPG_PASSPHRASE" ]]; then
-      GPG_CMD_OPTIONS+=(--cipher-algo AES256 --s2k-digest-algo SHA512)
-
-      log "Encrypt ${_backup_file_encrypted}"
-      gpg \
-        "${GPG_CMD_OPTIONS[@]}" \
-        --symmetric \
-        --passphrase "$GPG_PASSPHRASE" \
-        --output "$_backup_file_encrypted" \
-        "$_backup_file"
-    else
-      return 0
-    fi
-
-    _backup_file="${_backup_file_encrypted}"
   fi
 }
 
@@ -143,30 +80,106 @@ ensure_s3_bucket(){
   set_up_s3
 
   if grep -q "${AWS_S3_BUCKET}" /var/run/backup_bucket_name 2>/dev/null; then
-    log "Using '${AWS_S3_BUCKET}' bucket"
+    log "Using ${AWS_S3_BUCKET} bucket"
     export AWS_S3_BUCKET; AWS_S3_BUCKET="$(cat /var/run/backup_bucket_name)"
   elif [[ -s /var/run/backup_bucket_name ]]; then
-    log "Updating to the '${AWS_S3_BUCKET}' bucket"
+    log "Updating to the ${AWS_S3_BUCKET} bucket"
     export AWS_S3_BUCKET
     echo "$AWS_S3_BUCKET" > /var/run/backup_bucket_name
   elif aws s3 ls "$AWS_S3_BUCKET" >/dev/null 2>&1; then
-    log "Set-up '${AWS_S3_BUCKET}' bucket"
+    log "Set-up ${AWS_S3_BUCKET} bucket"
     echo "$AWS_S3_BUCKET" > /var/run/backup_bucket_name
   else
-    log "Create '${AWS_S3_BUCKET}' bucket"
     if aws s3 mb "s3://${AWS_S3_BUCKET}"; then
+      log "Create ${AWS_S3_BUCKET} bucket"
       echo "$AWS_S3_BUCKET" > /var/run/backup_bucket_name
     else
-      log 'Could not create bucket!'
-      return 1
+      log "Could not create the ${AWS_S3_BUCKET} bucket!" >&2; exit 1
     fi
   fi
 }
 
+# Tar GZ the backup path
+create_archive(){
+  if [[ $(ls -A "$BACKUP_PATH" 2>/dev/null) ]]; then
+    BACKUP_CMD_OUTPUT="Archive ${BACKUP_PATH}"
+    BACKUP_CMD="tar cJ -C ${BACKUP_PATH} ."
+    _backup_file="${NOW}.tar.xz"
+  else
+    log "${BACKUP_PATH} is empty!" >&2; exit 1
+  fi
+}
+
+# Extract the latest archive
+extract_archive(){
+  mkdir -p /restore
+  RESTORE_CMD_OUTPUT+=' and save to /restore'
+  RESTORE_CMD="${RESTORE_CMD} | tar xJ --directory /restore"
+}
+
+# Encrypt the backup tar.gz
+encrypt_archive(){
+  import_gpg_keys
+
+  if [[ -n "$GPG_RECIPIENT" ]]; then
+    _gpg_cmd_options+=' --trust-model always'
+    _recipients=''
+
+    IFS=', ' read -ra GPG_RECIPIENT_ARRAY <<< "${GPG_RECIPIENT:-}"
+    for recipient in "${GPG_RECIPIENT_ARRAY[@]}"; do
+      _recipients+=" $recipient"
+      _gpg_cmd_options+=" --recipient ${recipient}"
+    done
+
+    BACKUP_CMD_OUTPUT+=" with GPG encryption for${_recipients}"
+    BACKUP_CMD="${BACKUP_CMD} | gpg ${_gpg_cmd_options} --encrypt"
+  elif [[ -n "$GPG_PASSPHRASE" ]]; then
+    _gpg_cmd_options+=' --cipher-algo AES256 --s2k-digest-algo SHA512'
+
+    BACKUP_CMD_OUTPUT+=' with passphrase GPG encryption'
+    BACKUP_CMD="${BACKUP_CMD} | gpg ${_gpg_cmd_options} --symmetric --passphrase '${GPG_PASSPHRASE}'"
+  else
+    return 0
+  fi
+
+  _backup_file="${_backup_file}.gpg"
+}
+
+# Decrypt archive (if the file is encrypted)
+decrypt_archive(){
+  if [[ -n "$GPG_PASSPHRASE" ]]; then
+    import_gpg_keys
+    _gpg_cmd_options+=" --pinentry-mode loopback --passphrase '${GPG_PASSPHRASE}'"
+  else
+    return 0
+  fi
+
+  RESTORE_CMD_OUTPUT+=', decrypt'
+  RESTORE_CMD="${RESTORE_CMD} | gpg ${_gpg_cmd_options} --decrypt"
+}
+
 # Upload archive to AWS S3
 upload_archive(){
-  if [[ -s $_backup_file ]] && ensure_s3_bucket; then
-    aws s3 cp --no-progress "$_backup_file" "${_aws_s3_path}/${_backup_type}/${_backup_file}"
+  ensure_s3_bucket
+
+  BACKUP_CMD_OUTPUT+=" to ${_aws_s3_path}/${_backup_type}/${_backup_file}"
+  BACKUP_CMD="${BACKUP_CMD} | aws s3 cp --no-progress - ${_aws_s3_path}/${_backup_type}/${_backup_file}"
+}
+
+# Download the latest archive from S3
+download_archive(){
+  # Skip unless a bucket exists and you have permission to access it
+  if aws s3api head-bucket --bucket "$AWS_S3_BUCKET" >/dev/null 2>&1; then
+    log "Found AWS S3 bucket '${AWS_S3_BUCKET}'"
+    set_up_s3
+
+    _restore_path="$(get_latest_s3_archive)"
+    _restore_file="$(basename "$_restore_path")"
+
+    if [[ -n "$_restore_file" ]]; then
+      RESTORE_CMD_OUTPUT="Extract archive from s3://${AWS_S3_BUCKET}/${_restore_path} ${_restore_file}"
+      RESTORE_CMD="aws s3 cp --no-progress s3://${AWS_S3_BUCKET}/${_restore_path} -"
+    fi
   fi
 }
 
@@ -178,60 +191,7 @@ get_latest_s3_archive(){
     --query 'reverse(sort_by(Contents, &LastModified))[0].Key' \
     --output text
   then
-    echo 'Could not retrieve the last S3 object' >&2; exit 1
-  fi
-}
-
-# Download the latest archive from S3
-get_archive(){
-  # Skip unless a bucket exists and you have permission to access it
-  if aws s3api head-bucket --bucket "$AWS_S3_BUCKET" >/dev/null 2>&1; then
-    log "Found AWS S3 bucket '${AWS_S3_BUCKET}'"
-    set_up_s3
-
-    _restore_path="$(get_latest_s3_archive)"
-    _restore_file="$(basename "$_restore_path")"
-
-    if [[ -n "$_restore_file" ]]; then
-      aws s3 cp --no-progress "s3://${AWS_S3_BUCKET}/${_restore_path}" "${_restore_file}"
-    fi
-  fi
-}
-
-# Decrypt archive
-decrypt_archive(){
-  # Skip if the file is not encrypted
-  if [[ -s "$_restore_file" ]] && [[ "$_restore_file" != *.gpg ]]; then
-    return 0
-  fi
-
-  import_gpg_keys
-
-  if [[ -s "$_restore_file" ]] && [[ "$_restore_file" == *.gpg ]]; then
-    _restore_file_decrypted="${_restore_file%.gpg}"
-    log "Restore encrypted archive '${_restore_file}'"
-  else
-    _restore_file_decrypted="${NOW}.tar.xz"
-    log 'Reading file for STDIN'
-  fi
-
-  GPG_CMD_OPTIONS+=(--pinentry-mode loopback)
-
-  gpg \
-    "${GPG_CMD_OPTIONS[@]}" \
-    --decrypt \
-    --passphrase "$GPG_PASSPHRASE" \
-    --output "$_restore_file_decrypted" \
-    "${_restore_file:-/dev/stdin}"
-  _restore_file="$_restore_file_decrypted"
-}
-
-# Extract the latest archive
-extract_archive(){
-  if [[ -s $_restore_file ]]; then
-    log "Extract '${_restore_file}' to '/restore'"
-    mkdir -p /restore
-    tar xJf "$_restore_file" --directory /restore
+    log 'Could not retrieve the last S3 object!' >&2; exit 1
   fi
 }
 
@@ -254,27 +214,22 @@ run_backup(){
   create_archive
   encrypt_archive
   upload_archive
+  log "${BACKUP_CMD_OUTPUT}"
+  eval "${BACKUP_CMD}"
 }
 
 # Restore archive
 restore_backup(){
   _restore_file="${1:-}"
   log 'Restore backup'
-  get_archive
+  download_archive
   decrypt_archive
   extract_archive
+  log "${RESTORE_CMD_OUTPUT}"
+  eval "${RESTORE_CMD}"
 }
 
 main(){
-  # Trap exit
-  trap 'clean_up $?' EXIT INT TERM
-
-  # Set Umask
-  umask 077
-
-  # Set working directory
-  cd "$TMPDIR" || exit
-
   # Parse command line arguments
   cmd="${1:-once}"
   case "$cmd" in
