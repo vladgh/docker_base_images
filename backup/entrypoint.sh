@@ -215,7 +215,9 @@ run_backup(){
   encrypt_archive
   upload_archive
   log "${BACKUP_CMD_OUTPUT}"
-  if ! eval "${BACKUP_CMD}"; then
+  if eval "${BACKUP_CMD}"; then
+    log 'Backup complete'
+  else
     log 'Backup failed!' >&2; exit 1
   fi
 }
@@ -228,7 +230,9 @@ restore_backup(){
   decrypt_archive
   extract_archive
   log "${RESTORE_CMD_OUTPUT}"
-  if ! eval "${RESTORE_CMD}"; then
+  if eval "${RESTORE_CMD}"; then
+    log 'Restore complete'
+  else
     log 'Restore failed!' >&2; exit 1
   fi
 }
