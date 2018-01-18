@@ -10,11 +10,11 @@ ENV PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH \
 # Install Puppet release package
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && \
-    apt-get install -y --no-install-recommends wget ca-certificates lsb-release && \
+    apt-get install -y --no-install-recommends ca-certificates lsb-release wget && \
     wget -O "/tmp/${PUPPET_RELEASE}.deb" \
     "https://apt.puppetlabs.com/${PUPPET_RELEASE}.deb" && \
     dpkg -i "/tmp/${PUPPET_RELEASE}.deb" && apt-get update -y && \
-    apt-get install -y --no-install-recommends puppet-agent="$PUPPET_AGENT_VERSION"-1xenial && \
+    apt-get install -y --no-install-recommends puppet-agent="${PUPPET_AGENT_VERSION}"-1xenial && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Tini
