@@ -16,7 +16,8 @@ GPG_KEY_URL="${GPG_KEY_URL:-}"
 BACKUP_PATH="${BACKUP_PATH:-/backup}"
 RESTORE_PATH="${RESTORE_PATH:-/restore}"
 CRON_TIME="${CRON_TIME:-8 */8 * * *}"
-NOW=$(date +"%Y-%m-%d_%H-%M-%S")
+TIME_ZONE="${TIME_ZONE:-}"
+TIME_SERVER="${TIME_SERVER:-'pool.ntp.org'}"
 
 # Log message
 log(){
@@ -68,6 +69,10 @@ import_gpg_keys(){
 
 # Set-up S3
 set_up_s3(){
+  if [[ -z "$AWS_S3_BUCKET" ]]; then
+    AWS_S3_BUCKET="backup_$(date +%s | sha256sum | base64 | head -c 16 ; echo)"
+  fi
+
   if [[ -n "$AWS_S3_PREFIX" ]]; then
     _aws_s3_path="s3://${AWS_S3_BUCKET}/${AWS_S3_PREFIX}"
   else
@@ -104,7 +109,7 @@ create_archive(){
   if [[ $(ls -A "$BACKUP_PATH" 2>/dev/null) ]]; then
     BACKUP_CMD_OUTPUT="Archive ${BACKUP_PATH}"
     BACKUP_CMD="tar cJ -C ${BACKUP_PATH} ."
-    _backup_file="${NOW}.tar.xz"
+    _backup_file="$(date +"%Y-%m-%d_%H-%M-%S").tar.xz"
   else
     log "${BACKUP_PATH} is empty!" >&2; exit 1
   fi
@@ -168,10 +173,11 @@ upload_archive(){
 
 # Download the latest archive from S3
 download_archive(){
+  set_up_s3
+
   # Skip unless a bucket exists and you have permission to access it
   if aws s3api head-bucket --bucket "$AWS_S3_BUCKET" >/dev/null 2>&1; then
     log "Found AWS S3 bucket '${AWS_S3_BUCKET}'"
-    set_up_s3
 
     _restore_path="$(get_latest_s3_archive)"
     _restore_file="$(basename "$_restore_path")"
@@ -210,10 +216,10 @@ CRON
 # Backup archive
 run_backup(){
   _backup_type="${1:-hourly}"
+
   log 'Start backup'
-  create_archive
-  encrypt_archive
-  upload_archive
+  create_archive && encrypt_archive && upload_archive
+
   log "${BACKUP_CMD_OUTPUT}"
   if eval "${BACKUP_CMD}"; then
     log 'Backup complete'
@@ -225,10 +231,10 @@ run_backup(){
 # Restore archive
 restore_backup(){
   _restore_file="${1:-}"
+
   log 'Restore backup'
-  download_archive
-  decrypt_archive
-  extract_archive
+  download_archive && decrypt_archive && extract_archive
+
   log "${RESTORE_CMD_OUTPUT}"
   if eval "${RESTORE_CMD}"; then
     log 'Restore complete'
@@ -238,6 +244,17 @@ restore_backup(){
 }
 
 main(){
+  # Configure timezone if provided
+  if [[ -n "${TIME_ZONE}" ]]; then
+    log 'Set timezone'
+    cp "/usr/share/zoneinfo/${TIME_ZONE}" /etc/localtime
+    echo "$TIME_ZONE" > /etc/timezone
+  fi
+
+  # Update time
+  log 'Set time'
+  ntpd -p "$TIME_SERVER" || true
+
   # Parse command line arguments
   cmd="${1:-once}"
   case "$cmd" in
