@@ -16,7 +16,7 @@
 - `BACKUP_PATH`: container path to be archived (defaults to '/backup')
 - `RESTORE_PATH`: container path to restore (defaults to '/restore')
 - `CRON_TIME`: a valid cron expression (it only applies to the "hourly" backups; defaults to every 8 hours, at midnight, Sunday, and the first day of each month; see Rotation below)
-- `TIME_ZONE`: timezone (defaults to 'UTC')
+- `TIME_ZONE`: timezone in TZ format (defaults to 'UTC')
 - `TIME_SERVER`: timeserver (defaults to 'pool.ntp.org')
 
 ## AWS credentials
