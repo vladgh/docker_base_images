@@ -1,4 +1,5 @@
-require 'vtasks/utils/docker_shared_context'
+require 'serverspec'
+require 'docker'
 
 # Configura RSpec
 ::RSpec.configure do |config|

@@ -1,9 +1,16 @@
 require 'spec_helper'
 
-DOCKER_IMAGE_DIRECTORY = File.dirname(File.dirname(__FILE__))
-
 describe 'Dockerfile' do
-  include Vtasks::Utils::DockerSharedContext::RunningCommandContainer
+  before(:all) do
+    @image = ::Docker::Image.build_from_dir(File.dirname(File.dirname(__FILE__)))
+    set :backend, :docker
+    set :docker_image, @image.id
+    set :docker_container_create_options, {'Healthcheck' => {'Test' => ['NONE']}}
+  end
+
+  it "should have the maintainer label" do
+    expect(@image.json["Config"]["Labels"].has_key?("maintainer"))
+  end
 
   it 'uses the correct OS' do
     expect(os[:family]).to eq('alpine')
@@ -44,5 +51,9 @@ describe 'Dockerfile' do
   describe command('/sbin/tini -h') do
     its(:stdout) { is_expected.to contain('tini') }
     its(:exit_status) { is_expected.to eq 0 }
+  end
+
+  describe process('/usr/local/bin/gunicorn') do
+    it { is_expected.to be_running }
   end
 end
