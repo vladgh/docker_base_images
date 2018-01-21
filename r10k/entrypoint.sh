@@ -22,6 +22,7 @@ generate_configuration(){
 
   # Create R10K configuration
   if [[ ! -s /etc/puppetlabs/r10k/r10k.yaml ]]; then
+    log 'Save R10K configuration'
     cat << EOF > /etc/puppetlabs/r10k/r10k.yaml
 # The location to use for storing cached Git repos
 :cachedir: '${CACHEDIR}'
@@ -39,7 +40,7 @@ EOF
 
 # Install cron job
 run_cron(){
-  log "Setup the cron job (${CRON_TIME})"
+  log "Setup cron job '${CRON_TIME}'"
   # $* produces all the scripts arguments separated by the first character of
   # $IFS which we set earlier to newline and tab, so we change it back to space
   local IFS=' '
@@ -52,7 +53,12 @@ main(){
   generate_configuration
 
   # Run command
-  "${@:-}"
+  local IFS=' '
+  log "Run '${*}'"
+  until "${@:-}"; do
+    log 'Command failed! Retrying in 10 seconds...' >&2
+    sleep 10
+  done
 
   # Run cronjob
   if [[ -n "$CRON_TIME" ]]; then
