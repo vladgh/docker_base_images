@@ -1,4 +1,4 @@
-FROM almir/webhook:2.6.5
+FROM almir/webhook:2.6.8
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Install packages
