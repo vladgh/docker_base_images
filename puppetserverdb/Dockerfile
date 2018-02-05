@@ -4,7 +4,7 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 # Environment
 ENV PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/opt/puppetlabs/server/bin:/usr/local/bin:$PATH \
     PUPPET_RELEASE="puppet-release-xenial" \
-    PUPPET_AGENT_VERSION="5.3.3" \
+    PUPPET_AGENT_VERSION="5.3.4" \
     PUPPETSERVER_VERSION="5.1.4" \
     PUPPETSERVER_JAVA_ARGS="-Xms128M -Xmx512M" \
     PUPPETDB_TERMINUS_VERSION="5.1.3" \
