@@ -7,8 +7,10 @@ IFS=$'\n\t'
 
 # VARs
 REMOTE=${REMOTE:-}
-CRON_TIME="${CRON_TIME:-}"
+POSTRUN=${POSTRUN:-}
+CRONTIME="${CRONTIME:-}"
 CACHEDIR=${CACHEDIR:-/var/cache/r10k}
+CFG='/etc/puppetlabs/r10k/r10k.yaml'
 
 # Log message
 log(){
@@ -18,14 +20,25 @@ log(){
 # Generate R10K configuration
 generate_configuration(){
   # Make sure R10K configuration directory exists
-  mkdir -p /etc/puppetlabs/r10k
+  mkdir -p "$(dirname ${CFG})"
 
   # Create R10K configuration
-  if [[ ! -s /etc/puppetlabs/r10k/r10k.yaml ]]; then
+  if [[ ! -s "$CFG" ]]; then
     log 'Save R10K configuration'
-    cat << EOF > /etc/puppetlabs/r10k/r10k.yaml
+    cat << EOF > "$CFG"
 # The location to use for storing cached Git repos
 :cachedir: '${CACHEDIR}'
+EOF
+
+    generate_sources
+    generate_postrun_hook
+  fi
+}
+
+generate_sources(){
+  if [[ -n "$REMOTE" ]]; then
+    log 'Save R10K sources configuration'
+    cat << EOF >> "$CFG"
 
 # A list of git repositories to create
 :sources:
@@ -38,13 +51,34 @@ EOF
   fi
 }
 
+generate_postrun_hook(){
+  if [[ -n "$POSTRUN" ]]; then
+    log 'Save R10K postrun hook configuration'
+    cat << EOF >> "$CFG"
+
+# Postrun Hook
+postrun: ${POSTRUN}
+EOF
+  fi
+}
+
+# Run R10K command
+run_command(){
+  local IFS=' '
+  log "Run 'r10k ${*}'"
+  until r10k "${@:-}"; do
+    log 'Command failed! Retrying in 10 seconds...' >&2
+    sleep 10
+  done
+}
+
 # Install cron job
 run_cron(){
-  log "Setup cron job '${CRON_TIME}'"
+  log "Setup cron job '${CRONTIME}'"
   # $* produces all the scripts arguments separated by the first character of
   # $IFS which we set earlier to newline and tab, so we change it back to space
   local IFS=' '
-  echo "${CRON_TIME} sh -c '${*:-}'" > /etc/crontabs/root
+  echo "${CRONTIME} sh -c 'r10k ${*:-}'" > /etc/crontabs/root
   exec crond -f -l 6
 }
 
@@ -53,16 +87,13 @@ main(){
   generate_configuration
 
   # Run command
-  local IFS=' '
-  log "Run '${*}'"
-  until "${@:-}"; do
-    log 'Command failed! Retrying in 10 seconds...' >&2
-    sleep 10
-  done
+  if [[ -n ${*:-} ]] ; then
+    run_command "${@:-}"
 
-  # Run cronjob
-  if [[ -n "$CRON_TIME" ]]; then
-    run_cron "${@:-}"
+    # Run cronjob
+    if [[ -n "$CRONTIME" ]]; then
+      run_cron "${@:-}"
+    fi
   fi
 }
 

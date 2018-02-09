@@ -9,7 +9,8 @@ https://github.com/puppetlabs/r10k
 
 ## Environment variables :
 - `REMOTE`: the URL of the remote Puppet control repository (required unless the configuration file is already mounted)
-- `CRON_TIME`: a valid cron expression to run R10K deployment (ex: CRON_TIME='0 */6 * * *' runs every 6 hours)
+- `POSTRUN`: specifies an arbitrary command to run after deploying all environments. The command must be an array of strings that will be used as an argument vector. (ex: POSTRUN="['/usr/bin/curl', '-F', 'deploy=done', 'http://my-app.site/endpoint']")
+- `CRONTIME`: a valid cron expression to run R10K deployment (ex: CRONTIME='0 */6 * * *' runs every 6 hours)
 - `CACHEDIR`: the location to use for storing cached Git repos (defaults to `/var/cache/r10k`)
 
 ## Run example
@@ -34,11 +35,20 @@ docker run -it \
   r10k puppetfile install --verbose
 ```
 
-In addition if there is a `CRON_TIME` environment variable, the container will run the command once and then setup a cron job to rerun it periodically (ex: CRON_TIME='0 */6 * * *' runs every 6 hours)
+If there is a `CRONTIME` environment variable, the container will run the command once and then setup a cron job to rerun it periodically.
 ```
 docker run -it \
   -e REMOTE='https://github.com/me/example.git' \
-  -e CRON_TIME='0 */6 * * *'
+  -e CRONTIME='0 */6 * * *'
+  vladgh/r10k \
+  r10k deploy environment --puppetfile --verbose
+```
+
+If there is a `POSTRUN` environment variable, the container will run the specified command after deploying all environments.
+```
+docker run -it \
+  -e REMOTE='https://github.com/me/example.git' \
+  -e POSTRUN="['/usr/bin/curl', '-F', 'deploy=done', 'http://my-app.site/endpoint']"
   vladgh/r10k \
   r10k deploy environment --puppetfile --verbose
 ```
