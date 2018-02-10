@@ -2,7 +2,7 @@ FROM ruby:2.4-alpine
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Install packages
-RUN apk --no-cache add bash git tini
+RUN apk --no-cache add bash curl git tini
 
 # Install R10K
 RUN gem install r10k --no-ri --no-rdoc
