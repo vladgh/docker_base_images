@@ -1,6 +1,9 @@
 FROM ubuntu:16.04
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
+# Environment
+ENV TINI_VERSION="0.16.1"
+
 # Install packages
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
@@ -9,6 +12,10 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -q && \
     apt-get install -qy deluged deluge-web && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Tini
+ADD https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini /sbin/tini
+RUN chmod +x /sbin/tini
 
 # Expose ports
 EXPOSE 8112
@@ -19,8 +26,8 @@ ENV USER_ID=1000 \
     UMASK=022
 
 # Entrypoint
-COPY entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+COPY entrypoint.sh /
+ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
 
 # Metadata params
 ARG VERSION

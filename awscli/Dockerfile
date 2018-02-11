@@ -13,8 +13,8 @@ RUN apk --no-cache add --virtual build-dependencies py-pip && \
     apk del build-dependencies
 
 # Entrypoint
-ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["/bin/bash"]
+ENTRYPOINT ["/sbin/tini", "--", "aws"]
+CMD ["--version"]
 
 # Metadata params
 ARG VERSION

@@ -2,10 +2,11 @@ FROM alpine:3.7
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Install packages
-RUN apk --no-cache add gnupg haveged
+RUN apk --no-cache add gnupg haveged tini
 
 # Entrypoint
-ENTRYPOINT ["gpg"]
+ENTRYPOINT ["/sbin/tini", "--", "gpg"]
+CMD ["--version"]
 
 # Metadata params
 ARG VERSION

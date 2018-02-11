@@ -2,11 +2,11 @@ FROM alpine:3.7
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Install packages
-RUN apk --no-cache add bash minidlna
+RUN apk --no-cache add bash minidlna tini
 
 # Entrypoint
 COPY entrypoint.sh /
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
 
 # Metadata params
 ARG VERSION

@@ -84,16 +84,17 @@ run_cron(){
 
 # Main function
 main(){
-  generate_configuration
-
   # Run command
   if [[ -n ${*:-} ]] ; then
+    generate_configuration
     run_command "${@:-}"
 
     # Run cronjob
     if [[ -n "$CRONTIME" ]]; then
       run_cron "${@:-}"
     fi
+  else
+    r10k version
   fi
 }
 
