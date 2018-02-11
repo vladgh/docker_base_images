@@ -1,5 +1,22 @@
 # Change Log
 
+## [v0.3.4](https://github.com/vladgh/docker_base_images/tree/v0.3.4) (2018-02-11)
+[Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.3...v0.3.4)
+
+**Implemented enhancements:**
+
+- Improve idempotency and minor updates [\#57](https://github.com/vladgh/docker_base_images/issues/57)
+- \[r10k\] Add curl [\#56](https://github.com/vladgh/docker_base_images/issues/56)
+- \[r10k\] Allow post run hook [\#55](https://github.com/vladgh/docker_base_images/issues/55)
+- Upgrade Puppet Agent [\#54](https://github.com/vladgh/docker_base_images/issues/54)
+- Brake dependencies between base images [\#52](https://github.com/vladgh/docker_base_images/issues/52)
+- Improve testing [\#51](https://github.com/vladgh/docker_base_images/issues/51)
+- \[backup\] Add time zone and time server configuration [\#50](https://github.com/vladgh/docker_base_images/issues/50)
+
+**Fixed bugs:**
+
+- \[r10k\] Fix start-up issues [\#53](https://github.com/vladgh/docker_base_images/issues/53)
+
 ## [v0.3.3](https://github.com/vladgh/docker_base_images/tree/v0.3.3) (2018-01-17)
 [Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.2...v0.3.3)
 
