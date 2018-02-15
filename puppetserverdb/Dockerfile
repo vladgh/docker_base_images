@@ -5,10 +5,9 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 ENV PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/opt/puppetlabs/server/bin:/usr/local/bin:$PATH \
     PUPPET_RELEASE="puppet-release-xenial" \
     PUPPET_AGENT_VERSION="5.4.0" \
-    PUPPETSERVER_VERSION="5.1.5" \
+    PUPPETSERVER_VERSION="5.2.0" \
     PUPPETSERVER_JAVA_ARGS="-Xms128M -Xmx512M" \
     PUPPETDB_TERMINUS_VERSION="5.2.0" \
-    HIERA_EYAML_VERSION='~> 2.0' \
     TINI_VERSION="0.16.1"
 
 # Installation
@@ -29,12 +28,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 ADD https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini /sbin/tini
 RUN chmod +x /sbin/tini
 
-# Install Hiera EYaml
-RUN puppetserver gem install hiera-eyaml:"${HIERA_EYAML_VERSION}" --no-ri --no-rdoc && \
-    gem install hiera-eyaml:"${HIERA_EYAML_VERSION}" --no-ri --no-rdoc
-
 # Copy configuration files
-COPY hiera.yaml /etc/puppetlabs/puppet/hiera.yaml
 COPY logback.xml request-logging.xml /etc/puppetlabs/puppetserver/
 COPY puppetdb.conf /etc/puppetlabs/puppet/
 
@@ -61,7 +55,7 @@ HEALTHCHECK --interval=10s --timeout=10s --retries=90 CMD \
   https://puppet:8140/production/status/test \
   |  grep -q '"is_alive":true' \
   || exit 1
-  
+
 # Metadata params
 ARG VERSION
 ARG VCS_URL

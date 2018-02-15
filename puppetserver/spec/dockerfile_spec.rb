@@ -60,10 +60,6 @@ describe 'Dockerfile' do
     it { sleep 5; is_expected.to be_running }
   end
 
-  describe package('hiera-eyaml') do
-    it { is_expected.to be_installed.by('gem') }
-  end
-
   describe command('puppetserver gem list') do
     its(:stdout) { is_expected.to match(/hiera-eyaml/) }
   end
