@@ -5,7 +5,7 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 ENV PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH \
     PUPPET_RELEASE="puppet-release-xenial" \
     PUPPET_AGENT_VERSION="5.4.0" \
-    TINI_VERSION="0.16.1"
+    TINI_VERSION="0.17.0"
 
 # Install Puppet release package
 RUN export DEBIAN_FRONTEND=noninteractive && \

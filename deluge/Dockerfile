@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
-ENV TINI_VERSION="0.16.1"
+ENV TINI_VERSION="0.17.0"
 
 # Install packages
 RUN export DEBIAN_FRONTEND=noninteractive && \

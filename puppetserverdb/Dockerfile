@@ -8,7 +8,7 @@ ENV PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/opt/puppetlabs/server/b
     PUPPETSERVER_VERSION="5.2.0" \
     PUPPETSERVER_JAVA_ARGS="-Xms128M -Xmx512M" \
     PUPPETDB_TERMINUS_VERSION="5.2.0" \
-    TINI_VERSION="0.16.1"
+    TINI_VERSION="0.17.0"
 
 # Installation
 RUN export DEBIAN_FRONTEND=noninteractive && \
