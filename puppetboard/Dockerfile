@@ -2,10 +2,10 @@ FROM python:2.7-alpine
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
-ENV GUNICORN_VERSION="19.7.1" \
-    PUPPETBOARD_VERSION="0.3.0" \
+ENV PUPPETBOARD_VERSION="0.3.0" \
     PUPPETBOARD_PORT="8000" \
-    PUPPETBOARD_SETTINGS="docker_settings.py"
+    PUPPETBOARD_SETTINGS="docker_settings.py" \
+    GUNICORN_VERSION="19.7.1"
 WORKDIR /var/www/puppetboard
 
 # Install packages

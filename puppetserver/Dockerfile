@@ -1,30 +1,18 @@
-FROM ubuntu:16.04
+FROM vladgh/puppet:latest
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
-ENV PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/opt/puppetlabs/server/bin:/usr/local/bin:$PATH \
-    PUPPET_RELEASE="puppet-release-xenial" \
-    PUPPET_AGENT_VERSION="5.4.0" \
-    PUPPETSERVER_VERSION="5.2.0" \
-    PUPPETSERVER_JAVA_ARGS="-Xms128M -Xmx512M" \
-    TINI_VERSION="0.17.0"
+ENV PATH=/opt/puppetlabs/server/bin:$PATH \
+    PUPPETSERVER_VERSION="5.3.0" \
+    PUPPETSERVER_JAVA_ARGS="-Xms128M -Xmx512M"
 
 # Installation
 RUN export DEBIAN_FRONTEND=noninteractive && \
-    apt-get update -y && apt-get install -y --no-install-recommends ca-certificates lsb-release wget && \
-    wget -O "/tmp/${PUPPET_RELEASE}.deb" \
-    "https://apt.puppetlabs.com/${PUPPET_RELEASE}.deb" && \
-    dpkg -i "/tmp/${PUPPET_RELEASE}.deb" && apt-get update -y && \
-    apt-get install -y --no-install-recommends \
-    puppet-agent="${PUPPET_AGENT_VERSION}"-1xenial \
-    puppetserver="$PUPPETSERVER_VERSION"-1xenial && \
+    apt-get update -y && apt-get install -y --no-install-recommends \
+    puppetserver="$PUPPETSERVER_VERSION-1xenial" && \
     sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{PUPPETSERVER_JAVA_ARGS:-\1\}@' \
     /etc/default/puppetserver && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Tini
-ADD https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini /sbin/tini
-RUN chmod +x /sbin/tini
 
 # Ports
 EXPOSE 8140

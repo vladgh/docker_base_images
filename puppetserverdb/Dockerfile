@@ -1,60 +1,22 @@
-FROM ubuntu:16.04
+FROM vladgh/puppetserver:latest
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
-ENV PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/opt/puppetlabs/server/bin:/usr/local/bin:$PATH \
-    PUPPET_RELEASE="puppet-release-xenial" \
-    PUPPET_AGENT_VERSION="5.4.0" \
-    PUPPETSERVER_VERSION="5.2.0" \
-    PUPPETSERVER_JAVA_ARGS="-Xms128M -Xmx512M" \
-    PUPPETDB_TERMINUS_VERSION="5.2.0" \
-    TINI_VERSION="0.17.0"
+ENV PUPPETDB_TERMINUS_VERSION="5.2.1"
 
 # Installation
 RUN export DEBIAN_FRONTEND=noninteractive && \
-    apt-get update -y && apt-get install -y --no-install-recommends ca-certificates lsb-release wget && \
-    wget -O "/tmp/${PUPPET_RELEASE}.deb" \
-    "https://apt.puppetlabs.com/${PUPPET_RELEASE}.deb" && \
-    dpkg -i "/tmp/${PUPPET_RELEASE}.deb" && apt-get update -y && \
-    apt-get install -y --no-install-recommends \
-    puppet-agent="${PUPPET_AGENT_VERSION}"-1xenial \
-    puppetserver="$PUPPETSERVER_VERSION"-1xenial \
+    apt-get update -y && apt-get install -y --no-install-recommends \
     puppetdb-termini="$PUPPETDB_TERMINUS_VERSION"-1xenial && \
-    sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{PUPPETSERVER_JAVA_ARGS:-\1\}@' \
-    /etc/default/puppetserver && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Tini
-ADD https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini /sbin/tini
-RUN chmod +x /sbin/tini
-
 # Copy configuration files
-COPY logback.xml request-logging.xml /etc/puppetlabs/puppetserver/
 COPY puppetdb.conf /etc/puppetlabs/puppet/
 
 # Configure Puppet for PuppetDB
 RUN puppet config set storeconfigs_backend puppetdb --section master && \
     puppet config set storeconfigs true --section master && \
     puppet config set reports puppetdb --section master
-
-# Entrypoint
-COPY entrypoint.sh /
-ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
-CMD ["puppetserver", "foreground"]
-
-# Ports
-EXPOSE 8140
-
-# Health check
-HEALTHCHECK --interval=10s --timeout=10s --retries=90 CMD \
-  curl --fail -H 'Accept: pson' \
-  --resolve 'puppet:8140:127.0.0.1' \
-  --cert "/etc/puppetlabs/puppet/ssl/certs/$(hostname).pem" \
-  --key "/etc/puppetlabs/puppet/ssl/private_keys/$(hostname).pem" \
-  --cacert /etc/puppetlabs/puppet/ssl/certs/ca.pem \
-  https://puppet:8140/production/status/test \
-  |  grep -q '"is_alive":true' \
-  || exit 1
 
 # Metadata params
 ARG VERSION
