@@ -23,7 +23,7 @@ CMD /usr/local/bin/gunicorn -b 0.0.0.0:${PUPPETBOARD_PORT} --access-logfile=/dev
 
 # Health check
 HEALTHCHECK --interval=10s --timeout=10s --retries=90 CMD \
-  curl --fail -X GET localhost:${PUPPETBOARD_PORT} \
+  curl --silent --fail -X GET localhost:${PUPPETBOARD_PORT} \
   |  grep -q 'Live from PuppetDB' \
   || exit 1
 

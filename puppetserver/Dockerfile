@@ -27,7 +27,7 @@ CMD ["puppetserver", "foreground"]
 
 # Health check
 HEALTHCHECK --interval=10s --timeout=10s --retries=90 CMD \
-  curl --fail -H 'Accept: pson' \
+  curl --silent --fail -H 'Accept: pson' \
   --resolve 'puppet:8140:127.0.0.1' \
   --cert "/etc/puppetlabs/puppet/ssl/certs/$(hostname).pem" \
   --key "/etc/puppetlabs/puppet/ssl/private_keys/$(hostname).pem" \
