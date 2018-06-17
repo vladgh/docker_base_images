@@ -253,7 +253,7 @@ main(){
 
   # Update time
   log 'Set time'
-  ntpd -p "$TIME_SERVER" || true
+  ntpd -q -p "$TIME_SERVER" || true
 
   # Parse command line arguments
   cmd="${1:-once}"
