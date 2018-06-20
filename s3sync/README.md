@@ -61,7 +61,7 @@ docker run \
   vladgh/s3sync
 ```
 
-- Uplaod files and exit
+- Upload files and exit
 ```
 docker run \
   -e S3PATH='s3://mybucket/myprefix' \
