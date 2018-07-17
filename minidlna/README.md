@@ -21,4 +21,19 @@ docker run -d --net=host \
   vladgh/minidlna
 ```
 
+### Multiple Media dirs
+
+Any environment variable starting MEDIA_DIR will be treated as an additional media_dir directive.
+
+```
+docker run -d --net=host \
+  -p 8200:8200 \
+  -v <media dir on host>:/media/audio \
+  -v <media dir on host>:/media/video \
+  -e MEDIADIR_1=A:/media/audio \
+  -e MEDIADIR_1=V:/media/video \
+  -e MINIDLNA_FRIENDLY_NAME=MyMini \
+  vladgh/minidlna
+```
+
 See: http://manpages.ubuntu.com/manpages/raring/man5/minidlna.conf.5.html

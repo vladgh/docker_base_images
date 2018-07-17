@@ -15,6 +15,11 @@ for VAR in $(env); do
     minidlna_value=$(echo "$VAR" | sed -r "s/.*=(.*)/\1/g")
     echo "${minidlna_name}=${minidlna_value}" >> /etc/minidlna.conf
   fi
+  if [[ "$VAR" =~ ^MEDIA_DIR ]]; then
+    minidlna_name=media_dir
+    minidlna_value=$(echo "$VAR" | sed -r "s/.*=(.*)/\1/g")
+    echo "${minidlna_name}=${minidlna_value}" >> /etc/minidlna.conf
+  fi
 done
 
 # Start daemon
