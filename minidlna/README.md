@@ -23,15 +23,18 @@ docker run -d --net=host \
 
 ### Multiple Media dirs
 
-Any environment variable starting MEDIA_DIR will be treated as an additional media_dir directive.
+Any environment variable starting with `MINIDLNA_MEDIA_DIR` will be treated as
+an additional `media_dir` directive and any suffix in the variable name will
+be trimmed (ex: `MINIDLNA_MEDIA_DIR_1`). This way you can eclare multiple
+`media_dir` directives
 
 ```
 docker run -d --net=host \
   -p 8200:8200 \
   -v <media dir on host>:/media/audio \
   -v <media dir on host>:/media/video \
-  -e MEDIADIR_1=A:/media/audio \
-  -e MEDIADIR_1=V:/media/video \
+  -e MINIDLNA_MEDIA_DIR_1=A:/media/audio \
+  -e MINIDLNA_MEDIA_DIR_2=V:/media/video \
   -e MINIDLNA_FRIENDLY_NAME=MyMini \
   vladgh/minidlna
 ```
