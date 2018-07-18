@@ -1,5 +1,24 @@
 # Change Log
 
+## [v0.3.5](https://github.com/vladgh/docker_base_images/tree/v0.3.5) (2018-07-18)
+[Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.4...v0.3.5)
+
+**Implemented enhancements:**
+
+- Multiple "media\_dir" configuration not supported in MiniDLNA container [\#63](https://github.com/vladgh/docker_base_images/issues/63)
+- Clean up health check logs [\#61](https://github.com/vladgh/docker_base_images/issues/61)
+- Nest Puppet repositories [\#59](https://github.com/vladgh/docker_base_images/issues/59)
+- add multiple entrypoint support - fixes \#63 [\#64](https://github.com/vladgh/docker_base_images/pull/64) ([cwoac](https://github.com/cwoac))
+
+**Fixed bugs:**
+
+- \[backup\] Do not daemonize NTP [\#60](https://github.com/vladgh/docker_base_images/issues/60)
+
+**Closed issues:**
+
+- Graceful shutdown for s3sync sync [\#62](https://github.com/vladgh/docker_base_images/issues/62)
+- Codecs issue [\#58](https://github.com/vladgh/docker_base_images/issues/58)
+
 ## [v0.3.4](https://github.com/vladgh/docker_base_images/tree/v0.3.4) (2018-02-11)
 [Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.3...v0.3.4)
 
