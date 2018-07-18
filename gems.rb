@@ -1,6 +1,6 @@
 source ENV['GEM_SOURCE'] || 'https://rubygems.org'
 
-gem 'vtasks', :git => 'https://github.com/vladgh/vtasks', require: false
+gem 'vtasks', require: false
 
 gem 'docker-api', require: false
 gem 'dotenv', require: false

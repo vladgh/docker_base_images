@@ -8,7 +8,7 @@ IFS=$'\n\t'
 [ -f /var/run/minidlna/minidlna.pid ] && rm -f /var/run/minidlna/minidlna.pid
 
 # Change configuration
-> /etc/minidlna.conf
+: > /etc/minidlna.conf
 for VAR in $(env); do
   if [[ "$VAR" =~ ^MINIDLNA_ ]]; then
     minidlna_name=$(echo "$VAR" | sed -r "s/MINIDLNA_(.*)=.*/\1/g" | tr '[:upper:]' '[:lower:]')
