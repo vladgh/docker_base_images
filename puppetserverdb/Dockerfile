@@ -2,7 +2,7 @@ FROM vladgh/puppetserver:latest
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
-ENV PUPPETDB_TERMINUS_VERSION="5.2.2"
+ENV PUPPETDB_TERMINUS_VERSION="5.2.4"
 
 # Installation
 RUN export DEBIAN_FRONTEND=noninteractive && \

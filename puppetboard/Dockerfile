@@ -5,7 +5,7 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 ENV PUPPETBOARD_VERSION="0.3.0" \
     PUPPETBOARD_PORT="8000" \
     PUPPETBOARD_SETTINGS="docker_settings.py" \
-    GUNICORN_VERSION="19.8.1"
+    GUNICORN_VERSION="19.9.0"
 WORKDIR /var/www/puppetboard
 
 # Install packages

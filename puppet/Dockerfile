@@ -1,10 +1,10 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
 ENV PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH \
     PUPPET_RELEASE="puppet-release-xenial" \
-    PUPPET_AGENT_VERSION="5.5.3" \
+    PUPPET_AGENT_VERSION="5.5.4" \
     TINI_VERSION="0.18.0"
 
 # Install Puppet release package

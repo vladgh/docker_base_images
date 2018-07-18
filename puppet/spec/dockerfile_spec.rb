@@ -14,7 +14,7 @@ describe 'Dockerfile' do
 
   it 'uses the correct version of Ubuntu' do
     os_version = command('cat /etc/lsb-release').stdout
-    expect(os_version).to include('16.04')
+    expect(os_version).to include('18.04')
     expect(os_version).to include('Ubuntu')
   end
 
