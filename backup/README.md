@@ -1,10 +1,11 @@
 # Backup Docker Image ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/master/backup))
-[![](https://images.microbadger.com/badges/image/vladgh/backup.svg)](https://microbadger.com/images/vladgh/backup "Get your own image badge on microbadger.com")
-[![](https://images.microbadger.com/badges/version/vladgh/backup.svg)](https://microbadger.com/images/vladgh/backup "Get your own version badge on microbadger.com")
-[![](https://images.microbadger.com/badges/commit/vladgh/backup.svg)](https://microbadger.com/images/vladgh/backup "Get your own commit badge on microbadger.com")
-[![](https://images.microbadger.com/badges/license/vladgh/backup.svg)](https://microbadger.com/images/vladgh/backup "Get your own license badge on microbadger.com")
 
-## Environment variables :
+[![badge](https://images.microbadger.com/badges/image/vladgh/backup.svg)](https://microbadger.com/images/vladgh/backup)
+[![badge](https://images.microbadger.com/badges/version/vladgh/backup.svg)](https://microbadger.com/images/vladgh/backup)
+[![badge](https://images.microbadger.com/badges/commit/vladgh/backup.svg)](https://microbadger.com/images/vladgh/backup)
+[![badge](https://images.microbadger.com/badges/license/vladgh/backup.svg)](https://microbadger.com/images/vladgh/backup)
+
+## Environment variables
 
 - `AWS_S3_BUCKET`: the name of the AWS S3 bucket (defaults to backup_{ID})
 - `AWS_S3_PREFIX`: the prefix for the keys inside the AWS S3 bucket (no leading or trailing slashes)
@@ -24,9 +25,9 @@
 
 You can declare AWS credentials in several ways:
 
-1. As environment variables
+### As environment variables
 
-```
+```sh
 docker run ...
 -e AWS_ACCESS_KEY_ID=1234 \
 -e AWS_SECRET_ACCESS_KEY=5678 \
@@ -34,48 +35,48 @@ docker run ...
 ...
 ```
 
-2. Mount the configuration directory
+### Mount the configuration directory
 
-```
+```sh
 docker run ...
 -v ~/.aws:/root/.aws:ro
 ...
 ```
 
-3. If you are using Docker Swarm Secrets, you can create a secret with a target to `/root/.aws/credentials`.
+### If you are using Docker Swarm Secrets, you can create a secret with a target to `/root/.aws/credentials`
 
-```
+```sh
 docker service create ...
 --secret source=aws_credentials,target=/root/.aws/credentials,mode=0400
 ...
 ```
 
-For more information on Docker Swarm secrets, read: https://docs.docker.com/engine/swarm/secrets/. For information about a AWS CLI credentials file, read: http://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html
+For more information on Docker Swarm secrets, read: <https://docs.docker.com/engine/swarm/secrets/>. For information about a AWS CLI credentials file, read: <http://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html>.
 
 ## GPG keys
 
 You can import the GPG keys in several ways:
 
-1. From an URL
+### From an URL
 
-```
+```sh
 docker run ...
 -e GPG_KEY_URL='https://keybase.io/example/key.asc' \
 ...
 ```
 
-2. From a file (which needs to be mounted from the host)
+### From a file (which needs to be mounted from the host)
 
-```
+```sh
 docker run ...
 -v /host/path/to/GPG/key:/key:ro \
 -e GPG_KEY_PATH='/key' \
 ...
 ```
 
-2. From a folder (which needs to be mounted from the host)
+### From a folder (which needs to be mounted from the host)
 
-```
+```sh
 docker run ...
 -v /host/path/to/GPG/keys:/keys:ro \
 -e GPG_KEY_PATH='/keys' \
@@ -84,7 +85,7 @@ docker run ...
 
 ## One time backup
 
-```
+```sh
 docker run --rm -it \
   -e AWS_S3_BUCKET=mybucket \
   -e GPG_RECIPIENT=me@example.com \
@@ -98,7 +99,7 @@ docker run --rm -it \
 
 ## One time backup (symmetric encryption with passphrase)
 
-```
+```sh
 docker run --rm -it \
   -e AWS_S3_BUCKET=mybucket \
   -e GPG_PASSPHRASE='mysuperstrongpassword' \
@@ -111,7 +112,7 @@ docker run --rm -it \
 
 ## Cronjob
 
-```
+```sh
 docker run -d \
   -e AWS_S3_BUCKET=mybucket \
   -e GPG_RECIPIENT=me@example.com \
@@ -125,10 +126,11 @@ docker run -d \
 ```
 
 ## Restore
+
 If the right AWS credentials are specified, it will try to download the latest object from the specified bucket (with the specified prefix).
 The private GPG key needs to be imported (see [GPG keys](#gpg-keys)), and the passphrase needs to be declared (via `GPG_PASSPHRASE` or `GPG_PASSPHRASE_FILE`)
 
-```
+```sh
 docker run --rm -it \
   -e AWS_S3_BUCKET=mybucket \
   -e GPG_PASSPHRASE=myverystrongpassword \
@@ -139,9 +141,10 @@ docker run --rm -it \
 ```
 
 ## Restore single file
+
 You can also restore a single encrypted file by piping it into the container (**Note: do not allocate a TTY to this container**)
 
-```
+```sh
 docker run --rm -i \
   -e GPG_PASSPHRASE=myverystrongpassword \
   -v /host/path/to/GPG/private/key:/keys/my_private_key:ro \
@@ -150,17 +153,19 @@ docker run --rm -i \
 ```
 
 ## Restore single file (with symmetric encryption)
-**Note: do not allocate a TTY to this container**
 
-```
+### **Note: do not allocate a TTY to this container**
+
+```sh
 docker run --rm -i \
   -e GPG_PASSPHRASE=myverystrongpassword \
   -v /host/path/to/restore:/restore \
   vladgh/backup restore < /path/to/host/restore_file.tar.xz.gpg
 ```
+
 ## Restore single file (mounted inside the container)
 
-```
+```sh
 docker run --rm -it \
   -e GPG_PASSPHRASE=myverystrongpassword \
   -v /host/path/to/restore:/restore \
@@ -170,7 +175,7 @@ docker run --rm -it \
 
 ## Restore single file (without encryption)
 
-```
+```sh
 docker run --rm -it \
   -v /host/path/to/restore:/restore \
   -v /host/path/to/restore_file.tar.xz:/container/path/to/restore_file.tar.xz \
@@ -179,7 +184,7 @@ docker run --rm -it \
 
 ## Encryption
 
-```
+```sh
 # Start container
 docker run --rm -it -v /path/to/keys/store:/keys -e GPG_TTY=/dev/console --entrypoint bash vladgh/backup
 
@@ -202,10 +207,11 @@ gpg --list-keys
 ## Rotation
 
 The recommended rotation method is by using life cycle rules for the S3 bucket. A json file is included as example. It will remove backups according to the following schedule:
+
 - hourly backups expire after 1 day
 - daily backups expire after 7 days
 - monthly backups expire after 30 days
 
-```
+```sh
 aws s3api put-bucket-lifecycle --bucket mybucket --lifecycle-configuration file://lifecycle.json
 ```
