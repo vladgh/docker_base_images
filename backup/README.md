@@ -8,6 +8,7 @@
 
 - `AWS_S3_BUCKET`: the name of the AWS S3 bucket (defaults to backup_{ID})
 - `AWS_S3_PREFIX`: the prefix for the keys inside the AWS S3 bucket (no leading or trailing slashes)
+- `AWS_S3_SSE`: use S3 Server Side Encryption (defaults to `false`; currently only AES256 is available)
 - `GPG_PASSPHRASE`: The GPG passphrase
 - `GPG_PASSPHRASE_FILE`: The file containing the GPG passphrase (for example a docker swarm secret mounted at /run/secrets/my_gpg_pass)
 - `GPG_RECIPIENT`: the intended recipient or comma separated list of recipients; it can be a key ID, a full fingerprint, an email address, or anything else that uniquely identifies a public key to GPG (see "HOW TO SPECIFY A USER ID" in the gpg man page)

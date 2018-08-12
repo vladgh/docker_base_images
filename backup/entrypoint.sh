@@ -167,8 +167,14 @@ decrypt_archive(){
 upload_archive(){
   ensure_s3_bucket
 
+  local s3_upload_cmd='--no-progress'
+
+  if [[ "$AWS_S3_SSE" == 'true' ]]; then
+    s3_upload_cmd+=' --sse AES256'
+  fi
+
   BACKUP_CMD_OUTPUT+=" to ${_aws_s3_path}/${_backup_type}/${_backup_file}"
-  BACKUP_CMD="${BACKUP_CMD} | aws s3 cp --no-progress - ${_aws_s3_path}/${_backup_type}/${_backup_file}"
+  BACKUP_CMD="${BACKUP_CMD} | aws s3 cp ${s3_upload_cmd} - ${_aws_s3_path}/${_backup_type}/${_backup_file}"
 }
 
 # Download the latest archive from S3
