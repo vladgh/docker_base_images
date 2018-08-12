@@ -49,6 +49,7 @@ docker run ...
 
 ### Optional environment variables
 - `SYNCDIR`: the local synchronize location (defaults to `/sync`)
+- `SYNCSSE`: use S3 Server Side Encryption (defaults to `false`; currently only AES256 is available)
 - `CRON_TIME`: a valid cron expression (ex: `CRON_TIME='0 */6 * * *'` runs every 6 hours; defaults to hourly)
 - `INITIAL_DOWNLOAD`: whether to download files initially (defaults to `true`); this will only download the files if the directory is empty. Set this to `force` to skip this check
 
@@ -99,7 +100,7 @@ docker run -d \
 - External AWS credentials
 ```
 docker run -d \
-  -e S3PATH='s3://textvgh' \
+  -e S3PATH='s3://mybucket/myprefix' \
   -v ~/.aws:/root/.aws:ro \
   vladgh/s3sync
 ```

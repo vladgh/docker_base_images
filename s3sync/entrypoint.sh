@@ -8,6 +8,7 @@ IFS=$'\n\t'
 # VARs
 S3PATH=${S3PATH:-}
 SYNCDIR="${SYNCDIR:-/sync}"
+SYNCSSE="${SYNCSSE:-false}"
 CRON_TIME="${CRON_TIME:-10 * * * *}"
 INITIAL_DOWNLOAD="${INITIAL_DOWNLOAD:-true}"
 
@@ -18,13 +19,20 @@ log(){
 
 # Sync files
 sync_files(){
-  local src="${1:-}"
-  local dst="${2:-}"
+  local src dst sync_cmd
+  src="${1:-}"
+  dst="${2:-}"
+
+  sync_cmd='--no-progress --delete --exact-timestamps'
+
+  if [[ "$SYNCSSE" == 'true' ]]; then
+    sync_cmd+=' --sse AES256'
+  fi
 
   mkdir -p "$dst" # Make sure directory exists
 
   log "Sync '${src}' to '${dst}'"
-  if ! aws s3 sync --no-progress --delete --exact-timestamps "$src" "$dst"; then
+  if ! eval aws s3 sync "$sync_cmd" "$src" "$dst"; then
     log "Could not sync '${src}' to '${dst}'" >&2; exit 1
   fi
 }
