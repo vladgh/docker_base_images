@@ -7,6 +7,7 @@ IFS=$'\n\t'
 # VARs
 AWS_S3_BUCKET="${AWS_S3_BUCKET:-backup_$(date +%s | sha256sum | base64 | head -c 16 ; echo)}"
 AWS_S3_PREFIX="${AWS_S3_PREFIX:-}"
+AWS_S3_SSE="${AWS_S3_SSE:-false}"
 AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
 GPG_PASSPHRASE="${GPG_PASSPHRASE:-}"
 GPG_PASSPHRASE_FILE="${GPG_PASSPHRASE_FILE:-}"
