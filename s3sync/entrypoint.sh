@@ -29,7 +29,9 @@ sync_files(){
     sync_cmd+=' --sse AES256'
   fi
 
-  mkdir -p "$dst" # Make sure directory exists
+  if [[ ! "$dst" =~ s3:// ]]; then
+    mkdir -p "$dst" # Make sure directory exists
+  fi
 
   log "Sync '${src}' to '${dst}'"
   if ! eval aws s3 sync "$sync_cmd" "$src" "$dst"; then
