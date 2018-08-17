@@ -1,5 +1,18 @@
 # Change Log
 
+## [v0.3.6](https://github.com/vladgh/docker_base_images/tree/v0.3.6) (2018-08-17)
+[Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.5...v0.3.6)
+
+**Implemented enhancements:**
+
+- \[backup\] Allow S3 Server Side Encryption [\#66](https://github.com/vladgh/docker_base_images/issues/66)
+- \[s3sync\] Allow S3 Server Side Encryption [\#65](https://github.com/vladgh/docker_base_images/issues/65)
+
+**Fixed bugs:**
+
+- \[s3sync\] Issue with sync\_files and $dst when uploading to s3 [\#68](https://github.com/vladgh/docker_base_images/issues/68)
+- \[backup\] Fix unbound variable [\#67](https://github.com/vladgh/docker_base_images/issues/67)
+
 ## [v0.3.5](https://github.com/vladgh/docker_base_images/tree/v0.3.5) (2018-07-18)
 [Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.4...v0.3.5)
 
