@@ -8,7 +8,8 @@ IFS=$'\n\t'
 # VARs
 S3PATH=${S3PATH:-}
 SYNCDIR="${SYNCDIR:-/sync}"
-SYNCSSE="${SYNCSSE:-false}"
+AWS_S3_SSE="${AWS_S3_SSE:-false}"
+AWS_S3_SSE_KMS_KEY_ID="${AWS_S3_SSE_KMS_KEY_ID:-}"
 CRON_TIME="${CRON_TIME:-10 * * * *}"
 INITIAL_DOWNLOAD="${INITIAL_DOWNLOAD:-true}"
 
@@ -25,8 +26,13 @@ sync_files(){
 
   sync_cmd='--no-progress --delete --exact-timestamps'
 
-  if [[ "$SYNCSSE" == 'true' ]]; then
-    sync_cmd+=' --sse AES256'
+  if [[ "$AWS_S3_SSE" == 'true' ]] || [[ "$AWS_S3_SSE" == 'aes256' ]]; then
+    s3_upload_cmd+=' --sse AES256'
+  elif [[ "$AWS_S3_SSE" == 'kms' ]]; then
+    s3_upload_cmd+=' --sse aws:kms'
+    if [[ -n "$AWS_S3_SSE_KMS_KEY_ID" ]]; then
+      s3_upload_cmd+=" --sse-kms-key-id ${AWS_S3_SSE_KMS_KEY_ID}"
+    fi
   fi
 
   if [[ ! "$dst" =~ s3:// ]]; then

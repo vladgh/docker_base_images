@@ -8,6 +8,7 @@ IFS=$'\n\t'
 AWS_S3_BUCKET="${AWS_S3_BUCKET:-backup_$(date +%s | sha256sum | base64 | head -c 16 ; echo)}"
 AWS_S3_PREFIX="${AWS_S3_PREFIX:-}"
 AWS_S3_SSE="${AWS_S3_SSE:-false}"
+AWS_S3_SSE_KMS_KEY_ID="${AWS_S3_SSE_KMS_KEY_ID:-}"
 AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
 GPG_PASSPHRASE="${GPG_PASSPHRASE:-}"
 GPG_PASSPHRASE_FILE="${GPG_PASSPHRASE_FILE:-}"
@@ -170,8 +171,13 @@ upload_archive(){
 
   local s3_upload_cmd='--no-progress'
 
-  if [[ "$AWS_S3_SSE" == 'true' ]]; then
+  if [[ "$AWS_S3_SSE" == 'true' ]] || [[ "$AWS_S3_SSE" == 'aes256' ]]; then
     s3_upload_cmd+=' --sse AES256'
+  elif [[ "$AWS_S3_SSE" == 'kms' ]]; then
+    s3_upload_cmd+=' --sse aws:kms'
+    if [[ -n "$AWS_S3_SSE_KMS_KEY_ID" ]]; then
+      s3_upload_cmd+=" --sse-kms-key-id ${AWS_S3_SSE_KMS_KEY_ID}"
+    fi
   fi
 
   BACKUP_CMD_OUTPUT+=" to ${_aws_s3_path}/${_backup_type}/${_backup_file}"

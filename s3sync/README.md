@@ -55,7 +55,8 @@ docker run ...
 ### Optional environment variables
 
 - `SYNCDIR`: the local synchronize location (defaults to `/sync`)
-- `SYNCSSE`: use S3 Server Side Encryption (defaults to `false`; currently only AES256 is available)
+- `AWS_S3_SSE`: use S3 Server Side Encryption; it can be `false` for no encryption, `aes256` or `true` for Server-Side Encryption with Amazon S3-Managed Keys (SSE-S3) and `kms` for Server-Side Encryption with AWS KMS-Managed Keys (SSE-KMS) (defaults to `false`). For more information refer to <https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html> (Note: Server-Side Encryption with Customer-Provided Keys (SSE-C) is not currently supported)
+- `AWS_S3_SSE_KMS_KEY_ID`: The AWS KMS key ID that should be used to server-side encrypt the object in S3 (only available if use in conjunction with `AWS_S3_SSE`)
 - `CRON_TIME`: a valid cron expression (ex: `CRON_TIME='0 */6 * * *'` runs every 6 hours; defaults to hourly)
 - `INITIAL_DOWNLOAD`: whether to download files initially (defaults to `true`); this will only download the files if the directory is empty. Set this to `force` to skip this check
 
