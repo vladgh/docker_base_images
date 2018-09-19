@@ -3,13 +3,13 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
 ENV PATH=/opt/puppetlabs/server/bin:$PATH \
-    PUPPETDB_VERSION="5.2.4" \
+    PUPPETDB_VERSION="6.0.0" \
     PUPPETDB_JAVA_ARGS="-Djava.net.preferIPv4Stack=true -Xms128M -Xmx512M"
 
 # Installation
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && apt-get install -y --no-install-recommends \
-    netcat puppetdb="${PUPPETDB_VERSION}-1xenial" && \
+    netcat puppetdb="${PUPPETDB_VERSION}-1bionic" && \
     sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{PUPPETDB_JAVA_ARGS:-\1\}@' \
     /etc/default/puppetdb && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

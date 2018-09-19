@@ -3,8 +3,8 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
 ENV PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH \
-    PUPPET_RELEASE="puppet-release-xenial" \
-    PUPPET_AGENT_VERSION="5.5.6" \
+    PUPPET_RELEASE="puppet-release-bionic" \
+    PUPPET_AGENT_VERSION="6.0.0" \
     TINI_VERSION="0.18.0"
 
 # Install Puppet release package
@@ -14,7 +14,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     wget -O "/tmp/${PUPPET_RELEASE}.deb" \
     "https://apt.puppetlabs.com/${PUPPET_RELEASE}.deb" && \
     dpkg -i "/tmp/${PUPPET_RELEASE}.deb" && apt-get update -y && \
-    apt-get install -y --no-install-recommends puppet-agent="${PUPPET_AGENT_VERSION}-1xenial" && \
+    apt-get install -y --no-install-recommends puppet-agent="${PUPPET_AGENT_VERSION}-1bionic" && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Tini
