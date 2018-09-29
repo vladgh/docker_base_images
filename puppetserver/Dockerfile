@@ -4,12 +4,14 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 # Environment
 ENV PATH=/opt/puppetlabs/server/bin:$PATH \
     PUPPETSERVER_VERSION="6.0.0" \
+    PUPPETDB_TERMINUS_VERSION="6.0.0" \
     PUPPETSERVER_JAVA_ARGS="-Xms128M -Xmx512M"
 
 # Installation
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && apt-get install -y --no-install-recommends \
-    puppetserver="$PUPPETSERVER_VERSION-1bionic" && \
+    puppetserver="${PUPPETSERVER_VERSION}-1bionic" \
+    puppetdb-termini="${PUPPETDB_TERMINUS_VERSION}-1bionic" && \
     sed -i -e 's@^JAVA_ARGS=\(.*\)$@JAVA_ARGS=\$\{PUPPETSERVER_JAVA_ARGS:-\1\}@' \
     /etc/default/puppetserver && \
     apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -18,6 +20,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 EXPOSE 8140
 
 # Copy configuration files
+COPY puppetdb.conf /etc/puppetlabs/puppet/
 COPY logback.xml request-logging.xml /etc/puppetlabs/puppetserver/
 
 # Entrypoint
