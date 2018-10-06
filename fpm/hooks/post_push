@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
 echo '------ HOOK START - POST_PUSH -------'
-
-echo 'Load libraries'
-# shellcheck disable=1090
-. "$(pwd -P)/../shlib/hooks.sh"
-
-run_post_push_hook
-
+./scripts/docker.sh notify
 echo '------ HOOK END - POST_PUSH -------'
