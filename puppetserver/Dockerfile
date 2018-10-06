@@ -3,7 +3,7 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
 ENV PATH=/opt/puppetlabs/server/bin:$PATH \
-    PUPPETSERVER_VERSION="6.0.2" \
+    PUPPETSERVER_VERSION="6.0.1" \
     PUPPETDB_TERMINUS_VERSION="6.0.0" \
     PUPPETSERVER_JAVA_ARGS="-Xms128M -Xmx512M"
 
