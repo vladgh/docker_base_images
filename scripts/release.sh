@@ -65,7 +65,7 @@ increment(){
 
 # Generate log
 generate_log(){
-  GCG_CMD="--bug-labels ${BUG_LABELS} --enhancement-labels ${ENHANCEMENT_LABELS}"
+  GCG_CMD="--bug-labels '${BUG_LABELS}' --enhancement-labels '${ENHANCEMENT_LABELS}'"
 
   if is_cmd github_changelog_generator; then
     # If release is empty is the same as `unreleased`

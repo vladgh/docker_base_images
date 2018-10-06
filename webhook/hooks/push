@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 echo "------ HOOK START - PUSH -------"
-./scripts/docker.sh push
+..scripts/docker.sh push
 if [[ "$SOURCE_BRANCH" =~ ^v[0-9]+ ]]; then
-  ./scripts/docker.sh tag
+  ../scripts/docker.sh tag
 fi
 echo "------ HOOK END - PUSH -------"
