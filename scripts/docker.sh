@@ -10,13 +10,15 @@ IFS=$'\n\t'
 [ -z "${DEBUG:-}" ] || set -x
 
 # VARs
+APPDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd -P)"
 GIT_TAG="$(git describe --always --tags)"
+GIT_BRANCH="${GIT_BRANCH:-$(git symbolic-ref --short HEAD)}" # Specify the branch name manually when on a detached HEAD
 BUILD_PATH="${BUILD_PATH:-/}"
 DOCKERFILE_PATH="${DOCKERFILE_PATH:-Dockerfile}"
 DOCKER_USERNAME="${DOCKER_USERNAME:-}"
 DOCKER_PASSWORD="${DOCKER_PASSWORD:-}"
 DOCKER_REPO="${DOCKER_REPO:-}"
-DOCKER_TAG="${DOCKER_TAG:-latest}"
+DOCKER_TAG="${DOCKER_TAG:-$(if [[ "$GIT_BRANCH" == 'master' ]]; then echo latest; else echo "$GIT_BRANCH"; fi)}"
 IMAGE_NAME="${IMAGE_NAME:-${DOCKER_REPO}:${DOCKER_TAG}}"
 
 # Generate semantic version style tags
@@ -55,7 +57,7 @@ build_image(){
 
   echo 'Build the image with the specified arguments'
   (
-  cd ".${BUILD_PATH}" # In Docker Hub this is `/` or `/dir`
+  cd "${APPDIR}${BUILD_PATH}" # In Docker Hub this is `/` or `/dir`
   docker build \
     --build-arg VERSION="$GIT_TAG" \
     --build-arg VCS_URL="$(git config --get remote.origin.url)" \
@@ -83,7 +85,6 @@ push_image(){
 #     Tag     /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/     /           {\1}
 tag_image(){
   generate_semantic_version
-  push_image
 
   for version in "${major}.${minor}.${patch}" "${major}.${minor}" "${major}"; do
     echo "Pushing version (${DOCKER_REPO}:${version})"
