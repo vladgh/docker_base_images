@@ -50,9 +50,12 @@ increment(){
   case "${1:-patch}" in
     major)
       export MAJOR=$((MAJOR+1))
+      export MINOR=0
+      export PATCH=0
       ;;
     minor)
       export MINOR=$((MINOR+1))
+      export PATCH=0
       ;;
     patch)
       export PATCH=$((PATCH+1))

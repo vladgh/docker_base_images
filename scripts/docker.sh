@@ -12,13 +12,13 @@ IFS=$'\n\t'
 # VARs
 APPDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd -P)"
 GIT_TAG="$(git describe --always --tags)"
-GIT_BRANCH="${GIT_BRANCH:-$(git symbolic-ref --short HEAD)}" # Specify the branch name manually when on a detached HEAD
+GIT_BRANCH="${GIT_BRANCH:-$(git symbolic-ref --short --quiet HEAD || echo)}" # Specify the branch name manually when on a detached HEAD
 BUILD_PATH="${BUILD_PATH:-/}"
 DOCKERFILE_PATH="${DOCKERFILE_PATH:-Dockerfile}"
 DOCKER_USERNAME="${DOCKER_USERNAME:-}"
 DOCKER_PASSWORD="${DOCKER_PASSWORD:-}"
 DOCKER_REPO="${DOCKER_REPO:-}"
-DOCKER_TAG="${DOCKER_TAG:-$(if [[ "$GIT_BRANCH" == 'master' ]]; then echo latest; else echo "$GIT_BRANCH"; fi)}"
+DOCKER_TAG="${DOCKER_TAG:-$(if [[ "$GIT_BRANCH" == 'master' ]]; then echo latest; elif [[ -n "$GIT_BRANCH" ]]; then echo "$GIT_BRANCH"; else echo "$GIT_TAG"; fi)}"
 IMAGE_NAME="${IMAGE_NAME:-${DOCKER_REPO}:${DOCKER_TAG}}"
 
 # Generate semantic version style tags
