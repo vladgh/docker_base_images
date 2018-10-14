@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
 echo '------ HOOK START - POST_PUSH -------'
-MICROBADGER_FILE=../../.microbadger ~/vgs/scripts/docker.sh notify
+# shellcheck disable=1091
+. ./.env; ~/vgs/scripts/docker.sh notify
 echo '------ HOOK END - POST_PUSH -------'
