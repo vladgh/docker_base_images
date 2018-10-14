@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-echo '------ HOOK START - POST_PUSH -------'
-../scripts/docker.sh notify
-echo '------ HOOK END - POST_PUSH -------'
