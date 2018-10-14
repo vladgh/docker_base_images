@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 echo '------ HOOK START - POST_PUSH -------'
-~/vgs/scripts/docker.sh notify
+MICROBADGER_FILE=../.microbadger ~/vgs/scripts/docker.sh notify
 echo '------ HOOK END - POST_PUSH -------'
