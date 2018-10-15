@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
 echo '------ HOOK START - POST_PUSH -------'
+set -euo pipefail
+IFS=$'\n\t'
+
 MICROBADGER_TOKENS_FILE=../.microbadger ~/vgs/scripts/docker.sh notify
 echo '------ HOOK END - POST_PUSH -------'
