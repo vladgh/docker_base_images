@@ -4,7 +4,7 @@ echo "------ HOOK START - PUSH -------"
 if [[ "$DOCKER_TAG" == 'latest' ]]; then
   ~/vgs/scripts/docker.sh push
 fi
-if [[ "$SOURCE_BRANCH" =~ ^v[0-9]+ ]]; then
+if [[ "$DOCKER_TAG" =~ ^v[0-9]+ ]]; then
   ~/vgs/scripts/docker.sh tag
 fi
 echo "------ HOOK END - PUSH -------"
