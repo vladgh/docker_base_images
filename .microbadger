@@ -18,3 +18,4 @@ declare -A MICROBADGER_TOKENS=(
   ['vladgh/s3sync']='eB40MYq66N9GQvIisktwJVOL_tw='
   ['vladgh/webhook']='tRhT7nPREdQwptZxaMHDTgrazYY='
 )
+export MICROBADGER_TOKENS
