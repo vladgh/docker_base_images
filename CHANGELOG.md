@@ -1,5 +1,22 @@
 # Change Log
 
+## [v0.3.7](https://github.com/vladgh/docker_base_images/tree/v0.3.7) (2018-10-15)
+[Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.6...v0.3.7)
+
+**Implemented enhancements:**
+
+- Push latest with tags [\#76](https://github.com/vladgh/docker_base_images/issues/76)
+- Use bash strict mode in all hooks [\#75](https://github.com/vladgh/docker_base_images/issues/75)
+- Improve hooks [\#74](https://github.com/vladgh/docker_base_images/issues/74)
+- Improve release script [\#73](https://github.com/vladgh/docker_base_images/issues/73)
+- Add release and docker scripts [\#72](https://github.com/vladgh/docker_base_images/issues/72)
+- \[puppetserver\] Use a conditional in Puppet Server for PuppetDB [\#71](https://github.com/vladgh/docker_base_images/issues/71)
+- \[backup | s3sync\] Add support for S3 Server Side Encryption \(SSE-KMS\) [\#69](https://github.com/vladgh/docker_base_images/issues/69)
+
+**Fixed bugs:**
+
+- Fix Puppet packages [\#70](https://github.com/vladgh/docker_base_images/issues/70)
+
 ## [v0.3.6](https://github.com/vladgh/docker_base_images/tree/v0.3.6) (2018-08-17)
 [Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.5...v0.3.6)
 
