@@ -4,7 +4,7 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 # Environment
 ENV PATH=/opt/puppetlabs/puppet/bin:/opt/puppetlabs/bin:/usr/local/bin:$PATH \
     PUPPET_RELEASE="puppet-release-bionic" \
-    PUPPET_AGENT_VERSION="6.0.2" \
+    PUPPET_AGENT_VERSION="6.0.3" \
     TINI_VERSION="0.18.0"
 
 # Install Puppet release package
