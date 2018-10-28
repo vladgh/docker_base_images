@@ -33,8 +33,8 @@ docker run -d --net=host \
   -p 8200:8200 \
   -v <media dir on host>:/media/audio \
   -v <media dir on host>:/media/video \
-  -e MINIDLNA_MEDIA_DIR_1=A:/media/audio \
-  -e MINIDLNA_MEDIA_DIR_2=V:/media/video \
+  -e MINIDLNA_MEDIA_DIR_1=A,/media/audio \
+  -e MINIDLNA_MEDIA_DIR_2=V,/media/video \
   -e MINIDLNA_FRIENDLY_NAME=MyMini \
   vladgh/minidlna
 ```
