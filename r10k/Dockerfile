@@ -1,11 +1,11 @@
-FROM ruby:2.5-alpine
+FROM ruby:2.6-alpine
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Install packages
 RUN apk --no-cache add bash curl git tini
 
 # Install R10K
-RUN gem install r10k --no-ri --no-rdoc
+RUN gem install r10k
 
 # Entrypoint
 COPY entrypoint.sh /
