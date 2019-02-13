@@ -4,7 +4,7 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpng-dev libjpeg-dev libxml2-dev libmcrypt-dev \
     libcurl4-gnutls-dev zlib1g-dev libicu-dev \
-    libncurses5-dev libtidy-dev ssmtp && \
+    libncurses5-dev libtidy-dev libzip-dev msmtp msmtp-mta && \
     apt-get -y autoremove && apt-get -y clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
