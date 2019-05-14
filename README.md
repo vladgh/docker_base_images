@@ -1,5 +1,8 @@
 # Vlad's Docker Base Images
 
+## Overview
+Vlad's Docker base images.
+
 ## Description
 You can find published versions of these images on [Docker Hub](https://hub.docker.com/r/vladgh):
 * [vladgh/apache](https://hub.docker.com/r/vladgh/apache)
@@ -17,36 +20,6 @@ You can find published versions of these images on [Docker Hub](https://hub.dock
 * [vladgh/r10k](https://hub.docker.com/r/vladgh/r10k)
 * [vladgh/s3sync](https://hub.docker.com/r/vladgh/s3sync)
 * [vladgh/webhook](https://hub.docker.com/r/vladgh/webhook)
-
-## Development
-### List images
-```
-bundle exec rake docker:list
-```
-
-### Lint images
-```
-bundle exec rake docker:lint
-bundle exec rake docker:{IMAGE}:lint
-```
-
-### Test images
-```
-bundle exec rake docker:spec
-bundle exec rake docker:{IMAGE}:spec
-```
-
-### Build images
-```
-bundle exec rake docker:build
-bundle exec rake docker:{IMAGE}:build
-```
-
-### Push images
-```
-bundle exec rake docker:push
-bundle exec rake docker:{IMAGE}:push
-```
 
 ## Contribute
 See [CONTRIBUTING.md](CONTRIBUTING.md) file.
