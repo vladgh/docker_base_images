@@ -1,5 +1,18 @@
 # Change Log
 
+## [v0.3.8](https://github.com/vladgh/docker_base_images/tree/v0.3.8) (2019-05-14)
+[Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.7...v0.3.8)
+
+**Implemented enhancements:**
+
+- \[r10k\] Upgrade ruby [\#81](https://github.com/vladgh/docker_base_images/issues/81)
+- Upgrade to Alpine 3.9 [\#80](https://github.com/vladgh/docker_base_images/issues/80)
+- Remove the ruby development environment [\#78](https://github.com/vladgh/docker_base_images/issues/78)
+
+**Fixed bugs:**
+
+- \[minidlna\] Fix usage example [\#77](https://github.com/vladgh/docker_base_images/pull/77) ([F1uxCapacitor](https://github.com/F1uxCapacitor))
+
 ## [v0.3.7](https://github.com/vladgh/docker_base_images/tree/v0.3.7) (2018-10-15)
 [Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.6...v0.3.7)
 
@@ -121,6 +134,7 @@
 - Improve symmetric encryption algorithm [\#23](https://github.com/vladgh/docker_base_images/issues/23)
 - Remove ASCII-armored format for the encrypted files [\#22](https://github.com/vladgh/docker_base_images/issues/22)
 - Set a very restrictive umask [\#27](https://github.com/vladgh/docker_base_images/pull/27) ([vladgh](https://github.com/vladgh))
+- Add support for Docker Swarm secrets to the backup image [\#16](https://github.com/vladgh/docker_base_images/pull/16) ([vladgh](https://github.com/vladgh))
 
 **Fixed bugs:**
 
@@ -150,7 +164,6 @@
 - Use the voxpupuli configuration for Puppet Board [\#13](https://github.com/vladgh/docker_base_images/issues/13)
 - Upgrade to Alpine 3.6 [\#12](https://github.com/vladgh/docker_base_images/issues/12)
 - Add health check to the PuppetDB [\#11](https://github.com/vladgh/docker_base_images/issues/11)
-- Add support for Docker Swarm secrets to the backup image [\#16](https://github.com/vladgh/docker_base_images/pull/16) ([vladgh](https://github.com/vladgh))
 - Refactor S3Sync to allow Docker Swarm secrets [\#14](https://github.com/vladgh/docker_base_images/pull/14) ([vladgh](https://github.com/vladgh))
 - Add PuppetBoard base image [\#9](https://github.com/vladgh/docker_base_images/pull/9) ([vladgh](https://github.com/vladgh))
 
