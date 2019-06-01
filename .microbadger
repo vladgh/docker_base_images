@@ -15,7 +15,7 @@ declare -A MICROBADGER_TOKENS=(
   ['vladgh/puppetserver']='Z8Ruox6vyG737HPGY6VKyeuL5qU='
   ['vladgh/puppetserverdb']='8d7IFiC0YkD1xJinK5UtgkQ88V0='
   ['vladgh/r10k']='OvMmZQPNL_0s5G-CYxrRmNFMDxE='
-  ['vladgh/rsyslog']=''
+  ['vladgh/rsyslog']='NIJq3gk3T8v_XS1jAYh30xS_gdo='
   ['vladgh/s3sync']='eB40MYq66N9GQvIisktwJVOL_tw='
   ['vladgh/webhook']='tRhT7nPREdQwptZxaMHDTgrazYY='
 )
