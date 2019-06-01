@@ -21,12 +21,11 @@ ARG VCS_REF
 ARG BUILD_DATE
 
 # Metadata
-LABEL org.label-schema.name="VGH PHP FPM" \
-      org.label-schema.url="$VCS_URL" \
-      org.label-schema.vendor="Vlad Ghinea" \
-      org.label-schema.license="Apache-2.0" \
-      org.label-schema.version="$VERSION" \
-      org.label-schema.vcs-url="$VCS_URL" \
-      org.label-schema.vcs-ref="$VCS_REF" \
-      org.label-schema.build-date="$BUILD_DATE" \
-      org.label-schema.docker.schema-version="1.0"
+LABEL org.opencontainers.image.title="VGH PHP FPM" \
+      org.opencontainers.image.url="$VCS_URL" \
+      org.opencontainers.image.authors="Vlad Ghinea" \
+      org.opencontainers.image.licenses="Apache-2.0" \
+      org.opencontainers.image.version="$VERSION" \
+      org.opencontainers.image.source="$VCS_URL" \
+      org.opencontainers.image.revision="$VCS_REF" \
+      org.opencontainers.image.created="$BUILD_DATE"
