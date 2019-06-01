@@ -18,6 +18,7 @@ You can find published versions of these images on [Docker Hub](https://hub.dock
 * [vladgh/puppetserver](https://hub.docker.com/r/vladgh/puppetserver)
 * [vladgh/puppetserverdb](https://hub.docker.com/r/vladgh/puppetserverdb)
 * [vladgh/r10k](https://hub.docker.com/r/vladgh/r10k)
+* [vladgh/rsyslog](https://hub.docker.com/r/vladgh/rsyslog)
 * [vladgh/s3sync](https://hub.docker.com/r/vladgh/s3sync)
 * [vladgh/webhook](https://hub.docker.com/r/vladgh/webhook)
 

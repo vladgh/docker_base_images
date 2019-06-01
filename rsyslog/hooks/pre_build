@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+echo "------ HOOK START - PRE_BUILD -------"
+set -euo pipefail
+IFS=$'\n\t'
+
+git clone https://github.com/vghn/vgs.git ~/vgs
+echo "------ HOOK END - PRE_BUILD -------"

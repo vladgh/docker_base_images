@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+echo '------ HOOK START - BUILD -------'
+set -euo pipefail
+IFS=$'\n\t'
+
+~/vgs/scripts/docker.sh build
+echo '------ HOOK END - BUILD -------'
