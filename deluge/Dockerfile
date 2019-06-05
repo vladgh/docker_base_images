@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment

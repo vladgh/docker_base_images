@@ -4,8 +4,8 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 # Install the PHP extensions we need
 RUN apt-get update && \
   apt-get install -y --no-install-recommends libpng-dev libjpeg-dev \
-    libxml2-dev libmcrypt-dev libcurl4-gnutls-dev zlib1g-dev libicu-dev g++ \
-    wget libtool apache2-dev libncurses5-dev libtidy-dev libzip-dev msmtp msmtp-mta && \
+  libxml2-dev libmcrypt-dev libcurl4-gnutls-dev zlib1g-dev libicu-dev g++ \
+  wget libtool apache2-dev libncurses5-dev libtidy-dev libzip-dev msmtp msmtp-mta && \
   docker-php-ext-install gd intl mysqli soap zip tidy opcache && \
   wget -O /tmp/mod_cloudflare.c https://www.cloudflare.com/static/misc/mod_cloudflare/mod_cloudflare.c && \
   wget -O /tmp/mod_pagespeed_64.deb https://dl-ssl.google.com/dl/linux/direct/mod-pagespeed-stable_current_amd64.deb && \
