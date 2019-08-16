@@ -12,6 +12,7 @@ AWS_S3_SSE="${AWS_S3_SSE:-false}"
 AWS_S3_SSE_KMS_KEY_ID="${AWS_S3_SSE_KMS_KEY_ID:-}"
 CRON_TIME="${CRON_TIME:-10 * * * *}"
 INITIAL_DOWNLOAD="${INITIAL_DOWNLOAD:-true}"
+SYNCEXTRA="${SYNCEXTRA:-}"
 
 # Log message
 log(){
@@ -24,7 +25,7 @@ sync_files(){
   src="${1:-}"
   dst="${2:-}"
 
-  sync_cmd='--no-progress --delete --exact-timestamps'
+  sync_cmd="--no-progress --delete --exact-timestamps $SYNCEXTRA"
 
   if [[ "$AWS_S3_SSE" == 'true' ]] || [[ "$AWS_S3_SSE" == 'aes256' ]]; then
     s3_upload_cmd+=' --sse AES256'
