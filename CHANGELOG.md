@@ -1,5 +1,18 @@
 # Change Log
 
+## [v0.3.10](https://github.com/vladgh/docker_base_images/tree/v0.3.10) (2019-08-18)
+[Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.9...v0.3.10)
+
+**Implemented enhancements:**
+
+- \[minidlna\] Fix foreground process and remove debug output [\#88](https://github.com/vladgh/docker_base_images/issues/88)
+- \[rsyslog\] Separate rsyslog image [\#85](https://github.com/vladgh/docker_base_images/issues/85)
+- \[s3sync\] Add SYNCEXTRA environment variable [\#87](https://github.com/vladgh/docker_base_images/pull/87) ([sven-codeculture](https://github.com/sven-codeculture))
+
+**Closed issues:**
+
+- Why do we install haveged? [\#86](https://github.com/vladgh/docker_base_images/issues/86)
+
 ## [v0.3.9](https://github.com/vladgh/docker_base_images/tree/v0.3.9) (2019-06-01)
 [Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.8...v0.3.9)
 
@@ -7,6 +20,7 @@
 
 - Deprecate Label-Schema in favor of OCI Image Spec [\#83](https://github.com/vladgh/docker_base_images/issues/83)
 - Add RSysLog image [\#82](https://github.com/vladgh/docker_base_images/issues/82)
+- \[r10k\] Upgrade ruby [\#81](https://github.com/vladgh/docker_base_images/issues/81)
 
 **Fixed bugs:**
 
@@ -17,7 +31,6 @@
 
 **Implemented enhancements:**
 
-- \[r10k\] Upgrade ruby [\#81](https://github.com/vladgh/docker_base_images/issues/81)
 - Upgrade to Alpine 3.9 [\#80](https://github.com/vladgh/docker_base_images/issues/80)
 - Remove the ruby development environment [\#78](https://github.com/vladgh/docker_base_images/issues/78)
 
@@ -37,6 +50,7 @@
 - Add release and docker scripts [\#72](https://github.com/vladgh/docker_base_images/issues/72)
 - \[puppetserver\] Use a conditional in Puppet Server for PuppetDB [\#71](https://github.com/vladgh/docker_base_images/issues/71)
 - \[backup | s3sync\] Add support for S3 Server Side Encryption \(SSE-KMS\) [\#69](https://github.com/vladgh/docker_base_images/issues/69)
+- Clean up health check logs [\#61](https://github.com/vladgh/docker_base_images/issues/61)
 
 **Fixed bugs:**
 
@@ -61,7 +75,6 @@
 **Implemented enhancements:**
 
 - Multiple "media\_dir" configuration not supported in MiniDLNA container [\#63](https://github.com/vladgh/docker_base_images/issues/63)
-- Clean up health check logs [\#61](https://github.com/vladgh/docker_base_images/issues/61)
 - Nest Puppet repositories [\#59](https://github.com/vladgh/docker_base_images/issues/59)
 - add multiple entrypoint support - fixes \#63 [\#64](https://github.com/vladgh/docker_base_images/pull/64) ([cwoac](https://github.com/cwoac))
 
@@ -86,7 +99,6 @@
 - Brake dependencies between base images [\#52](https://github.com/vladgh/docker_base_images/issues/52)
 - Improve testing [\#51](https://github.com/vladgh/docker_base_images/issues/51)
 - \[backup\] Add time zone and time server configuration [\#50](https://github.com/vladgh/docker_base_images/issues/50)
-- \[backup\] Avoid writing temporary files to disk [\#49](https://github.com/vladgh/docker_base_images/issues/49)
 
 **Fixed bugs:**
 
@@ -97,11 +109,15 @@
 
 **Implemented enhancements:**
 
+- \[backup\] Avoid writing temporary files to disk [\#49](https://github.com/vladgh/docker_base_images/issues/49)
 - \[backup\] Mount readonly backup folders [\#48](https://github.com/vladgh/docker_base_images/issues/48)
 - \[backup\] Improve trap functions [\#47](https://github.com/vladgh/docker_base_images/issues/47)
 - \[puppetserver\] Move storeconfigs and reports to the master section [\#46](https://github.com/vladgh/docker_base_images/issues/46)
 - \[backup\] Do not wait for the backup to finish in order to install cron [\#45](https://github.com/vladgh/docker_base_images/issues/45)
-- Allow multiple GPG recipients [\#37](https://github.com/vladgh/docker_base_images/issues/37)
+
+**Fixed bugs:**
+
+- Do not log S3 copy and sync progress [\#44](https://github.com/vladgh/docker_base_images/issues/44)
 
 ## [v0.3.2](https://github.com/vladgh/docker_base_images/tree/v0.3.2) (2017-12-23)
 [Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.1...v0.3.2)
@@ -123,6 +139,7 @@
 **Implemented enhancements:**
 
 - Backup: Allow GPG public key importing from multiple URLs [\#38](https://github.com/vladgh/docker_base_images/issues/38)
+- Allow multiple GPG recipients [\#37](https://github.com/vladgh/docker_base_images/issues/37)
 - Upgrade Tini [\#36](https://github.com/vladgh/docker_base_images/issues/36)
 - Allow GPG passphrase from environment variable or Docker Secret [\#34](https://github.com/vladgh/docker_base_images/issues/34)
 
@@ -141,12 +158,11 @@
 - Upgrade Puppet Agent [\#24](https://github.com/vladgh/docker_base_images/issues/24)
 - Improve symmetric encryption algorithm [\#23](https://github.com/vladgh/docker_base_images/issues/23)
 - Remove ASCII-armored format for the encrypted files [\#22](https://github.com/vladgh/docker_base_images/issues/22)
-- Use the voxpupuli configuration for Puppet Board [\#13](https://github.com/vladgh/docker_base_images/issues/13)
+- Remove hardcoded AWS credentials location [\#20](https://github.com/vladgh/docker_base_images/issues/20)
 - Set a very restrictive umask [\#27](https://github.com/vladgh/docker_base_images/pull/27) ([vladgh](https://github.com/vladgh))
 
 **Fixed bugs:**
 
-- Do not log S3 copy and sync progress [\#44](https://github.com/vladgh/docker_base_images/issues/44)
 - Fix GPG key importing from folder [\#32](https://github.com/vladgh/docker_base_images/issues/32)
 - Prefix gets doubled when restoring a backup so archive not copied [\#30](https://github.com/vladgh/docker_base_images/issues/30)
 
@@ -156,7 +172,6 @@
 **Implemented enhancements:**
 
 - Adhere to recommended community standards [\#21](https://github.com/vladgh/docker_base_images/issues/21)
-- Remove hardcoded AWS credentials location [\#20](https://github.com/vladgh/docker_base_images/issues/20)
 - Use the new Puppet rolling repos [\#19](https://github.com/vladgh/docker_base_images/issues/19)
 - Allow restore single file from backup [\#18](https://github.com/vladgh/docker_base_images/issues/18)
 
@@ -170,6 +185,7 @@
 **Implemented enhancements:**
 
 - Refactor Backup image for Docker Swarm secrets [\#15](https://github.com/vladgh/docker_base_images/issues/15)
+- Use the voxpupuli configuration for Puppet Board [\#13](https://github.com/vladgh/docker_base_images/issues/13)
 - Upgrade to Alpine 3.6 [\#12](https://github.com/vladgh/docker_base_images/issues/12)
 - Add health check to the PuppetDB [\#11](https://github.com/vladgh/docker_base_images/issues/11)
 - Add support for Docker Swarm secrets to the backup image [\#16](https://github.com/vladgh/docker_base_images/pull/16) ([vladgh](https://github.com/vladgh))
