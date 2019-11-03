@@ -1,8 +1,9 @@
 # MiniDLNA ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/master/minidlna))
-[![](https://images.microbadger.com/badges/image/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna "Get your own image badge on microbadger.com")
-[![](https://images.microbadger.com/badges/version/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna "Get your own version badge on microbadger.com")
-[![](https://images.microbadger.com/badges/commit/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna "Get your own commit badge on microbadger.com")
-[![](https://images.microbadger.com/badges/license/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna "Get your own license badge on microbadger.com")
+
+[![Image](https://images.microbadger.com/badges/image/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna)
+[![Version](https://images.microbadger.com/badges/version/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna)
+[![Commit](https://images.microbadger.com/badges/commit/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna)
+[![License](https://images.microbadger.com/badges/license/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna)
 
 This is MiniDLNA on top of minimal Alpine.
 It can be configured with environment variables.
@@ -12,6 +13,7 @@ It can be configured with environment variables.
 Prefix any configuration directive of MiniDLNA with `MINIDLNA_`
 and run your container:
 
+```sh
 docker run -d \
   --net=host \
   -v <media dir on host>:/media \
@@ -26,9 +28,10 @@ Note: You need to run the container in host mode for it to be able to receive UP
 
 Any environment variable starting with `MINIDLNA_MEDIA_DIR` will be treated as
 an additional `media_dir` directive and any suffix in the variable name will
-be trimmed (ex: `MINIDLNA_MEDIA_DIR_1`). This way you can eclare multiple
+be trimmed (ex: `MINIDLNA_MEDIA_DIR_1`). This way you can declare multiple
 `media_dir` directives
 
+```sh
 docker run -d \
   --net=host \
   -v <media dir on host>:/media/audio \
@@ -39,4 +42,4 @@ docker run -d \
   vladgh/minidlna
 ```
 
-See: http://manpages.ubuntu.com/manpages/raring/man5/minidlna.conf.5.html
+See: <http://manpages.ubuntu.com/manpages/raring/man5/minidlna.conf.5.html>
