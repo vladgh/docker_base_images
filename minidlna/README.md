@@ -12,14 +12,15 @@ It can be configured with environment variables.
 Prefix any configuration directive of MiniDLNA with `MINIDLNA_`
 and run your container:
 
-```
-docker run -d --net=host \
-  -p 8200:8200 \
+docker run -d \
+  --net=host \
   -v <media dir on host>:/media \
   -e MINIDLNA_MEDIA_DIR=/media \
   -e MINIDLNA_FRIENDLY_NAME=MyMini \
   vladgh/minidlna
 ```
+
+Note: You need to run the container in host mode for it to be able to receive UPnP broadcast packets. The default bridge mode will not work.
 
 ### Multiple Media dirs
 
@@ -28,9 +29,8 @@ an additional `media_dir` directive and any suffix in the variable name will
 be trimmed (ex: `MINIDLNA_MEDIA_DIR_1`). This way you can eclare multiple
 `media_dir` directives
 
-```
-docker run -d --net=host \
-  -p 8200:8200 \
+docker run -d \
+  --net=host \
   -v <media dir on host>:/media/audio \
   -v <media dir on host>:/media/video \
   -e MINIDLNA_MEDIA_DIR_1=A,/media/audio \
