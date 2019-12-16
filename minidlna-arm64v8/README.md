@@ -1,4 +1,4 @@
-# MiniDLNA ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/master/minidlna))
+# MiniDLNA ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/master/minidlna-arm64v8))
 
 [![Image](https://images.microbadger.com/badges/image/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna)
 [![Version](https://images.microbadger.com/badges/version/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna)
@@ -19,7 +19,7 @@ docker run -d \
   -v <media dir on host>:/media \
   -e MINIDLNA_MEDIA_DIR=/media \
   -e MINIDLNA_FRIENDLY_NAME=MyMini \
-  vladgh/minidlna
+  vladgh/minidlna-arm64v8
 ```
 
 Note: You need to run the container in host mode for it to be able to receive UPnP broadcast packets. The default bridge mode will not work.
@@ -39,7 +39,7 @@ docker run -d \
   -e MINIDLNA_MEDIA_DIR_1=A,/media/audio \
   -e MINIDLNA_MEDIA_DIR_2=V,/media/video \
   -e MINIDLNA_FRIENDLY_NAME=MyMini \
-  vladgh/minidlna
+  vladgh/minidlna-arm64v8
 ```
 
 See: <http://manpages.ubuntu.com/manpages/raring/man5/minidlna.conf.5.html>
