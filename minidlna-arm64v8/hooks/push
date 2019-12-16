@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+echo "------ HOOK START - PUSH -------"
+set -euo pipefail
+IFS=$'\n\t'
+
+if [[ "$DOCKER_TAG" == 'latest' ]]; then
+  ~/vgs/scripts/docker.sh push
+fi
+
+if [[ "$DOCKER_TAG" =~ ^v[0-9]+ ]]; then
+  ~/vgs/scripts/docker.sh push
+  ~/vgs/scripts/docker.sh tag
+fi
+echo "------ HOOK END - PUSH -------"
