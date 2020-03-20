@@ -4,6 +4,13 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 # Install packages
 RUN apk --no-cache add bash minidlna tini
 
+#Set User to MiniDLNA, to prevent it from running as root user
+#We set the read/write permissions to everyone to give the user the possibility to run the container as any desired user 
+RUN chown minidlna:minidlna /etc/minidlna.conf && chmod ugo+w /etc/minidlna.conf
+RUN mkdir /minidlna && chown minidlna:minidlna /minidlna && chmod 777 /minidlna
+USER minidlna
+RUN mkdir /minidlna/cache && chmod 777 /minidlna/cache
+
 # Entrypoint
 COPY entrypoint.sh /
 ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
