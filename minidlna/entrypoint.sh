@@ -3,9 +3,10 @@
 # Bash strict mode
 set -euo pipefail
 IFS=$'\n\t'
+pidfile="/minidlna/minidlna.pid"
 
 # Remove old pid if it exists
-[ -f /var/run/minidlna/minidlna.pid ] && rm -f /var/run/minidlna/minidlna.pid
+[ -f $pidfile ] && rm -f $pidfile
 
 # Change configuration
 : > /etc/minidlna.conf
@@ -20,6 +21,9 @@ for VAR in $(env); do
     echo "${minidlna_name}=${minidlna_value}" >> /etc/minidlna.conf
   fi
 done
+# Directories have to be in a writeable place
+echo "db_dir=/minidlna/cache" >> /etc/minidlna.conf
+echo "log_dir=/minidlna/" >>/etc/minidlna.conf
 
 # Start daemon
-exec /usr/sbin/minidlnad -S "$@"
+exec /usr/sbin/minidlnad -P $pidfile -S "$@"
