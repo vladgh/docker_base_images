@@ -1,10 +1,13 @@
 # Vlad's Docker Base Images
 
 ## Overview
+
 Vlad's Docker base images.
 
 ## Description
+
 You can find published versions of these images on [Docker Hub](https://hub.docker.com/r/vladgh):
+
 * [vladgh/apache](https://hub.docker.com/r/vladgh/apache)
 * [vladgh/awscli](https://hub.docker.com/r/vladgh/awscli)
 * [vladgh/backup](https://hub.docker.com/r/vladgh/backup)
@@ -22,8 +25,10 @@ You can find published versions of these images on [Docker Hub](https://hub.dock
 * [vladgh/webhook](https://hub.docker.com/r/vladgh/webhook)
 
 ## Contribute
+
 See [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ## License
+
 Licensed under the Apache License, Version 2.0.
 See [LICENSE](LICENSE) file.
