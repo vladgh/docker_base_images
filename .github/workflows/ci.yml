@@ -1,0 +1,137 @@
+name: Docker Image CI
+
+on: push
+
+jobs:
+  build:
+    name: Build Docker images
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - repo: vladgh/apache
+            path: apache
+            platform: linux/amd64
+            token: 1LIUNGTtioEcpHJoQZzwK3qQPhE=
+            version: '0.4.0'
+          - repo: vladgh/awscli
+            path: awscli
+            platform: linux/amd64
+            token: mbMppUV6he_zmIGik-MeJ22K8a0=
+            version: '0.4.0'
+          - repo: vladgh/backup
+            path: backup
+            platform: linux/amd64
+            token: ZjbRHMtrAhl9V2MWjWmOR0KWlGc=
+            version: '0.4.0'
+          - repo: vladgh/deluge
+            path: deluge
+            platform: linux/amd64
+            token: BvOV7ec7tt2N207sgMKqFrGzSxs=
+            version: '0.4.0'
+          - repo: vladgh/fpm
+            path: fpm
+            platform: linux/amd64
+            token: OG17Glgq8CvSRFJjkK5vdC_pn_A=
+            version: '0.4.0'
+          - repo: vladgh/gpg
+            path: gpg
+            platform: linux/amd64
+            token: Sg_CkaULmDjZ0K3u5W1mIqXlkOk=
+            version: '0.4.0'
+          - repo: vladgh/minidlna
+            path: minidlna
+            platform: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
+            token: Qr9rUtKpdDGoUVh3tGwGTBzSmQ8=
+            version: '0.4.0'
+          - repo: vladgh/puppet
+            path: puppet
+            platform: linux/amd64
+            token: uj5nZE_tFQ3DyNFvERhnamfJbis=
+            version: '0.4.0'
+          - repo: vladgh/puppetboard
+            path: puppetboard
+            platform: linux/amd64
+            token: hS1FQBmTy1gQvGTzzBbGVkeGEYs=
+            version: '0.4.0'
+          - repo: vladgh/puppetdb
+            path: puppetdb
+            platform: linux/amd64
+            token: eLBcOfMSKHB7seTlBGvZD8VjK4A=
+            version: '0.4.0'
+          - repo: vladgh/puppetserver
+            path: puppetserver
+            platform: linux/amd64
+            token: Z8Ruox6vyG737HPGY6VKyeuL5qU=
+            version: '0.4.0'
+          - repo: vladgh/puppetserverdb
+            path: puppetserverdb
+            platform: linux/amd64
+            token: 8d7IFiC0YkD1xJinK5UtgkQ88V0=
+            version: '0.4.0'
+          - repo: vladgh/r10k
+            path: r10k
+            platform: linux/amd64
+            token: OvMmZQPNL_0s5G-CYxrRmNFMDxE=
+            version: '0.4.0'
+          - repo: vladgh/s3sync
+            path: s3sync
+            platform: linux/amd64
+            token: eB40MYq66N9GQvIisktwJVOL_tw=
+            version: '0.4.0'
+          - repo: vladgh/webhook
+            path: webhook
+            platform: linux/amd64
+            token: tRhT7nPREdQwptZxaMHDTgrazYY=
+            version: '0.4.0'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set VARs
+        run: |
+          echo ::set-env name=VERSION::"${{ matrix.image.version }}"
+          echo ::set-env name=GITHUB_SHA::"${{ github.sha }}"
+          echo ::set-env name=GITHUB_REF::"${{ github.ref }}"
+          echo ::set-env name=GITHUB_EVENT::"${{ github.event_name }}"
+          echo ::set-env name=DOCKER_REPO::"${{ matrix.image.repo }}"
+          echo ::set-env name=DOCKER_PLATFORM::"${{ matrix.image.platform }}"
+          echo ::set-env name=DOCKER_BUILD_PATH::"${{ matrix.image.path }}"
+          echo ::set-env name=MICROBADGER_TOKEN::"${{ matrix.image.token }}"
+      - name: Set up Docker Buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
+        with:
+          buildx-version: latest
+          qemu-version: latest
+      - name: Docker login
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Build/tag/push image
+        run: |
+          # Always tag with the short SHA of commit
+          export DOCKER_TAGS="--tag ${DOCKER_REPO}:${GITHUB_SHA::8}"
+          # Publish 'latest' and semantic tags only if pushing to 'master'
+          if [[ "$GITHUB_REF" == 'refs/heads/master' && "$GITHUB_EVENT" == 'push' ]]; then
+            export DOCKER_TAGS="${DOCKER_TAGS} --tag ${DOCKER_REPO}:latest"
+            # Look for the version tag in the registry and if it does not exist, create all other semantic version tags for it
+            if ! curl --fail --silent "https://hub.docker.com/v2/repositories/${DOCKER_REPO}/tags/${VERSION}/" >/dev/null; then
+              IFS="." read -r -a semver <<< "$VERSION"
+              export major="${semver[0]}" minor="${semver[1]}" patch="${semver[2]}"
+              for version in "${major}.${minor}.${patch}" "${major}.${minor}" "${major}"; do
+                export DOCKER_TAGS="${DOCKER_TAGS} --tag ${DOCKER_REPO}:${version}"
+              done
+            fi
+          fi
+          # Build/tag/push image
+          eval docker buildx build --rm --pull --push \
+            --build-arg VERSION="$VERSION" \
+            --build-arg VCS_URL="$(git config --get remote.origin.url)" \
+            --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
+            --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+            --platform "${DOCKER_PLATFORM}" \
+            "${DOCKER_TAGS}" \
+            "${DOCKER_BUILD_PATH}"
+      - name: Notify MicroBadger
+        run: |
+          if [[ -n "$MICROBADGER_TOKEN" ]]; then
+            curl --request POST --silent --fail "https://hooks.microbadger.com/images/${DOCKER_REPO}/${MICROBADGER_TOKEN}"
+          fi
