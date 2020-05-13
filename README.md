@@ -1,5 +1,7 @@
 # Vlad's Docker Base Images
 
+![Build Status](https://github.com/vladgh/docker_base_images/workflows/CI/badge.svg)
+
 ## Overview
 
 Vlad's Docker base images.
