@@ -1,11 +1,11 @@
-FROM alpine:3.10
+FROM alpine:3
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
 ENV AWS_DEFAULT_REGION=us-east-1
 
 # Install packages
-RUN apk --no-cache add bash findutils git groff less python tini
+RUN apk --no-cache add bash findutils git groff less python3 tini
 
 # Install pip packages
 RUN apk --no-cache add --virtual build-dependencies py-pip && \

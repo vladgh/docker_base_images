@@ -1,11 +1,11 @@
-FROM alpine:3.10
+FROM alpine:3
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
 ENV AWS_DEFAULT_REGION=us-east-1
 
 # Install packages
-RUN apk --no-cache add bash curl findutils groff less python tini tzdata gnupg haveged xz
+RUN apk --no-cache add bash curl findutils groff less python3 tini tzdata gnupg haveged xz
 
 # Install AWS CLI
 RUN apk --no-cache add --virtual build-dependencies py-pip && \
