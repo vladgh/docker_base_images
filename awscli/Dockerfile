@@ -5,7 +5,7 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 ENV AWS_DEFAULT_REGION=us-east-1
 
 # Install packages
-RUN apk --no-cache add bash findutils git groff less python tini
+RUN apk --no-cache add bash findutils git groff less python3 tini
 
 # Install pip packages
 RUN apk --no-cache add --virtual build-dependencies py-pip && \
