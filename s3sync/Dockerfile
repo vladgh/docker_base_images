@@ -5,12 +5,7 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 ENV AWS_DEFAULT_REGION=us-east-1
 
 # Install packages
-RUN apk --no-cache add bash findutils groff less python3 tini inotify-tools
-
-# Install AWS CLI
-RUN apk --no-cache add --virtual build-dependencies py-pip && \
-    pip --no-cache-dir install awscli && \
-    apk del build-dependencies
+RUN apk --no-cache add aws-cli bash findutils groff less tini inotify-tools
 
 # Entrypoint
 COPY entrypoint.sh /
