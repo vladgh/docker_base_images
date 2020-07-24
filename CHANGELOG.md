@@ -1,5 +1,19 @@
 # Changelog
 
+## [v0.4.0](https://github.com/vladgh/docker_base_images/tree/v0.4.0) (2020-07-24)
+
+[Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.11...v0.4.0)
+
+**Implemented enhancements:**
+
+- \[s3ync\] Use the Alpine AWS CLI package [\#99](https://github.com/vladgh/docker_base_images/pull/99) ([vladgh](https://github.com/vladgh))
+- Update CI badge [\#96](https://github.com/vladgh/docker_base_images/pull/96) ([vladgh](https://github.com/vladgh))
+- Use GitHub Actions [\#95](https://github.com/vladgh/docker_base_images/pull/95) ([vladgh](https://github.com/vladgh))
+
+**Fixed bugs:**
+
+- \[s3sync\] ModuleNotFoundError: No module named 'six' [\#98](https://github.com/vladgh/docker_base_images/issues/98)
+
 ## [v0.3.11](https://github.com/vladgh/docker_base_images/tree/v0.3.11) (2020-04-28)
 
 [Full Changelog](https://github.com/vladgh/docker_base_images/compare/v0.3.10...v0.3.11)
@@ -98,6 +112,7 @@
 - Multiple "media\_dir" configuration not supported in MiniDLNA container [\#63](https://github.com/vladgh/docker_base_images/issues/63)
 - Clean up health check logs [\#61](https://github.com/vladgh/docker_base_images/issues/61)
 - Nest Puppet repositories [\#59](https://github.com/vladgh/docker_base_images/issues/59)
+- Update Alpine to major version 3 [\#97](https://github.com/vladgh/docker_base_images/pull/97) ([vladgh](https://github.com/vladgh))
 - add multiple entrypoint support - fixes \#63 [\#64](https://github.com/vladgh/docker_base_images/pull/64) ([cwoac](https://github.com/cwoac))
 
 **Fixed bugs:**
