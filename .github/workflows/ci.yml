@@ -94,10 +94,10 @@ jobs:
           echo "GITHUB_SHA='${{ github.sha }}'" >> $GITHUB_ENV
           echo "GITHUB_REF='${{ github.ref }}'" >> $GITHUB_ENV
           echo "GITHUB_EVENT='${{ github.event_name }}'" >> $GITHUB_ENV
-          echo "DOCKER_REPO='${{ matrix.image.repo }}'" >> $GITHUB_ENV
+          echo "DOCKER_REPO=${{ matrix.image.repo }}" >> $GITHUB_ENV
           echo "DOCKER_PLATFORM='${{ matrix.image.platform }}'" >> $GITHUB_ENV
           echo "DOCKER_BUILD_PATH='${{ matrix.image.path }}'" >> $GITHUB_ENV
-          echo "MICROBADGER_TOKEN='${{ matrix.image.token }}'" >> $GITHUB_ENV
+          echo "MICROBADGER_TOKEN=${{ matrix.image.token }}" >> $GITHUB_ENV
       - name: Set up Docker Buildx
         id: buildx
         uses: crazy-max/ghaction-docker-buildx@v3
