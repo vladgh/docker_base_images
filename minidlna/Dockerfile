@@ -1,25 +1,8 @@
 FROM alpine:3
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
-ARG USERNAME=minidlna
-ARG GROUPNAME=minidlna
-ARG USER_UID=1000
-ARG USER_GID="$USER_UID"
-
-# Create the user (before installing the package in order to preserver UID and GID)
-RUN addgroup --gid "$USER_GID" "$GROUPNAME" && \
-    adduser --disabled-password --ingroup "$GROUPNAME" --uid "$USER_UID" "$USERNAME"
-
-# Install packages
-RUN apk --no-cache add bash curl minidlna tini
-
-# We set the read/write permissions to everyone to give the user the possibility to run the container as any desired user
-RUN mkdir -p /minidlna/cache && \
-    chown -R "${USERNAME}:${GROUPNAME}" /etc/minidlna.conf /minidlna/cache && \
-    chmod 777 /etc/minidlna.conf /minidlna
-
-# Run as user
-USER "$USERNAME"
+# Install
+RUN apk --no-cache add bash curl minidlna tini shadow su-exec
 
 # Entrypoint
 COPY entrypoint.sh /
