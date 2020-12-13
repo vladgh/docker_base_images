@@ -10,11 +10,11 @@ jobs:
       fail-fast: false
       matrix:
         image:
-          - repo: vladgh/apache
-            path: apache
-            platform: linux/amd64
-            token: 1LIUNGTtioEcpHJoQZzwK3qQPhE=
-            version: '0.4.0'
+          # - repo: vladgh/apache
+          #   path: apache
+          #   platform: linux/amd64
+          #   token: 1LIUNGTtioEcpHJoQZzwK3qQPhE=
+          #   version: '0.4.0'
           - repo: vladgh/awscli
             path: awscli
             platform: linux/amd64
@@ -30,11 +30,11 @@ jobs:
             platform: linux/amd64
             token: BvOV7ec7tt2N207sgMKqFrGzSxs=
             version: '0.4.0'
-          - repo: vladgh/fpm
-            path: fpm
-            platform: linux/amd64
-            token: OG17Glgq8CvSRFJjkK5vdC_pn_A=
-            version: '0.4.0'
+          # - repo: vladgh/fpm
+          #   path: fpm
+          #   platform: linux/amd64
+          #   token: OG17Glgq8CvSRFJjkK5vdC_pn_A=
+          #   version: '0.4.0'
           - repo: vladgh/gpg
             path: gpg
             platform: linux/amd64
@@ -45,46 +45,46 @@ jobs:
             platform: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
             token: Qr9rUtKpdDGoUVh3tGwGTBzSmQ8=
             version: '0.4.0'
-          - repo: vladgh/puppet
-            path: puppet
-            platform: linux/amd64
-            token: uj5nZE_tFQ3DyNFvERhnamfJbis=
-            version: '0.4.0'
-          - repo: vladgh/puppetboard
-            path: puppetboard
-            platform: linux/amd64
-            token: hS1FQBmTy1gQvGTzzBbGVkeGEYs=
-            version: '0.4.0'
-          - repo: vladgh/puppetdb
-            path: puppetdb
-            platform: linux/amd64
-            token: eLBcOfMSKHB7seTlBGvZD8VjK4A=
-            version: '0.4.0'
-          - repo: vladgh/puppetserver
-            path: puppetserver
-            platform: linux/amd64
-            token: Z8Ruox6vyG737HPGY6VKyeuL5qU=
-            version: '0.4.0'
-          - repo: vladgh/puppetserverdb
-            path: puppetserverdb
-            platform: linux/amd64
-            token: 8d7IFiC0YkD1xJinK5UtgkQ88V0=
-            version: '0.4.0'
-          - repo: vladgh/r10k
-            path: r10k
-            platform: linux/amd64
-            token: OvMmZQPNL_0s5G-CYxrRmNFMDxE=
-            version: '0.4.0'
+          # - repo: vladgh/puppet
+          #   path: puppet
+          #   platform: linux/amd64
+          #   token: uj5nZE_tFQ3DyNFvERhnamfJbis=
+          #   version: '0.4.0'
+          # - repo: vladgh/puppetboard
+          #   path: puppetboard
+          #   platform: linux/amd64
+          #   token: hS1FQBmTy1gQvGTzzBbGVkeGEYs=
+          #   version: '0.4.0'
+          # - repo: vladgh/puppetdb
+          #   path: puppetdb
+          #   platform: linux/amd64
+          #   token: eLBcOfMSKHB7seTlBGvZD8VjK4A=
+          #   version: '0.4.0'
+          # - repo: vladgh/puppetserver
+          #   path: puppetserver
+          #   platform: linux/amd64
+          #   token: Z8Ruox6vyG737HPGY6VKyeuL5qU=
+          #   version: '0.4.0'
+          # - repo: vladgh/puppetserverdb
+          #   path: puppetserverdb
+          #   platform: linux/amd64
+          #   token: 8d7IFiC0YkD1xJinK5UtgkQ88V0=
+          #   version: '0.4.0'
+          # - repo: vladgh/r10k
+          #   path: r10k
+          #   platform: linux/amd64
+          #   token: OvMmZQPNL_0s5G-CYxrRmNFMDxE=
+          #   version: '0.4.0'
           - repo: vladgh/s3sync
             path: s3sync
             platform: linux/amd64
             token: eB40MYq66N9GQvIisktwJVOL_tw=
             version: '0.4.0'
-          - repo: vladgh/webhook
-            path: webhook
-            platform: linux/amd64
-            token: tRhT7nPREdQwptZxaMHDTgrazYY=
-            version: '0.4.0'
+          # - repo: vladgh/webhook
+          #   path: webhook
+          #   platform: linux/amd64
+          #   token: tRhT7nPREdQwptZxaMHDTgrazYY=
+          #   version: '0.4.0'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
