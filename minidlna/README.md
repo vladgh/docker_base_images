@@ -24,6 +24,19 @@ docker run -d \
 
 Note: You need to run the container in host mode for it to be able to receive UPnP broadcast packets. The default bridge mode will not work.
 
+Specify the user ID (UID) and group ID (GID):
+
+```sh
+docker run -d \
+  --net=host \
+  -v <media dir on host>:/media \
+  -e PUID=1000 \
+  -e PGID=1000 \
+  -e MINIDLNA_MEDIA_DIR=/media \
+  -e MINIDLNA_FRIENDLY_NAME=MyMini \
+  vladgh/minidlna
+```
+
 ### Multiple Media dirs
 
 Any environment variable starting with `MINIDLNA_MEDIA_DIR` will be treated as
