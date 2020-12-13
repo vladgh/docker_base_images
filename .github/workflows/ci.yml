@@ -104,8 +104,12 @@ jobs:
         with:
           buildx-version: latest
           qemu-version: latest
-      - name: Docker login
-        run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login --username "${DOCKER_REPO%%/*}" --password-stdin
+      - name: Login to DockerHub
+        if: success() && github.event_name != 'pull_request'
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build/tag/push image
         run: |
           # Always tag with the short SHA of commit
