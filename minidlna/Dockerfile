@@ -6,6 +6,7 @@ RUN apk --no-cache add bash curl minidlna tini shadow su-exec
 
 # Entrypoint
 COPY entrypoint.sh /
+RUN chmod 777 entrypoint.sh
 ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
 
 # Health check
