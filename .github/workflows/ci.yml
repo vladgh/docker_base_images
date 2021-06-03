@@ -44,7 +44,7 @@ jobs:
             path: minidlna
             platform: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
             token: Qr9rUtKpdDGoUVh3tGwGTBzSmQ8=
-            version: '0.5.0'
+            version: '0.5.1'
           # - repo: vladgh/puppet
           #   path: puppet
           #   platform: linux/amd64

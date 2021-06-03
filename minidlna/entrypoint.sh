@@ -5,6 +5,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # VARs
+TZ="${TZ:-UTC}"
 PUID="${PUID:-100}"
 PGID="${PGID:-101}"
 PIDFILE="/minidlna/minidlna.pid"
@@ -35,6 +36,9 @@ echo "log_dir=/minidlna/" >>/etc/minidlna.conf
 # Set permissions
 mkdir -p /minidlna/cache
 chown -R "${PUID}:${PGID}" /minidlna
+
+# Set timezone
+setup-timezone -z "$TZ"
 
 # Start daemon
 exec su-exec minidlna /usr/sbin/minidlnad -P "$PIDFILE" -S "$@"
