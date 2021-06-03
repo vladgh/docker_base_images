@@ -2,7 +2,7 @@ FROM alpine:3
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Install
-RUN apk --no-cache add bash curl minidlna tini shadow su-exec
+RUN apk --no-cache add bash curl minidlna tini shadow su-exec alpine-conf
 
 # Entrypoint
 COPY entrypoint.sh /

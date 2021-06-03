@@ -37,6 +37,18 @@ docker run -d \
   vladgh/minidlna
 ```
 
+Specify the timezone (defaults to UTC; <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>):
+
+```sh
+docker run -d \
+  --net=host \
+  -v <media dir on host>:/media \
+  -e TZ=US/Central \
+  -e MINIDLNA_MEDIA_DIR=/media \
+  -e MINIDLNA_FRIENDLY_NAME=MyMini \
+  vladgh/minidlna
+```
+
 ### Multiple Media dirs
 
 Any environment variable starting with `MINIDLNA_MEDIA_DIR` will be treated as
