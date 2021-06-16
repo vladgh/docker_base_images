@@ -56,8 +56,8 @@ jobs:
         run: |
           # Always tag with the short SHA of commit
           export DOCKER_TAGS="--tag ${DOCKER_REPO}:${GITHUB_SHA::8}"
-          # Publish 'latest' and semantic tags only if pushing to 'master'
-          if [[ "$GITHUB_REF" == 'refs/heads/master' && "$GITHUB_EVENT" == 'push' ]]; then
+          # Publish 'latest' and semantic tags only if pushing to 'main'
+          if [[ "$GITHUB_REF" == 'refs/heads/main' && "$GITHUB_EVENT" == 'push' ]]; then
             export DOCKER_TAGS="${DOCKER_TAGS} --tag ${DOCKER_REPO}:latest"
             # Look for the version tag in the registry and if it does not exist, create all other semantic version tags for it
             if ! curl --fail --silent "https://hub.docker.com/v2/repositories/${DOCKER_REPO}/tags/${VERSION}/" >/dev/null; then
