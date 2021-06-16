@@ -5,6 +5,8 @@
 [![badge](https://images.microbadger.com/badges/commit/vladgh/backup.svg)](https://microbadger.com/images/vladgh/backup)
 [![badge](https://images.microbadger.com/badges/license/vladgh/backup.svg)](https://microbadger.com/images/vladgh/backup)
 
+## **⚠️ This project is no longer supported!**
+
 ## Environment variables
 
 - `AWS_S3_BUCKET`: the name of the AWS S3 bucket (defaults to backup_{ID})

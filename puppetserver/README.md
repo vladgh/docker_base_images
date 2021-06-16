@@ -5,6 +5,8 @@
 [![badge](https://images.microbadger.com/badges/commit/vladgh/puppetserver.svg)](https://microbadger.com/images/vladgh/puppetserver)
 [![badge](https://images.microbadger.com/badges/license/vladgh/puppetserver.svg)](https://microbadger.com/images/vladgh/puppetserver)
 
+## **⚠️ This project is no longer supported!**
+
 ## Available environment variables
 
 ### `PUPPETDB` [Boolean]

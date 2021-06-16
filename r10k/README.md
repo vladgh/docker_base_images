@@ -4,6 +4,8 @@
 [![](https://images.microbadger.com/badges/commit/vladgh/r10k.svg)](https://microbadger.com/images/vladgh/r10k "Get your own version badge on microbadger.com")
 [![](https://images.microbadger.com/badges/license/vladgh/r10k.svg)](https://microbadger.com/images/vladgh/r10k "Get your own version badge on microbadger.com")
 
+## **⚠️ This project is no longer supported!**
+
 ## Source
 https://github.com/puppetlabs/r10k
 
