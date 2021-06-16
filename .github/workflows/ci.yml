@@ -16,15 +16,15 @@ jobs:
         image:
           - repo: vladgh/gpg
             path: gpg
-            platform: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
+            platform: linux/amd64,linux/386,linux/arm/v6,linux/arm/v7,linux/arm64/v8
             mb_token: Sg_CkaULmDjZ0K3u5W1mIqXlkOk=
           - repo: vladgh/minidlna
             path: minidlna
-            platform: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
+            platform: linux/amd64,linux/386,linux/arm/v6,linux/arm/v7,linux/arm64/v8
             mb_token: Qr9rUtKpdDGoUVh3tGwGTBzSmQ8=
           - repo: vladgh/s3sync
             path: s3sync
-            platform: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
+            platform: linux/amd64,linux/386,linux/arm/v6,linux/arm/v7,linux/arm64/v8
             mb_token: eB40MYq66N9GQvIisktwJVOL_tw=
     steps:
       - name: Checkout
@@ -37,8 +37,9 @@ jobs:
             path:
               - "${{ matrix.image.path }}/**"
       - name: Docker MetaData
-        id: meta
         uses: docker/metadata-action@v3.3.0
+        id: meta
+        if: steps.changes.outputs.path == 'true'
         with:
           images: ${{ matrix.image.repo }}
           tags: |
