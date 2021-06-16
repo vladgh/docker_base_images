@@ -1,4 +1,4 @@
-# S3Sync Docker Image ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/master/s3sync))
+# S3Sync Docker Image ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/main/s3sync))
 
 [![badge](https://images.microbadger.com/badges/image/vladgh/s3sync.svg)](https://microbadger.com/images/vladgh/s3sync)
 [![badge](https://images.microbadger.com/badges/version/vladgh/s3sync.svg)](https://microbadger.com/images/vladgh/s3sync)

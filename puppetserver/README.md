@@ -1,4 +1,4 @@
-# PuppetServer Docker Image ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/master/puppetserver))
+# PuppetServer Docker Image ([Dockerfile](Dockerfile))
 
 [![badge](https://images.microbadger.com/badges/image/vladgh/puppetserver.svg)](https://microbadger.com/images/vladgh/puppetserver)
 [![badge](https://images.microbadger.com/badges/version/vladgh/puppetserver.svg)](https://microbadger.com/images/vladgh/puppetserver)

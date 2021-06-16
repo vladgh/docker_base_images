@@ -1,4 +1,4 @@
-# MiniDLNA ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/master/minidlna))
+# MiniDLNA ([Dockerfile](Dockerfile))
 
 [![Image](https://images.microbadger.com/badges/image/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna)
 [![Version](https://images.microbadger.com/badges/version/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna)

@@ -1,4 +1,4 @@
-# Apache Docker Image ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/master/apache))
+# Apache Docker Image ([Dockerfile](Dockerfile))
 [![](https://images.microbadger.com/badges/image/vladgh/apache.svg)](https://microbadger.com/images/vladgh/apache "Get your own image badge on microbadger.com")
 [![](https://images.microbadger.com/badges/version/vladgh/apache.svg)](https://microbadger.com/images/vladgh/apache "Get your own version badge on microbadger.com")
 [![](https://images.microbadger.com/badges/commit/vladgh/apache.svg)](https://microbadger.com/images/vladgh/apache "Get your own commit badge on microbadger.com")

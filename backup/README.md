@@ -1,4 +1,4 @@
-# Backup Docker Image ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/master/backup))
+# Backup Docker Image ([Dockerfile](Dockerfile))
 
 [![badge](https://images.microbadger.com/badges/image/vladgh/backup.svg)](https://microbadger.com/images/vladgh/backup)
 [![badge](https://images.microbadger.com/badges/version/vladgh/backup.svg)](https://microbadger.com/images/vladgh/backup)
