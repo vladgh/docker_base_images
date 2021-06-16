@@ -23,7 +23,6 @@ jobs:
             minidlna: 'minidlna/**'
             s3sync: 's3sync/**'
 
-jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
