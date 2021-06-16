@@ -3,3 +3,5 @@
 [![](https://images.microbadger.com/badges/version/vladgh/puppetboard.svg)](https://microbadger.com/images/vladgh/puppetboard "Get your own version badge on microbadger.com")
 [![](https://images.microbadger.com/badges/commit/vladgh/puppetboard.svg)](https://microbadger.com/images/vladgh/puppetboard "Get your own version badge on microbadger.com")
 [![](https://images.microbadger.com/badges/license/vladgh/puppetboard.svg)](https://microbadger.com/images/vladgh/puppetboard "Get your own version badge on microbadger.com")
+
+## **⚠️ This project is no longer supported!**

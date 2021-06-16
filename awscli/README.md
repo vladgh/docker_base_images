@@ -4,6 +4,8 @@
 [![](https://images.microbadger.com/badges/commit/vladgh/awscli.svg)](https://microbadger.com/images/vladgh/awscli "Get your own commit badge on microbadger.com")
 [![](https://images.microbadger.com/badges/license/vladgh/awscli.svg)](https://microbadger.com/images/vladgh/awscli "Get your own license badge on microbadger.com")
 
+## **⚠️ This project is no longer supported!**
+
 Docker image with the AWS Command Line Interface installed.
 
 Optional variables :
