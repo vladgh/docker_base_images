@@ -24,12 +24,12 @@ jobs:
             path: awscli
             platform: linux/amd64
             token: mbMppUV6he_zmIGik-MeJ22K8a0=
-            version: '0.4.0'
+            version: '0.5.0'
           - repo: vladgh/backup
             path: backup
             platform: linux/amd64
             token: ZjbRHMtrAhl9V2MWjWmOR0KWlGc=
-            version: '0.4.0'
+            version: '0.5.0'
           - repo: vladgh/deluge
             path: deluge
             platform: linux/amd64
@@ -44,12 +44,12 @@ jobs:
             path: gpg
             platform: linux/amd64
             token: Sg_CkaULmDjZ0K3u5W1mIqXlkOk=
-            version: '0.4.0'
+            version: '0.5.0'
           - repo: vladgh/minidlna
             path: minidlna
             platform: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
             token: Qr9rUtKpdDGoUVh3tGwGTBzSmQ8=
-            version: '0.5.1'
+            version: '0.6.0'
           # - repo: vladgh/puppet
           #   path: puppet
           #   platform: linux/amd64
@@ -84,7 +84,7 @@ jobs:
             path: s3sync
             platform: linux/amd64
             token: eB40MYq66N9GQvIisktwJVOL_tw=
-            version: '0.4.0'
+            version: '0.5.0'
           # - repo: vladgh/webhook
           #   path: webhook
           #   platform: linux/amd64
