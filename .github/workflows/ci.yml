@@ -22,6 +22,7 @@ jobs:
             gpg: 'gpg/**'
             minidlna: 'minidlna/**'
             s3sync: 's3sync/**'
+            none: '**'
 
   build:
     name: Build
