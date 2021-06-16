@@ -26,6 +26,19 @@ You can find published versions of these images on [Docker Hub](https://hub.dock
 * [vladgh/s3sync](https://hub.docker.com/r/vladgh/s3sync)
 * [vladgh/webhook](https://hub.docker.com/r/vladgh/webhook)
 
+## Changelog & Releases
+
+This repository keeps a change log using [GitHub's releases][releases]
+functionality.
+
+Releases are based on [Semantic Versioning][semver], and use the format
+of `MAJOR.MINOR.PATCH`. The version will be incremented
+based on the following:
+
+- `MAJOR`: Incompatible or major changes
+- `MINOR`: Backwards-compatible new features and enhancements
+- `PATCH`: Backwards-compatible bugfixes and package updates
+
 ## Contribute
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-007ba7.svg)](https://www.contributor-covenant.org/version/2/0/code_of_conduct.html)
