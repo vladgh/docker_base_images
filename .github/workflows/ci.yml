@@ -8,48 +8,34 @@ on:
       - '*'
 
 jobs:
-  changes:
-    runs-on: ubuntu-latest
-    outputs:
-      images: ${{ steps.filter.outputs.changes }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.3.4
-      - uses: dorny/paths-filter@v2.10.2
-        id: filter
-        with:
-          filters: |
-            gpg: 'gpg/**'
-            minidlna: 'minidlna/**'
-            s3sync: 's3sync/**'
-            none: '**'
-
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: changes
     strategy:
       matrix:
-        image: ${{ fromJSON(needs.changes.outputs.images) }}
-        # image:
-        #   - repo: vladgh/gpg
-        #     path: gpg
-        #     platform: linux/amd64
-        #     token: Sg_CkaULmDjZ0K3u5W1mIqXlkOk=
-        #     version: '0.5.0'
-        #   - repo: vladgh/minidlna
-        #     path: minidlna
-        #     platform: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
-        #     token: Qr9rUtKpdDGoUVh3tGwGTBzSmQ8=
-        #     version: '0.6.0'
-        #   - repo: vladgh/s3sync
-        #     path: s3sync
-        #     platform: linux/amd64
-        #     token: eB40MYq66N9GQvIisktwJVOL_tw=
-        #     version: '0.5.0'
+        image:
+          - repo: vladgh/gpg
+            path: gpg
+            platform: linux/amd64
+            mb_token: Sg_CkaULmDjZ0K3u5W1mIqXlkOk=
+          - repo: vladgh/minidlna
+            path: minidlna
+            platform: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
+            mb_token: Qr9rUtKpdDGoUVh3tGwGTBzSmQ8=
+          - repo: vladgh/s3sync
+            path: s3sync
+            platform: linux/amd64
+            mb_token: eB40MYq66N9GQvIisktwJVOL_tw=
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
+      - name: Check for file changes
+        uses: dorny/paths-filter@v2.10.2
+        id: changes
+        with:
+          filters:  |
+            "${{ matrix.image.repo }}":
+              - "${{ matrix.image.path }}/**"
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -68,7 +54,7 @@ jobs:
       #     echo "DOCKER_REPO=${{ matrix.image.repo }}" >> $GITHUB_ENV
       #     echo "DOCKER_PLATFORM=${{ matrix.image.platform }}" >> $GITHUB_ENV
       #     echo "DOCKER_BUILD_PATH=${{ matrix.image.path }}" >> $GITHUB_ENV
-      #     echo "MICROBADGER_TOKEN=${{ matrix.image.token }}" >> $GITHUB_ENV
+      #     echo "MICROBADGER_TOKEN=${{ matrix.image.mb_token }}" >> $GITHUB_ENV
       # - name: Build/tag/push image
       #   run: |
       #     # Always tag with the short SHA of commit
