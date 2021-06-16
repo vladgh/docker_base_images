@@ -29,7 +29,7 @@ jobs:
     needs: changes
     strategy:
       matrix:
-        image: ${{ fromJSON(needs.changes.outputs.images) | [] }}
+        image: ${{ fromJSON(needs.changes.outputs.images) }}
         # image:
         #   - repo: vladgh/gpg
         #     path: gpg
