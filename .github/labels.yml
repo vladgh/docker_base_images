@@ -49,6 +49,9 @@
 - color: e4e669
   name: ignore
   description: This will be ignored
+- color: cfd3d7
+  name: stale
+  description: This issue or pull request has been marked 'stale' due to lack of recent activity
 
 - name: major
   color: b60205
