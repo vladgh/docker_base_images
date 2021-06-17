@@ -10,7 +10,7 @@ on:
       - 'v*.*.*'
   pull_request:
     branches:
-      - 'master'
+      - 'main'
 
 jobs:
   build:
@@ -65,43 +65,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           push: ${{ github.event_name != 'pull_request' }}
-      # - name: Set VARs
-      #   run: |
-      #     echo "VERSION=${{ matrix.image.version }}" >> $GITHUB_ENV
-      #     echo "GITHUB_SHA=${{ github.sha }}" >> $GITHUB_ENV
-      #     echo "GITHUB_REF=${{ github.ref }}" >> $GITHUB_ENV
-      #     echo "GITHUB_EVENT=${{ github.event_name }}" >> $GITHUB_ENV
-      #     echo "DOCKER_REPO=${{ matrix.image.repo }}" >> $GITHUB_ENV
-      #     echo "DOCKER_PLATFORM=${{ matrix.image.platform }}" >> $GITHUB_ENV
-      #     echo "DOCKER_BUILD_PATH=${{ matrix.image.path }}" >> $GITHUB_ENV
-      #     echo "MICROBADGER_TOKEN=${{ matrix.image.mb_token }}" >> $GITHUB_ENV
-      # - name: Build/tag/push image
-      #   run: |
-      #     # Always tag with the short SHA of commit
-      #     export DOCKER_TAGS="--tag ${DOCKER_REPO}:${GITHUB_SHA::8}"
-      #     # Publish 'latest' and semantic tags only if pushing to 'main'
-      #     if [[ "$GITHUB_REF" == 'refs/heads/main' && "$GITHUB_EVENT" == 'push' ]]; then
-      #       export DOCKER_TAGS="${DOCKER_TAGS} --tag ${DOCKER_REPO}:latest"
-      #       # Look for the version tag in the registry and if it does not exist, create all other semantic version tags for it
-      #       if ! curl --fail --silent "https://hub.docker.com/v2/repositories/${DOCKER_REPO}/tags/${VERSION}/" >/dev/null; then
-      #         IFS="." read -r -a semver <<< "$VERSION"
-      #         export major="${semver[0]}" minor="${semver[1]}" patch="${semver[2]}"
-      #         for version in "${major}.${minor}.${patch}" "${major}.${minor}" "${major}"; do
-      #           export DOCKER_TAGS="${DOCKER_TAGS} --tag ${DOCKER_REPO}:${version}"
-      #         done
-      #       fi
-      #     fi
-      #     # Build/tag/push image
-      #     eval docker buildx build --rm --pull --push \
-      #       --build-arg VERSION="$VERSION" \
-      #       --build-arg VCS_URL="$(git config --get remote.origin.url)" \
-      #       --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
-      #       --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
-      #       --platform "${DOCKER_PLATFORM}" \
-      #       "${DOCKER_TAGS}" \
-      #       "${DOCKER_BUILD_PATH}"
-      # - name: Notify MicroBadger
-      #   run: |
-      #     if [[ -n "$MICROBADGER_TOKEN" ]]; then
-      #       curl --request POST --silent --fail "https://hooks.microbadger.com/images/${DOCKER_REPO}/${MICROBADGER_TOKEN}"
-      #     fi
+      - name: Notify MicroBadger
+        if: github.event_name != 'pull_request'
+        run: curl --request POST --silent --fail "https://hooks.microbadger.com/images/${{ matrix.image.repo }}/${{ matrix.image.mb_token }}"
