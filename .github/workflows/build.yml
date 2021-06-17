@@ -1,4 +1,4 @@
-name: CI
+name: Build
 
 on:
   schedule:
@@ -37,12 +37,12 @@ jobs:
         with:
           images: ${{ matrix.image.name }}
           tags: |
-            type=schedule
+            type=schedule,pattern=nightly
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
+            type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
             type=sha
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1.2.0
