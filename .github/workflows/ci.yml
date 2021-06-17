@@ -5,32 +5,29 @@ on:
     - cron: '2 2 * * *'
   push:
     branches:
-      - '**'
+      - '*'
     tags:
       - 'v*.*.*'
   pull_request:
     branches:
-      - 'main'
+      - '*'
 
 jobs:
   build:
-    name: "Build ${{ matrix.image.repo }}"
+    name: "Build ${{ matrix.image.name }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
         image:
-          - repo: vladgh/gpg
+          - name: vladgh/gpg
             path: gpg
-            platform: linux/amd64
-            mb_token: Sg_CkaULmDjZ0K3u5W1mIqXlkOk=
-          - repo: vladgh/minidlna
+            platforms: linux/amd64
+          - name: vladgh/minidlna
             path: minidlna
-            platform: linux/amd64,linux/386,linux/arm/v6,linux/arm/v7,linux/arm64/v8
-            mb_token: Qr9rUtKpdDGoUVh3tGwGTBzSmQ8=
-          - repo: vladgh/s3sync
+            platforms: linux/amd64,linux/386,linux/arm/v6,linux/arm/v7,linux/arm64/v8
+          - name: vladgh/s3sync
             path: s3sync
-            platform: linux/amd64
-            mb_token: eB40MYq66N9GQvIisktwJVOL_tw=
+            platforms: linux/amd64
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.4
@@ -38,7 +35,7 @@ jobs:
         uses: docker/metadata-action@v3.3.0
         id: meta
         with:
-          images: ${{ matrix.image.repo }}
+          images: ${{ matrix.image.name }}
           tags: |
             type=schedule
             type=ref,event=branch
@@ -61,10 +58,7 @@ jobs:
         uses: docker/build-push-action@v2.5.0
         with:
           context: ${{ matrix.image.path }}
-          platforms: ${{ matrix.image.platform }}
+          platforms: ${{ matrix.image.platforms }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           push: ${{ github.event_name != 'pull_request' }}
-      - name: Notify MicroBadger
-        if: github.event_name != 'pull_request'
-        run: curl --request POST --silent --fail "https://hooks.microbadger.com/images/${{ matrix.image.repo }}/${{ matrix.image.mb_token }}"
