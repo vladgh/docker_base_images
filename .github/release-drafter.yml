@@ -18,6 +18,9 @@ categories:
   - title: '📚 Documentation'
     labels:
       - documentation
+  - title: '📦 Dependency Updates'
+    labels:
+      - 'dependencies'
 
 version-resolver:
   major:
@@ -33,6 +36,7 @@ version-resolver:
     labels:
       - bug
       - refactor
+      - dependencies
       - documentation
       - deprecated
   default: patch

@@ -13,15 +13,16 @@
 - color: d73a4a
   name: bug
   description: Something isn't working
+- color: 7057ff
+  name: dependencies
+  description: Updates a dependency
 - name: refactor
   color: 1d76db
   description: Improvement of existing code, not introducing new features
 
-
 - color: 0366d6
   name: documentation
   description: Improvements or additions to documentation
-
 
 - color: e4e669
   name: deprecated
