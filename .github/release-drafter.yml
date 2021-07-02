@@ -11,16 +11,16 @@ categories:
     labels:
       - enhancement
       - security
+      - refactor
   - title: '🐛 Bug fixes'
     labels:
       - bug
-      - refactor
   - title: '📚 Documentation'
     labels:
       - documentation
   - title: '📦 Dependency Updates'
     labels:
-      - 'dependencies'
+      - dependencies
 
 version-resolver:
   major:
