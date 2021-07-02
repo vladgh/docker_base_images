@@ -1,8 +1,4 @@
 # GPG Docker Image ([Dockerfile](Dockerfile))
-[![](https://images.microbadger.com/badges/image/vladgh/gpg.svg)](https://microbadger.com/images/vladgh/gpg "Get your own image badge on microbadger.com")
-[![](https://images.microbadger.com/badges/version/vladgh/gpg.svg)](https://microbadger.com/images/vladgh/gpg "Get your own version badge on microbadger.com")
-[![](https://images.microbadger.com/badges/commit/vladgh/gpg.svg)](https://microbadger.com/images/vladgh/gpg "Get your own commit badge on microbadger.com")
-[![](https://images.microbadger.com/badges/license/vladgh/gpg.svg)](https://microbadger.com/images/vladgh/gpg "Get your own license badge on microbadger.com")
 
 ## USAGE
 

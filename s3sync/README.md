@@ -1,9 +1,4 @@
-# S3Sync Docker Image ([Dockerfile](https://github.com/vladgh/docker_base_images/tree/main/s3sync))
-
-[![badge](https://images.microbadger.com/badges/image/vladgh/s3sync.svg)](https://microbadger.com/images/vladgh/s3sync)
-[![badge](https://images.microbadger.com/badges/version/vladgh/s3sync.svg)](https://microbadger.com/images/vladgh/s3sync)
-[![badge](https://images.microbadger.com/badges/commit/vladgh/s3sync.svg)](https://microbadger.com/images/vladgh/s3sync)
-[![badge](https://images.microbadger.com/badges/license/vladgh/s3sync.svg)](https://microbadger.com/images/vladgh/s3sync)
+# S3Sync Docker Image ([Dockerfile](Dockerfile))
 
 This container keeps a local directory synced to an AWS S3 bucket.
 It does an initial sync from the specified S3 bucket to a local directory (if it's empty), and then syncs that directory with that S3 bucket. If the local directory was not empty to begin with, it will not do an initial sync.

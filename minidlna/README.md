@@ -1,10 +1,5 @@
 # MiniDLNA ([Dockerfile](Dockerfile))
 
-[![Image](https://images.microbadger.com/badges/image/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna)
-[![Version](https://images.microbadger.com/badges/version/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna)
-[![Commit](https://images.microbadger.com/badges/commit/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna)
-[![License](https://images.microbadger.com/badges/license/vladgh/minidlna.svg)](https://microbadger.com/images/vladgh/minidlna)
-
 This is MiniDLNA on top of minimal Alpine.
 It can be configured with environment variables.
 
