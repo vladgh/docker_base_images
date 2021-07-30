@@ -5,7 +5,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # VARs
-TZ="${TZ:-UTC}"
+TZ="${TZ:-}"
 PUID="${PUID:-100}"
 PGID="${PGID:-101}"
 PIDFILE="/minidlna/minidlna.pid"
@@ -17,7 +17,10 @@ PIDFILE="/minidlna/minidlna.pid"
 groupmod --non-unique --gid "$PGID" minidlna
 usermod --non-unique --uid "$PUID" minidlna
 
-# Change configuration
+if [[ -n "$TZ" ]]; then
+  echo 'Set timezone'
+  setup-timezone -z "$TZ"
+fi
 : > /etc/minidlna.conf
 for VAR in $(env); do
   if [[ "$VAR" =~ ^MINIDLNA_ ]]; then
