@@ -13,7 +13,7 @@ PIDFILE="/minidlna/minidlna.pid"
 # Remove old pid if it exists
 [ -f $PIDFILE ] && rm -f $PIDFILE
 
-# Change user and group identifier
+echo 'Set user and group identifier'
 groupmod --non-unique --gid "$PGID" minidlna
 usermod --non-unique --uid "$PUID" minidlna
 
@@ -21,6 +21,8 @@ if [[ -n "$TZ" ]]; then
   echo 'Set timezone'
   setup-timezone -z "$TZ"
 fi
+
+echo 'Set configuration from environment variables'
 : > /etc/minidlna.conf
 for VAR in $(env); do
   if [[ "$VAR" =~ ^MINIDLNA_ ]]; then
@@ -36,12 +38,9 @@ done
 echo "db_dir=/minidlna/cache" >> /etc/minidlna.conf
 echo "log_dir=/minidlna/" >>/etc/minidlna.conf
 
-# Set permissions
+echo 'Set permissions'
 mkdir -p /minidlna/cache
 chown -R "${PUID}:${PGID}" /minidlna
 
-# Set timezone
-setup-timezone -z "$TZ"
-
-# Start daemon
+echo 'Start daemon'
 exec su-exec minidlna /usr/sbin/minidlnad -P "$PIDFILE" -S "$@"
