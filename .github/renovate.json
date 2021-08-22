@@ -8,7 +8,7 @@
     "backup/**",
     "deluge/**",
     "fpm/**",
-    "puppet*/**",
+    "puppet**/**",
     "r10k/**",
     "webhook/**"
   ],
