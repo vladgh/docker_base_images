@@ -2,6 +2,13 @@
   "extends": [
     "config:base"
   ],
+  "packageRules": [
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["alpine"],
+      "versioning": "semver"
+    }
+  ],
   "ignorePaths": [
     "apache/**",
     "awscli/**",
