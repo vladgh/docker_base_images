@@ -1,0 +1,22 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["alpine"],
+      "versioning": "semver"
+    }
+  ],
+  "ignorePaths": [
+    "apache/**",
+    "awscli/**",
+    "backup/**",
+    "deluge/**",
+    "fpm/**",
+    "puppet**/**",
+    "r10k/**",
+    "webhook/**"
+  ]
+}
