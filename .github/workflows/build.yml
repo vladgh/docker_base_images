@@ -1,8 +1,6 @@
 name: Build
 
 on:
-  schedule:
-    - cron: '2 2 * * *'
   push:
     branches:
       - '*'
@@ -49,7 +47,6 @@ jobs:
         with:
           images: ${{ matrix.image.name }}
           tags: |
-            type=schedule,pattern=nightly
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
