@@ -22,6 +22,10 @@ if [[ -n "$TZ" ]]; then
   setup-timezone -z "$TZ"
 fi
 
+echo '=== Set standard configuration'
+export MINIDLNA_DB_DIR="${MINIDLNA_DB_DIR:-/minidlna/cache}"
+export MINIDLNA_LOG_DIR="${MINIDLNA_LOG_DIR:-/minidlna}"
+
 echo '=== Set configuration from environment variables'
 : > /etc/minidlna.conf
 for VAR in $(env); do
@@ -35,8 +39,6 @@ for VAR in $(env); do
     echo "${minidlna_name}=${minidlna_value}" >> /etc/minidlna.conf
   fi
 done
-echo "db_dir=/minidlna/cache" >> /etc/minidlna.conf
-echo "log_dir=/minidlna/" >>/etc/minidlna.conf
 
 echo '=== Set permissions'
 mkdir -p /minidlna/cache
