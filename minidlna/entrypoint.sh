@@ -4,14 +4,19 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# DEBUG
+[ -z "${DEBUG:-}" ] || set -x
+
 # VARs
-TZ="${TZ:-}"
-PUID="${PUID:-100}"
-PGID="${PGID:-101}"
-PIDFILE="/minidlna/minidlna.pid"
+export TZ="${TZ:-}"
+export PUID="${PUID:-100}"
+export PGID="${PGID:-101}"
+export PIDFILE='/minidlna/minidlna.pid'
+export FORCE_SCAN="${FORCE_SCAN:-false}"
+export FORCE_REBUILD="${FORCE_REBUILD:-false}"
 
 # Remove old pid if it exists
-[ -f $PIDFILE ] && rm -f $PIDFILE
+[ -f "$PIDFILE" ] && rm -f "$PIDFILE"
 
 echo '=== Set user and group identifier'
 groupmod --non-unique --gid "$PGID" minidlna
@@ -44,6 +49,14 @@ done
 echo '=== Set permissions'
 mkdir -p /minidlna/cache
 chown -R "${PUID}:${PGID}" /minidlna
+
+echo '=== Generate scan/rebuild flags'
+if [[ "$FORCE_SCAN" == true ]]; then
+  set -- -r "$@"
+fi
+if [[ "$FORCE_REBUILD" == true ]]; then
+  set -- -R "$@"
+fi
 
 echo '=== Start daemon'
 exec su-exec minidlna /usr/sbin/minidlnad -P "$PIDFILE" -S "$@"
