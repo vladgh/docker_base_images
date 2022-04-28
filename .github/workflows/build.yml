@@ -41,7 +41,7 @@ jobs:
             build:
               - ${{ matrix.image.path }}/!(**.md)
       - name: Docker Metadata
-        uses: docker/metadata-action@v3.7.0
+        uses: docker/metadata-action@v3.8.0
         id: meta
         if: steps.filter.outputs.build == 'true' || ( github.event_name == 'release' && github.event.action == 'published' )
         with:
