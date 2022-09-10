@@ -54,6 +54,7 @@ docker run ...
 - `AWS_S3_SSE_KMS_KEY_ID`: The AWS KMS key ID that should be used to server-side encrypt the object in S3 (only available if use in conjunction with `AWS_S3_SSE`)
 - `CRON_TIME`: a valid cron expression (ex: `CRON_TIME='0 */6 * * *'` runs every 6 hours; defaults to hourly)
 - `INITIAL_DOWNLOAD`: whether to download files initially (defaults to `true`); this will only download the files if the directory is empty. Set this to `force` to skip this check
+- `SYNCEXTRA`: add extra options to aws-cli sync command
 
 ### Usage
 
