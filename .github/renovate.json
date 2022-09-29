@@ -1,13 +1,16 @@
 {
-  "addLabels": ["dependencies"],
   "extends": [
     "config:base"
   ],
+  "addLabels": ["dependencies"],
   "packageRules": [
     {
       "matchDatasources": ["docker"],
       "matchPackageNames": ["alpine"],
-      "versioning": "semver"
+      "versioning": "semver",
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true
     }
   ],
   "ignorePaths": [
