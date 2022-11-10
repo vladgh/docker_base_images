@@ -47,8 +47,8 @@ for VAR in $(env); do
 done
 
 echo '=== Set permissions'
-mkdir -p /minidlna/cache
-chown -R "${PUID}:${PGID}" /minidlna
+mkdir -p /minidlna/ "${MINIDLNA_DB_DIR}" "${MINIDLNA_LOG_DIR}"
+chown -R "${PUID}:${PGID}" /minidlna/ "${MINIDLNA_DB_DIR}" "${MINIDLNA_LOG_DIR}"
 
 echo '=== Generate scan/rebuild flags'
 if [[ "$FORCE_SCAN" == true ]]; then
