@@ -10,4 +10,4 @@ ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
 
 # Health check
 HEALTHCHECK --interval=10s --timeout=10s --retries=6 CMD \
-  curl --silent --fail localhost:8200 || exit 1
+  curl --silent --fail 127.0.0.1:8200 || exit 1
