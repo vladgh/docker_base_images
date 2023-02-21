@@ -19,6 +19,6 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Run Release Drafter
-        uses: release-drafter/release-drafter@v5.22.0
+        uses: release-drafter/release-drafter@v5.23.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
