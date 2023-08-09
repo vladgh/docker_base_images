@@ -10,5 +10,4 @@ ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
 
 # Health check
 HEALTHCHECK --interval=10s --timeout=10s --retries=6 CMD \
-  sh -c 'test -n "$MINIDLNA_PORT" || MINIDLNA_PORT=8200; \
-  curl --silent --fail "http://127.0.0.1:$MINIDLNA_PORT" || exit 1'
+  curl --silent --fail http://127.0.0.1:${MINIDLNA_PORT:-8200} || exit 1
