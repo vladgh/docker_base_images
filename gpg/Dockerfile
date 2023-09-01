@@ -1,4 +1,4 @@
-FROM alpine:20230329
+FROM alpine:20230901
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Install packages
