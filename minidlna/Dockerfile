@@ -1,8 +1,10 @@
 FROM alpine:20230901
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
+ARG MINIDLNA_VERSION=1.3.3-r0
+
 # Install
-RUN apk --no-cache add bash curl minidlna tini shadow su-exec alpine-conf inotify-tools
+RUN apk --no-cache add bash curl minidlna=${MINIDLNA_VERSION} tini shadow su-exec alpine-conf inotify-tools
 
 # Entrypoint
 COPY entrypoint.sh /
