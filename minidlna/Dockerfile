@@ -1,4 +1,4 @@
-FROM alpine:20230901
+FROM alpine:20231219
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 ARG MINIDLNA_VERSION=1.3.3-r0
