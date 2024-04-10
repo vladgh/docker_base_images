@@ -31,6 +31,7 @@ echo '=== Set standard configuration'
 export MINIDLNA_DB_DIR="${MINIDLNA_DB_DIR:-/minidlna/cache}"
 export MINIDLNA_LOG_DIR="${MINIDLNA_LOG_DIR:-/minidlna}"
 export MINIDLNA_INOTIFY="${MINIDLNA_INOTIFY:-yes}"
+export MINIDLNA_NOTIFY_INTERVAL="${MINIDLNA_NOTIFY_INTERVAL:-895}"
 
 echo '=== Set configuration from environment variables'
 : > /etc/minidlna.conf

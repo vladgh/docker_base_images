@@ -63,3 +63,19 @@ docker run -d \
 ```
 
 See: <http://manpages.ubuntu.com/manpages/raring/man5/minidlna.conf.5.html>
+
+### Notify interval
+
+By default, `minidlna` will announce itself to the network every 895 seconds (roughly 15 minutes).
+For some scenarios, like using a smart TV that only gets switched on on when you want to watch something, you might need to wait up to that amount of time for the service to show up.
+You can use the `MINIDLNA_NOTIFY_INTERVAL` environment variable to change the notify interval to the desired number of seconds like so:
+
+```sh
+docker run -d \
+  --net=host \
+  -v <media dir on host>:/media \
+  -e MINIDLNA_MEDIA_DIR=/media \
+  -e MINIDLNA_FRIENDLY_NAME=MyMini \
+  -e MINIDLNA_NOTIFY_INTERVAL=30 \
+  vladgh/minidlna
+```
