@@ -3,12 +3,6 @@
     "config:best-practices"
   ],
   "addLabels": ["dependencies"],
-  "packageRules": [
-    {
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
-    }
-  ],
   "ignorePaths": [
     "apache/**",
     "awscli/**",
@@ -18,5 +12,16 @@
     "puppet**/**",
     "r10k/**",
     "webhook/**"
-  ]
+  ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "automerge": true
+    }
+  ],
+  "platformAutomerge": true
 }
