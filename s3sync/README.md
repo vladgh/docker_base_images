@@ -55,6 +55,11 @@ docker run ...
 - `CRON_TIME`: a valid cron expression (ex: `CRON_TIME='0 */6 * * *'` runs every 6 hours; defaults to hourly)
 - `INITIAL_DOWNLOAD`: whether to download files initially (defaults to `true`); this will only download the files if the directory is empty. Set this to `force` to skip this check
 - `SYNCEXTRA`: add extra options to aws-cli sync command
+- `EXCLUDE` : A RegEx with the following rules to exclude a set of files/directories from being watched and synced. 
+    - *: Matches everything
+    - ?: Matches any single character
+    - [sequence]: Matches any character in sequence
+    - [!sequence]: Matches any character not in sequence
 
 ### Usage
 
