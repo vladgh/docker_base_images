@@ -89,6 +89,7 @@ initial_download(){
 # Watch directory using inotify
 watch_directory(){
   initial_download # Run initial download
+
   log "Watching directory '${SYNCDIR}' for changes"
   inotifywait \
     --event create \
@@ -152,5 +153,4 @@ main(){
   esac
 }
 
-main "$1"
-
+main "$@"
