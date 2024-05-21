@@ -13,6 +13,13 @@ AWS_S3_SSE_KMS_KEY_ID="${AWS_S3_SSE_KMS_KEY_ID:-}"
 CRON_TIME="${CRON_TIME:-10 * * * *}"
 INITIAL_DOWNLOAD="${INITIAL_DOWNLOAD:-true}"
 SYNCEXTRA="${SYNCEXTRA:-}"
+EXCLUDE="${EXCLUDE:-}"
+
+if [[ ! -z $EXCLUDE ]]; then 
+  EXCLUDE_FLAG="--exclude=$EXCLUDE";
+else
+  EXCLUDE_FLAG="";
+fi
 
 # Log message
 log(){
@@ -25,7 +32,8 @@ sync_files(){
   src="${1:-}"
   dst="${2:-}"
 
-  sync_cmd="--no-progress --delete --exact-timestamps $SYNCEXTRA"
+
+  sync_cmd="$EXCLUDE_FLAG --no-progress --delete --exact-timestamps $SYNCEXTRA";
 
   if [[ "$AWS_S3_SSE" == 'true' ]] || [[ "$AWS_S3_SSE" == 'aes256' ]]; then
     s3_upload_cmd+=' --sse AES256'
@@ -91,6 +99,7 @@ watch_directory(){
     --monitor \
     --quiet \
     --recursive \
+    "$EXCLUDE_FLAG" \
     "$SYNCDIR" |
   while read -r changed
   do
