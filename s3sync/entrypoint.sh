@@ -15,7 +15,6 @@ INITIAL_DOWNLOAD="${INITIAL_DOWNLOAD:-true}"
 SYNCEXTRA="${SYNCEXTRA:-}"
 EXCLUDE="${EXCLUDE:-}"
 
-
 if [[ ! -z $EXCLUDE ]]; then 
   EXCLUDE_FLAG="--exclude=$EXCLUDE";
 else
@@ -106,7 +105,7 @@ watch_directory(){
   do
     log "$changed"
     upload_files
-  done;
+  done
 }
 
 # Install cron job

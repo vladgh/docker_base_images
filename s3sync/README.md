@@ -99,6 +99,16 @@ docker run -d \
   sync
 ```
 
+- Watch local directory excluding log files
+
+```sh
+docker run -d \
+  -e S3PATH='s3://mybucket/myprefix' \
+  -e EXCLUDE='*.log'
+  vladgh/s3sync \
+  sync
+```
+
 - Watch the specified local directory (host mount)
 
 ```sh
