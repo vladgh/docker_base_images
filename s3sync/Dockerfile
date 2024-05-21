@@ -1,4 +1,4 @@
-FROM alpine:20240315
+FROM alpine:3.19.1
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
