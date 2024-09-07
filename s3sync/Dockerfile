@@ -1,4 +1,4 @@
-FROM alpine:3.20.3@sha256:d92eaec1308e111c3623b46df740297b4b9021355d3f1d491a1398ee8f640ebf
+FROM alpine:3.20.3@sha256:beefdbd8a1da6d2915566fde36db9db0b524eb737fc57cd1367effd16dc0d06d
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Environment
