@@ -49,7 +49,7 @@ sync_files(){
   fi
 
   log "Sync '${src}' to '${dst}'"
-  if ! eval aws s3 sync "$sync_cmd" "$src" "$dst"; then
+  if ! eval aws s3 sync "$src" "$dst" $sync_cmd; then
     log "Could not sync '${src}' to '${dst}'" >&2; exit 1
   fi
 }
