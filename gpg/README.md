@@ -17,7 +17,7 @@ docker run -it -v /path/to/keys/store:/root/.gnupg -e GPG_TTY=/dev/console vladg
 - Encrypt with symmetric cipher only. This command asks for a passphrase.
 
 ```SH
-docker run -it -v $(pwd):/gpg -e GPG_TTY=/dev/console vladgh/gpg --symmetric /gpg/my_file
+docker run -it -v $(pwd):/gpg -e GPG_TTY=/dev/console vladgh/gpg --symmetric my_file
 ```
 
 - Generate GPG key
