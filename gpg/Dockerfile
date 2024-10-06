@@ -5,5 +5,6 @@ LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 RUN apk --no-cache add gnupg haveged tini
 
 # Entrypoint
+WORKDIR /gpg
 ENTRYPOINT ["/sbin/tini", "--", "gpg"]
 CMD ["--version"]
