@@ -1,4 +1,4 @@
-FROM alpine:20240329@sha256:e31c3b1cd47718260e1b6163af0a05b3c428dc01fa410baf72ca8b8076e22e72
+FROM alpine:20250108@sha256:115729ec5cb049ba6359c3ab005ac742012d92bbaa5b8bc1a878f1e8f62c0cb8
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 # Install packages
