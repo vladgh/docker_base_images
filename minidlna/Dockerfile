@@ -1,10 +1,11 @@
-FROM alpine:20250108@sha256:115729ec5cb049ba6359c3ab005ac742012d92bbaa5b8bc1a878f1e8f62c0cb8
+FROM alpine:3
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
-ARG MINIDLNA_VERSION=1.3.3-r1
+ARG MINIDLNA_VERSION=1.3.3-r3
 
 # Install
-RUN apk --no-cache add bash curl minidlna=${MINIDLNA_VERSION} tini shadow su-exec alpine-conf inotify-tools
+RUN apk --no-cache add bash curl minidlna=${MINIDLNA_VERSION} minidlna-lang=${MINIDLNA_VERSION} \
+  tini shadow su-exec alpine-conf inotify-tools
 
 # Entrypoint
 COPY entrypoint.sh /
