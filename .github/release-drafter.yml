@@ -2,7 +2,6 @@
 name-template: 'Release v$RESOLVED_VERSION'
 tag-template: 'v$RESOLVED_VERSION'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
-target_commitish: main
 
 categories:
   - title: '🚨 Breaking changes'
