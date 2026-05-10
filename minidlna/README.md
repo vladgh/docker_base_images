@@ -62,6 +62,29 @@ docker run -d \
   vladgh/minidlna
 ```
 
+### Root Container
+
+By default, MiniDLNA uses the standard container as the root of the tree exposed to clients.
+You can use the `MINIDLNA_ROOT_CONTAINER` environment variable to specify a different container as the root:
+
+- `.` to use the standard container (this is the default)
+- `B` to use the "Browse Directory" container
+- `M` to use the "Music" container
+- `V` to use the "Video" container
+- `P` to use the "Pictures" container
+
+If you specify `B` and the client device is audio only, then "Music/Folders" will be used as root container and you won't see Videos.
+
+```sh
+docker run -d \
+  --net=host \
+  -v <media dir on host>:/media \
+  -e MINIDLNA_MEDIA_DIR=/media \
+  -e MINIDLNA_FRIENDLY_NAME=MyMini \
+  -e MINIDLNA_ROOT_CONTAINER=M \
+  vladgh/minidlna
+```
+
 See: <http://manpages.ubuntu.com/manpages/raring/man5/minidlna.conf.5.html>
 
 ### Notify interval
