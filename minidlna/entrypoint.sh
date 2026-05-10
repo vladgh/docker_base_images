@@ -36,8 +36,8 @@ export MINIDLNA_ROOT_CONTAINER="${MINIDLNA_ROOT_CONTAINER:-.}"
 
 # Validate MINIDLNA_ROOT_CONTAINER
 if [[ ! "$MINIDLNA_ROOT_CONTAINER" =~ ^(\.|B|M|V|P)$ ]]; then
-  echo "Invalid MINIDLNA_ROOT_CONTAINER value: $MINIDLNA_ROOT_CONTAINER. Must be one of: ., B, M, V, P" >&2
-  exit 1
+  echo "Invalid MINIDLNA_ROOT_CONTAINER value: $MINIDLNA_ROOT_CONTAINER. Must be one of: ., B, M, V, P. Falling back to default '.'" >&2
+  export MINIDLNA_ROOT_CONTAINER="."
 fi
 
 echo '=== Set configuration from environment variables'
