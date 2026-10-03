@@ -9,10 +9,10 @@
     "backup/**",
     "deluge/**",
     "fpm/**",
-    "gpg**/**",
+    "gpg/**",
     "puppet**/**",
     "r10k/**",
-    "s3sync**/**",
+    "s3sync/**",
     "webhook/**"
   ],
   "packageRules": [
