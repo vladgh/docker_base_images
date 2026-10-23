@@ -1,4 +1,4 @@
-FROM alpine:3
+FROM alpine:3@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a
 LABEL maintainer "Vlad Ghinea vlad@ghn.me"
 
 ARG MINIDLNA_VERSION=1.3.3-r3
